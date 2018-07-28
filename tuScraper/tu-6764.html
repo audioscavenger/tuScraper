@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html class="no-js hp-v5.1.10" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>ITEC 470 - 101</title>
+        <meta name="description" content="">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <base href="https://mytumobile.towson.edu/">
+
+                <link rel="dns-prefetch" href="//ajax.googleapis.com" />
+        <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+        <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com" />
+
+                <link rel="icon" href="/images/branding/tu_favicon.ico">
+        <link rel="shortcut icon" href="/images/branding/tu_favicon.ico" />
+
+                        <link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png" sizes="120x120">         <link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png" sizes="144x144">         <link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png" sizes="152x152"> 		<link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png" sizes="167x167"> 		<link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png" sizes="180x180"> 
+                <link rel="apple-touch-icon" href="/images/branding/largerHomeScreenIcon.png"/>
+        <link rel="apple-touch-icon-precomposed" href="/images/branding/largerHomeScreenIcon.png"/>
+
+                <meta name="application-name" content="ITEC 470 - 101"/>
+        <meta name="msapplication-TileColor" content="#474747"/>
+        <meta name="msapplication-TileImage" content="/images/branding/largerHomeScreenIcon.png"/>
+
+        <link rel="stylesheet" href="/styles/style.css?cb=3b2ef681fb92b1a8f4935c654a9a22c3"/>
+
+                                            <link rel="stylesheet" href="https://mytumobile.towson.edu/styles/branding/menuConfig.css?cb=c6687d656c778484b105d06fff61c58c"/>
+                            <link rel="stylesheet" href="https://mytumobile.towson.edu/styles/branding/colors.css?cb=d01e22cc13c4f096d6fcd76cbe157835"/>
+                    
+        <script src="/vendor/modernizr/modernizr-custom.min.js?cb=9589953c7df191c7756062fbe975ab0f"></script>
+                    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Object.assign"></script>
+                <script src="/vendor/requirejs/require.min.js?cb=d7319af26361b5bfefb2ae20828ec064"></script>
+        <script src="/scripts/require-init.min.js?cb=8b90fee5e499347f7851ff078440e8ce"></script>
+        <script>window.requireSuccess || document.write('<script src="/scripts/require-init.js?cb=e0c6fb3ebf267a1cf119b6ae9a68fb91">\x3C/script>')</script>        <script type="text/javascript">
+            function onLoad() {
+                require(['cordova'], function () {
+                    document.addEventListener('deviceready', onDeviceReady, false);
+                });
+            }
+
+            function onDeviceReady() {
+
+                require(['jquery', 'cordova'], function ($) {
+                    // stuff that must be done after cordova is initialized...
+
+                    var about_link = 'https://mytumobile.towson.edu/app/about';
+                    var href = $('a[href="'+about_link+'"]').attr('href');
+                    $('a[href="'+about_link+'"]').attr('href', about_link + '/index/true');
+
+                    
+                    if(window.plugins && window.plugins.socialsharing) {
+
+                        window.plugins.socialsharing.available(function(isAvailable) {
+                            if (isAvailable) {
+                                $('#sharing_button_web').css('display', 'none');
+                                $('#sharing_button_hybrid').css('display', 'inline-block');
+                            }
+                        });
+                    }
+
+                    window.plugins.socialsharing.iPadPopupCoordinates = function() {
+                        var rect = document.getElementById('share_button').getBoundingClientRect();
+                        return rect.left + "," + rect.top + "," + rect.width + "," + rect.height;
+                    };
+                });
+
+            }
+        </script>
+    </head>
+    <body onload="onLoad()">
+        
+<script type="text/javascript">
+
+    window.hptMobile = '5.1.10';
+
+    
+        window.addSysInfoItem = function(){};
+
+    
+</script>
+
+        <nav class="sidebar">
+    <div class="sidebar-inner">
+        <header class="sidebar-head" role="banner">
+            <a href="https://mytumobile.towson.edu/" class="logo-link" role="link" aria-label="Go to Springboard"></a>
+
+            
+                <div class="clearfix user-control">
+                    <a name="user-control" href="https://mytumobile.towson.edu/app/profile/login" class="auth-link pull-right">Log in</a>
+                </div>
+
+                    </header>
+
+        <div class="div-scroll" role="navigation">
+                                        
+                <div class="group">
+                    <h3 class="group-title" aria-label="Public Links"  role="presentation">Public Links</h3>
+                                        <ul class="menu panel-group panel-group-tight" id="11056229465a0c7a20c7a85" role="menu">
+
+                        
+
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://inside.towson.edu/myTU/myTU2.asp" target="">
+                                            <div class="menu-icon menu-icon-0d7887d0f5b67dd15abd05551730f1b2"></div>
+                    
+                    <span class="title">Full Site</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://mytumobile.towson.edu/app/catalog/listSubjects" target="">
+                                            <div class="menu-icon menu-icon-1259a63c434db4c643acd4f6d87881dd"></div>
+                    
+                    <span class="title">Browse Classes</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://mytumobile.towson.edu/app/catalog/classSearch" target="">
+                                            <div class="menu-icon menu-icon-1259a63c434db4c643acd4f6d87881dd"></div>
+                    
+                    <span class="title">Class Search</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://mytumobile.towson.edu/app/catalog/listCatalog" target="">
+                                            <div class="menu-icon menu-icon-eb33bd8a6d166071940dceed54a352be"></div>
+                    
+                    <span class="title">Course Catalog</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="http://www.towson.edu/registrar/calendars/exams.html" target="">
+                                            <div class="menu-icon menu-icon-319ae3bc95fbd2efccfbb7d88e038f93"></div>
+                    
+                    <span class="title">Exam Schedule</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="http://www.towson.edu/registrar/calendars/" target="">
+                                            <div class="menu-icon menu-icon-319ae3bc95fbd2efccfbb7d88e038f93"></div>
+                    
+                    <span class="title">Academic Calendar</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://inside.towson.edu/phonebook/mobile/index.cfm" target="">
+                                            <div class="menu-icon menu-icon-16e63c1b30facabe821b5d5fd516bba1"></div>
+                    
+                    <span class="title">Faculty/Staff Directory</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://blackboard.towson.edu" target="">
+                                            <div class="menu-icon menu-icon-088296a2209902c23d7d3eb80010ada0"></div>
+                    
+                    <span class="title">Blackboard</span>
+
+                                    </a>
+            </li>
+        
+        
+    
+                        <li class=""  role="menuitem">
+                <a href="https://towsonu.turbovote.org/register " target="_blank">
+                                            <div class="menu-icon menu-icon-e2402cd696f2a2ed4cebfe704354804f"></div>
+                    
+                    <span class="title">Register to Vote</span>
+
+                                    </a>
+            </li>
+        
+    
+
+                    </ul>
+                </div>
+            
+                                                                                                                        </div>
+    </div>
+    <div class="close-sidebar" data-action="open-left" role="button" aria-label="Close Menu" aria-expanded="true">
+        <span class="btn-open"></span>
+    </div>
+</nav>
+<script type="text/javascript">
+    require(['jquery', 'jquery.cookie'], function($) {
+
+        $(function () {
+
+            $('.menu').on('show.bs.collapse hide.bs.collapse', '.panel-collapse', function(e) {
+                if (this === e.target) {
+                    $(this).parent().toggleClass('menu-collapse', (e.type === 'show'));
+                }
+            });
+
+            // we retain the cookie if the config for the cross session schedule preferences is enabled
+            // otherwise we destroy the cookie so the preferences are lost and schedule defaults to config
+                        
+            // If count of visible app menu items is <1, hide the whole menu section
+            if ($('#appGroup ul li:visible').size() === 0) {
+                $('#appGroup').hide();
+            }
+        });
+    });
+</script>
+
+        <section class="main" role="main">
+                            
+<style type="text/css">
+    .btn[data-add-favorite]:not(:hover) {
+        -webkit-transition: background-color 0.5s;
+        -moz-transition: background-color 0.5s;
+        -o-transition: background-color 0.5s;
+        -ms-transition: background-color 0.5s;
+        transition: background-color 0.5s;
+    }
+    .btn-favorite,
+    .btn-favorite:active,
+    .btn-favorite:focus,
+    .btn-favorite:hover {
+        background-color: #5bb75b;
+        background-image: none;
+        border-color: rgba(0, 0, 0, 0);
+    }
+</style>
+
+
+<header class="page-header" tabindex="0">
+    <div class="header-left">
+        <div class="btn-open" data-action="open-left" role="button" aria-label="Open Menu"></div>
+
+                    <a href="javascript:window.history.go(-1)" class="btn-back" aria-label="Back Button"></a>
+            </div>
+
+
+	<h1 class="page-title  with-back-btn">ITEC 470 - 101</h1>
+
+	<div class="header-right" tabindex="0" aria-label="Options" role="button" aria-expanded="false">
+                    <div class="btn-options" data-action="open-right"></div>
+        
+        	</div>
+</header>
+
+    <div class="options-menu-wrapper">
+    <nav id="options-menu" class="options-menu app-options-menu">
+        <h3 class="options-title">Options</h3>
+
+                                                                        <h4 class="section-title" aria-label="Links">Links</h4>
+                    <ul role="menu">
+                        
+                            
+                            <li role="menuitem">
+                                <a href="https://mytumobile.towson.edu/app/about" href="https://mytumobile.towson.edu/app/about" tabindex="-1">About</a>                            </li>
+                                            </ul>
+                                    
+            </nav>
+
+    <div class="close-options" data-action="open-right" tabindex="-1" role="button" aria-label="Close Options">
+        <span class="btn-options "></span>
+    </div>
+</div>
+<script type="text/javascript">
+    // logging out of impersonation; clear schedule prefs
+    require(['jquery', 'jquery.cookie'], function ($) {
+        $('.btn-ghost').on('click', function (e) {
+            $.removeCookie('schedule', {path: '/'});
+        });
+    });
+</script>
+
+<section itemscope itemtype="http://schema.org/Class">
+
+
+                                    <div class="primary-head" style="" itemprop="name">
+                    
+            
+            
+              
+                             SPECIAL TOPICS IN INFORMATION TECHNOLOGY            
+            
+                        </div>
+
+
+                                    <div class="section-content" style="; display: none;" itemprop="description">
+                    
+            
+            
+              
+                            <div class="strong section-body">Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 units of ITEC, CIS, or COSC courses.</div>
+            
+            
+                        </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Session</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Regular Academic Session</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Class Number</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>6764</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Career</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Undergraduate</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Units</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>3 units</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Grading</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>UNDERGRADUATE GRADING</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Topic</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Network & Security Practicum</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Description</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 units of ITEC, CIS, or COSC courses.</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Add Consent</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Department Consent Required</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Enrollment Requirements</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>ITEC 470 requires 12 units of ITEC, CIS and /or COSC.</div>
+                                                         </div>
+    </div>
+
+
+
+        
+        <div class="primary-head">Class Actions</div>
+        <div class="section-content">
+
+                        
+                        
+                                                        
+                                
+                                
+                                            
+                        
+                                                            <a href="http://towsonustore.com/selectcourses.aspx?&src=2&type=2&stoid=75&trm=Spring+18&cid=6764" target="_blank" class="btn btn-primary btn-fixed">
+                        Buy Books                    </a>
+                            
+                        
+                        
+                        
+        </div>
+
+    
+        
+
+
+
+                    <div class="primary-head" style="">
+        
+            
+            
+              
+                             Class Details            
+            
+                        </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Instructor(s)</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Jeffrey Hanson</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Topic</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Network & Security Practicum</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Meets</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Mo 6:00PM - 8:40PM</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Dates</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>01/29/2018 - 05/22/2018</div>
+                                                         </div>
+    </div>
+
+
+    <a href='https://mytumobile.towson.edu/app/catalog/mapBuilding/TOWSN/Y2'  >
+
+            <div class="section-content clearfix" style="">
+    
+                    <i class="ico-arrow-right pull-right right-icon"></i>
+        
+        <div class="pull-left">
+            <div class="strong">Room</div>
+
+                    </div>
+
+                    <div class="pull-right" style="margin-right: 20px;">
+        
+                                                                         <div>Y20111</div>
+                                                         </div>
+    </div>
+
+    </a>
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Campus</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Main Academic Campus</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Location</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>On Campus</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Components</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div><table class="PSTEXT"><tr><td>Lecture Required</td></tr></table></div>
+                                                         </div>
+    </div>
+
+
+
+        
+
+
+
+                    <div class="primary-head" style="">
+        
+            
+            
+              
+                             Class Availability            
+            
+                        </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Status</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>Open</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Seats Taken</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>11</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Seats Open</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>9</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Class Capacity</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>20</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Wait List Total</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>0</div>
+                                                         </div>
+    </div>
+
+
+
+            <div class="section-content clearfix" style="">
+    
+        
+        <div class="pull-left">
+            <div class="strong">Wait List Capacity</div>
+
+                    </div>
+
+                    <div class="pull-right">
+        
+                                                                         <div>0</div>
+                                                         </div>
+    </div>
+
+
+
+        
+
+        
+    
+</section>
+
+
+                    </section>
+
+                
+                
+                
+                
+<div id="explainText" class="modal visual-links" role="dialog" data-backdrop="true" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            
+                            <div class="modal-body">
+                                            <p>&nbsp;</p>
+                                    </div>
+            
+                            <div class="modal-footer">
+                    
+    <div class="center">
+        <button class="btn btn-primary" data-dismiss="modal">OK</button>
+    </div>
+
+                </div>
+                    </div>
+    </div>
+</div>
+
+
+        <script type="text/javascript">
+
+            require(['main'], function () {
+                                window.localStorage.setItem('institution', 'TOWSN');
+            });
+
+            
+            
+            
+            
+                // Universal (Google) Analytics 
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-49006161-1', { 'userId': 'd41d8cd98f00b204e9800998ecf8427e' });
+                ga('send', 'pageview');
+
+            
+            window.csrfToken = 'CSRFToken';
+            window.csrfCookie = 'CSRFCookie';
+
+                    </script>
+    </body>
+</html><script id="f5_cspm">(function(){var f5_cspm={f5_p:'FBMCPODIKGDOKGGGININBINIHCADIHOBGKGMMOLHAALOBPMKGPNJHANCOHIOIGAEEJLBHGIOAANOHHFCGJPACOPGAAKNEKPJHGFKFELOJDNLCKAKHGOHAKLLHLKPCLAF',setCharAt:function(str,index,chr){if(index>str.length-1)return str;return str.substr(0,index)+chr+str.substr(index+1);},get_byte:function(str,i){var s=(i/16)|0;i=(i&15);s=s*32;return((str.charCodeAt(i+16+s)-65)<<4)|(str.charCodeAt(i+s)-65);},set_byte:function(str,i,b){var s=(i/16)|0;i=(i&15);s=s*32;str=f5_cspm.setCharAt(str,(i+16+s),String.fromCharCode((b>>4)+65));str=f5_cspm.setCharAt(str,(i+s),String.fromCharCode((b&15)+65));return str;},set_latency:function(str,latency){latency=latency&0xffff;str=f5_cspm.set_byte(str,40,(latency>>8));str=f5_cspm.set_byte(str,41,(latency&0xff));str=f5_cspm.set_byte(str,35,2);return str;},wait_perf_data:function(){try{var wp=window.performance.timing;if(wp.loadEventEnd>0){var res=wp.loadEventEnd-wp.navigationStart;if(res<60001){var cookie_val=f5_cspm.set_latency(f5_cspm.f5_p,res);window.document.cookie='f5avr0512264274aaaaaaaaaaaaaaaa='+encodeURIComponent(cookie_val)+';path=/';}
+return;}}
+catch(err){return;}
+setTimeout(f5_cspm.wait_perf_data,100);return;},go:function(){var chunk=window.document.cookie.split(/\s*;\s*/);for(var i=0;i<chunk.length;++i){var pair=chunk[i].split(/\s*=\s*/);if(pair[0]=='f5_cspm'&&pair[1]=='1234')
+{var d=new Date();d.setTime(d.getTime()-1000);window.document.cookie='f5_cspm=;expires='+d.toUTCString()+';path=/;';setTimeout(f5_cspm.wait_perf_data,100);}}}}
+f5_cspm.go();}());</script>
