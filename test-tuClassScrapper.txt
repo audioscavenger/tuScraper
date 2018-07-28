@@ -1,0 +1,884 @@
+
+
+python Scripts\pip.exe install pypiwin32 scrapy arrow
+# python Scripts\pip.exe install pysqlite
+# pysqlite requires https://www.microsoft.com/en-us/download/details.aspx?id=44266
+# python Scripts\pip.exe install win-unicode-console
+
+scrapy shell
+python Scripts\scrapy.exe shell
+
+# https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
+fetch("https://www.reddit.com/r/gameofthrones/")
+
+# file:///C:/TMP/USER/tmpk5x469.html
+print response.text
+
+response.css(".title::text").extract()
+
+# get parts of the url:
+response.url.split("/")[-2]
+
+# https://doc.scrapy.org/en/latest/intro/tutorial.html
+# https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
+
+scrapy view https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/6764
+# ==> then work on this with firefox F12
+
+fetch("https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/6764")
+print response.text
+
+# left menu:
+response.css(".title::text").extract()
+# [u'Full Site', u'Browse Classes', u'Class Search', u'Course Catalog', u'Exam Schedule', u'Academic Calendar', u'Faculty/Staff Directory', u'Blackboard', u'Register to Vote']
+
+response.css(".title::text").extract_first()
+# u'Full Site'
+
+
+# title:
+response.css('title::text').extract_first()
+# u'ITEC 470 - 101'
+response.css('h1.page-title::text').extract_first()
+# u'ITEC 470 - 101'
+response.css('.page-title::text').extract_first()
+# u'ITEC 470 - 101'
+
+response.selector.xpath('//title/text()').extract_first()
+# u'ITEC 470 - 101'
+response.selector.xpath('//h1/text()').extract()
+# [u'ITEC 470 - 101']
+
+
+# topic:
+response.css('.primary-head::text').extract_first()
+# u'\n                    \n            \n            \n              \n                             SPECIAL TOPICS IN INFORMATION TECHNOLOGY            \n            \n                        '
+response.selector.xpath('//section/div/text()').extract_first()
+# [u'\n    ', u'\n\n    ', u'\n', u'\n                    \n            \n            \n            \n                             SPECIAL TOPICS IN INFORMATION TECHNOLOGY            \n            \n ...
+
+
+
+<div class="section-content clearfix" style="">
+  <div class="pull-left">
+    <div class="strong">Session</div>
+  </div>
+  <div class="pull-right">
+    <div>Regular Academic Session</div>
+  </div>
+</div>
+
+<div class="section-content clearfix" style="">
+  <div class="pull-left">
+    <div class="strong">Class Number</div>
+  </div>
+  <div class="pull-right">
+    <div>6764</div>
+  </div>
+</div>
+
+response.css(".pull-left").extract()
+
+response.xpath('//title')
+# [<Selector xpath='//title' data=u'<title>ITEC 470 - 101</title>'>]
+
+response.css('div.pull-left').extract()
+
+response.css('div.pull-left').extract_first()
+
+response.css('div.pull-left div.pull-right').extract()
+response.css('div.section-content div.pull-left').extract()
+response.css('div.section-content div.strong').extract()
+
+
+response.css('div.section-content div.strong').extract()[0]
+# u'<div class="strong section-body">Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 units of ITEC, CIS, or COSC courses.</div>'
+response.css('div.section-content div.strong').extract()[1]
+# u'<div class="strong">Session</div>'
+response.css('div.section-content div.strong').extract()[2]
+# u'<div class="strong">Class Number</div>'
+response.css('div.section-content div.strong').extract()[3]
+# u'<div class="strong">Career</div>'
+
+
+# -----------------------------------------------------------------
+response.css('div.primary-head').extract()
+# [u'<div class="primary-head" style="" itemprop="name">\n                    \n            \n            \n              \n SPECIAL TOPICS IN INFORMATION TECHNOLOGY            \n            \n                        </div>', u'<div class="primary-head">Class Actions</div>', u'<div class="primary-head">Similar Classes</div>', u'<div class="primary-head" style="">\n        \n            \n            \n              \n                          Class Details            \n            \n                        </div>', u'<div class="primary-head" style="">\n        \n           \n            \n              \n                             Class Availability            \n            \n                        </div>']
+
+# -----------------------------------------------------------------
+response.css('div.section-content div.pull-left').extract()[0]
+# u'<div class="pull-left">\n            <div class="strong">Session</div>\n\n                    </div>'
+response.css('div.section-content div.pull-left').extract()[1]
+# u'<div class="pull-left">\n            <div class="strong">Class Number</div>\n\n                    </div>'
+response.css('div.section-content div.pull-left').extract()[2]
+# u'<div class="pull-left">\n            <div class="strong">Career</div>\n\n                    </div>'
+
+response.css('div.section-content div.pull-right').extract()[0]
+# u'<div class="pull-right">\n        \n                                                                         <div>Regular Academic Session</div>\n                                                       </div>'
+response.css('div.section-content div.pull-right').extract()[1]
+# u'<div class="pull-right">\n        \n                                                                         <div>7608</div>\n                                   </div>'
+response.css('div.section-content div.pull-right').extract()[2]
+# u'<div class="pull-right">\n        \n                                                                         <div>Undergraduate</div>\n                                            </div>'
+
+response.css('div.section-content div.pull-right div::text').extract()[2]
+u'Undergraduate'
+
+# -----------------------------------------------------------------
+response.css('div.section-content div.pull-left')
+response.css('div.section-content div.pull-left')[5]
+response.css('div.section-content div.pull-right')
+response.css('div::text')[50]
+# <Selector xpath=u'descendant-or-self::div/text()' data=u'Undergraduate'>
+response.css('div::text')[50].extract()
+# u'Undergraduate'
+# -----------------------------------------------------------------
+
+
+# -----------------------------------------------------------------
+# 'Components' key has a problem: value = <table class="PSTEXT"><tr><td>Lecture Required</td></tr></table></div>
+# thus the value disappear in "div.section-content div.pull-right div::text" because there is no text in the table.
+# thus len(key)=23 and len(value)=22
+
+response.css('title::text').extract_first()
+# u'ITEC 470 - 101'
+
+len(response.css('div.section-content div.pull-left div::text').extract())
+response.css('div.section-content div.pull-left div::text').extract()
+# [u'Session', u'Class Number', u'Career', u'Units', u'Grading', u'Topic', u'Description', u'Add Consent', u'Enrollment Requirements', u'Instructor(s)', u'Topic', u'Meets', u'Dates', u'Room', u'Campus', u'Location', u'Components', u'Status', u'Seats Taken', u'Seats Open', u'Class Capacity', u'Wait List Total', u'Wait List Capacity']
+
+len(response.css('div.section-content div.pull-right div::text').extract())
+response.css('div.section-content div.pull-right div::text').extract()
+# [u'Regular Academic Session', u'7608', u'Undergraduate', u'3 units', u'UNDERGRADUATE GRADING', u'Network & Security Practicum', u'Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 units of ITEC, CIS, or COSC courses.', u'Department Consent Required', u'ITEC 470 requires 12 units of ITEC, CIS and /or COSC.', u'Jeffrey Hanson', u'COSC & DIAR/CPS Initiative', u'Mo 6:00PM - 8:40PM', u'08/28/2017 - 12/19/2017', u'Y20111', u'Main Academic Campus', u'On Campus', u'Closed', u'15', u'0', u'15', u'0', u'0']
+
+key=response.css('div.section-content div.pull-left div::text').extract()
+value=response.css('div.section-content div.pull-right div::text').extract()
+
+# remove a particular element in a list:
+key.remove('Components')
+
+classes={}
+classDict = dict(zip(key,value))
+classes.update({int(classDict['Class Number']):classDict})
+
+# -----------------------------------------------------------------
+
+
+scrapy startproject tuScraper
+cd tuScraper
+scrapy genspider --template=basic tuscraper mytumobile.towson.edu
+# Created spider 'tuscraper' using template 'basic' in module:
+#   myScraper.spiders.tuscraper
+
+
+
+# https://medium.com/python-pandemonium/develop-your-first-web-crawler-in-python-scrapy-6b2ee4baf954
+# https://www.analyticsvidhya.com/blog/2017/07/web-scraping-in-python-using-scrapy/
+# init db:
+pushd S:\wintools\PortableApps\Python27
+scrapy shell https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/6764
+
+import sqlite3, re
+# Create a database in RAM
+# db = sqlite3.connect(':memory:')
+# Creates or opens a file called mydb with a SQLite3 DB
+db = sqlite3.connect('tuScraper.0.sqlite3')
+db = sqlite3.connect('tuScraper/tuScraper.0.sqlite3')
+cursor = db.cursor()
+cursor.execute("DROP TABLE IF EXISTS classes")
+cursor.execute("CREATE TABLE IF NOT EXISTS classes(ClassNumber INTEGER PRIMARY KEY)")
+cursor.execute("DROP TABLE IF EXISTS fields")
+cursor.execute("CREATE TABLE IF NOT EXISTS fields(field TEXT PRIMARY KEY, desc TEXT)")
+cursor.execute("DROP TABLE IF EXISTS history")
+cursor.execute("CREATE TABLE IF NOT EXISTS history(id INTEGER PRIMARY KEY, timestamp NUMERIC)")
+
+import datetime, arrow
+arrow.get(datetime.datetime.now()).timestamp
+1510832691
+arrow.get(1510832691).datetime
+datetime.datetime(2017, 11, 16, 11, 44, 51, tzinfo=tzutc())
+arrow.get(1510832691).datetime.isoformat()
+'2017-11-16T11:44:51+00:00'
+
+keys=response.css('div.section-content div.pull-left div::text').extract()
+keys.remove('Components')
+# response.css('div.section-content div.pull-left div::text').extract()
+# [u'Session', u'Class Number', u'Career', u'Units', u'Grading', u'Topic', u'Description', u'Add Consent', u'Enrollment Requirements', u'Instructor(s)', u'Topic', u'Meets', u'Dates', u'Room', u'Campus', u'Location', u'Status', u'Seats Taken', u'Seats Open', u'Class Capacity', u'Wait List Total', u'Wait List Capacity']
+
+values=response.css('div.section-content div.pull-right div::text').extract()
+# response.css('div.section-content div.pull-right div::text').extract()
+# [u'Regular Academic Session', u'7608', u'Undergraduate', u'3 units', u'UNDERGRADUATE GRADING', u'Network & Security Practicum', u'Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 units of ITEC, CIS, or COSC courses.', u'Department Consent Required', u'ITEC 470 requires 12 units of ITEC, CIS and /or COSC.', u'Jeffrey Hanson', u'COSC & DIAR/CPS Initiative', u'Mo 6:00PM - 8:40PM', u'08/28/2017 - 12/19/2017', u'Y20111', u'Main Academic Campus', u'On Campus', u'Closed', u'15', u'0', u'15', u'0', u'0']
+
+classDict = dict(zip(keys,values))
+# {u'Status': u'Open', u'Add Consent': u'Department Consent Required', u'Instructor(s)': u'Jeffrey Hanson', u'Seats Open': u'9', u'Description': u'Studies in selected areas of information technology. May be repeated for a maximum of 6 units provided a different topic is taken. Prerequisites: 12 unitsof ITEC, CIS, or COSC courses.', u'Grading': u'UNDERGRADUATE GRADING', u'Career': u'Undergraduate', u'Room': u'Y20111', u'Seats Taken': u'11', u'Dates': u'01/29/2018 - 05/22/2018', u'Wait List Capacity': u'0', u'Topic': u'Network & Security Practicum', u'Meets': u'Mo 6:00PM - 8:40PM', u'Session': u'Regular Academic Session', u'Location': u'On Campus', u'Units': u'3 units', u'Wait List Total': u'0', u'Class Capacity': u'20', u'Enrollment Requirements': u'ITEC 470 requires 12 units of ITEC, CIS and /or COSC.', u'Campus': u'Main Academic Campus', u'Class Number': u'6764'}
+
+# insert the fields descriptions: cannot do it with keys because 'Topic' is present twice. Its corresponding value in values also is the same.
+# The zip method to create the dictionary will eliminate it.
+for key in classDict:
+  cursor.execute("INSERT INTO fields(field, desc) VALUES(?,?)", (re.sub(r'\W+', '', key), key))
+#
+
+# add columns:
+numerics = ['ClassNumber', 'SeatsTaken', 'SeatsOpen', 'ClassCapacity', 'WaitListTotal', 'WaitListCapacity']
+for field in classDict:
+  if re.sub(r'\W+', '', field) in numerics:
+	cursor.execute("ALTER TABLE history ADD "+re.sub(r'\W+', '', field)+" INTEGER")
+    if re.sub(r'\W+', '', field) != 'ClassNumber':
+      cursor.execute("ALTER TABLE classes ADD "+re.sub(r'\W+', '', field)+" INTEGER")
+  else
+    cursor.execute("ALTER TABLE classes ADD "+re.sub(r'\W+', '', field)+" TEXT")
+db.commit()
+db.close()
+
+
+#------------------------------------------
+# NULL VALUES = len(keys) > len(values):
+scrapy shell https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/1018
+import re
+keys=response.css('div.section-content div.pull-left div.strong::text').extract()
+keys.remove('Components')
+keys = [re.sub(r'\W+', '', i).encode("utf-8") for i in keys]
+print len(keys)
+print keys
+values=response.css('div.section-content div.pull-right div::text').extract()
+print len(values)
+print values
+
+19
+# ['Session', 'ClassNumber', 'Career', 'Units', 'Grading', 'Description', 'AddConsent', 'Instructors', 'Meets', 'Dates', 'Room', 'Campus', 'Location', 'Status', 'SeatsTaken', 'SeatsOpen', 'ClassCapacity', 'WaitListTotal', 'WaitListCapacity']
+18
+# [u'Regular Academic Session', u'1018', u'Graduate', u'1 units', u'Thesis Continuum', u"Individual research and writing of master's thesis. Prerequisite: 6 units of SOSC 897 or SOSC 898.", u'Department Consent Required', u'Staff', u'TBA', u'01/29/2018 - 05/22/2018', u'Main Academic Campus', u'On Campus', u'Open', u'0', u'1', u'1', u'0', u'0']
+
+values=response.css('div.section-content div.pull-right div::text').extract()
+prevalues=response.css('div.section-content div.pull-right div').extract()
+# [u'<div>Regular Academic Session</div>', u'<div>1018</div>', u'<div>Graduate</div>', u'<div>1 units</div>', u'<div>Thesis Continuum</div>', u"<div>Individual research and writing of master's thesis. Prerequisite: 6 units of SOSC 897 or SOSC 898.</div>", u'<div>Department Consent Required</div>', u'<div>Staff</div>', u'<div>TBA</div>', u'<div>01/29/2018 - 05/22/2018</div>', u'<div></div>', u'<div>Main Academic Campus</div>', u'<div>On Campus</div>', u'<div><table class="PSTEXT"><tr><td>Thesis/ Dissertation Required</td></tr></table></div>', u'<div>Open</div>', u'<div>0</div>', u'<div>1</div>',u'<div>1</div>', u'<div>0</div>', u'<div>0</div>']
+prevalues=response.css('div.section-content div.pull-right div').extract()
+indices = [i for i, x in enumerate(prevalues) if x == "<div></div>"]
+for i in indices: values.insert(i, "TBA")
+
+
+
+#------------------------------------------
+# NULL KEYS = len(keys) < len(values):
+scrapy shell https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/1022
+import re
+keys=response.css('div.section-content div.pull-left div.strong::text').extract()
+keys.remove('Components')
+keys = [re.sub(r'\W+', '', i).encode("utf-8") for i in keys]
+print len(keys)
+print keys
+values=response.css('div.section-content div.pull-right div::text').extract()
+print len(values)
+print values
+
+19
+# ['Session', 'ClassNumber', 'Career', 'Units', 'Grading', 'Description', 'ClassAttributes', 'Instructors', 'Meets', 'Dates', 'Room', 'Campus', 'Location', 'Status', 'SeatsTaken', 'SeatsOpen', 'ClassCapacity', 'WaitListTotal', 'WaitListCapacity']
+20
+# [u'Regular Academic Session', u'1022', u'Undergraduate', u'3 units', u'UNDERGRADUATE GRADING', u'The origins of modern governments. The nature of constitutions and constitutionalism. A definition and interpretation of politics. GenEd II.C.2 or Core: Social & Behavioral Sciences.', u'Core Category 6: Social & Behavioral Sciences', u'\nGroup II.C.2. Western Heritage: Social/Behavioral', u'Antonio W. Campbell', u'MoWeFr 8:00AM - 8:50AM', u'01/29/2018 - 05/22/2018', u'LA3214', u'Main Academic Campus', u'On Campus', u'Open', u'1', u'24', u'25', u'0', u'5']
+<div>Core Category 6: Social & Behavioral Sciences<br />
+Group II.C.2. Western Heritage: Social/Behavioral</div>
+
+# ====> <br /> becomes \n and then new item in the list of values...
+
+# same thing:
+response.css('div.section-content div.pull-right div').extract()
+response.css('div.section-content div.pull-right').xpath('./div').extract()
+
+# same thing:
+response.css('div.section-content div.pull-right div::text').extract()
+response.css('div.section-content div.pull-right').xpath('.//div/text()').extract()
+
+# solution:
+response = response.replace( body=re.sub(r"<br\s*[\/]?>", "\n", response.body) )
+
+#------------------------------------------
+scrapy shell https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/1044
+import re
+keys=response.css('div.section-content div.pull-left div.strong::text').extract()
+keys = [re.sub(r'\W+', '', i).encode("utf-8") for i in keys]
+keys.remove('Components')
+len(keys)
+# ['Session', 'ClassNumber', 'Career', 'Units', 'Grading', 'Description', 'Instructors', 'Meets', 'Dates', 'Room', 'Campus', 'Location', 'Status', 'SeatsTaken', 'SeatsOpen', 'CombinedSectionCapacity', 'WaitListTotal', 'WaitListCapacity']
+
+keys2remove=['Components']
+keys = [e for e in keys if e not in keys2remove]
+# solution:
+keys=['ClassCapacity' if x=='CombinedSectionCapacity' else x for x in keys]
+
+#------------------------------------------
+# now the fun
+select classnumber,title,status from classes where title like 'ITEC 470%' or title like 'ITEC 423%' order by title asc
+"2781"	"ITEC 423 - 900"	"Wait List"
+"7154"	"ITEC 423 - 901"	"Wait List"
+"6764"	"ITEC 470 - 101"	"Open"
+"2816"	"ITEC 470 - 180"	"Open"
+"7142"	"ITEC 470 - 851"	"Open"
+
+select classes.classnumber,title,status,ClassCapacity,(SeatsOpen-waitlisttotal) from classes,history 
+where history.classnumber = classes.classnumber
+and history.classnumber in (
+  select classes.classnumber from classes 
+  where title like 'ITEC 470%' or title like 'ITEC 423%' or title like 'ITEC 464%'
+)
+group by classes.classnumber
+order by title asc
+"2781"	"ITEC 423 - 900"	"Wait List"	"30"	"-13"
+"7154"	"ITEC 423 - 901"	"Wait List"	"30"	"-8"
+"2809"	"ITEC 464 - 001"	"Closed"	"30"	"-14"
+"6764"	"ITEC 470 - 101"	"Open"	"16"	"4"
+"2816"	"ITEC 470 - 180"	"Open"	"7"	"13"
+"7142"	"ITEC 470 - 851"	"Open"	"4"	"21"
+
+
+select classes.classnumber,title,status,ClassCapacity,(SeatsOpen-waitlisttotal) from classes,history 
+where history.classnumber = classes.classnumber
+and history.classnumber in (2768,2796,6571,6572,6764,7142)
+group by classes.classnumber
+order by title asc
+"2768"	"CIS 212 - 001"	"Wait List"	"24"	"-4"
+"2796"	"ITEC 250 - 002"	"Open"	"22"	"-2"
+"6571"	"ITEC 325 - 851"	"Open"	"30"	"11"
+"6572"	"ITEC 427 - 851"	"Open"	"30"	"20"
+"6764"	"ITEC 470 - 101"	"Open"	"20"	"4"
+"7142"	"ITEC 470 - 851"	"Open"	"25"	"21"
+
+select classes.classnumber from classes 
+where title like 'ITEC 470%' or title like 'ITEC 423%' or title like 'ITEC 464%'
+union SELECT DISTINCT * FROM (VALUES(2768),(2796),(6571),(6572),(6764),(7142)) 
+
+# sql_mySurvey
+# CREATE VIEW perso_fall2017 AS select classes.classnumber,title,status,SeatsTaken,(SeatsOpen-waitlisttotal) from classes,history 
+select classes.classnumber,title,status,SeatsTaken,(SeatsOpen-waitlisttotal) from classes,history 
+where history.classnumber = classes.classnumber
+and history.classnumber in (
+  select classes.classnumber from classes 
+  where title like 'ITEC 423%' or title like 'ITEC 464%'
+  union SELECT DISTINCT * FROM (VALUES(2768),(2796),(6571),(6572),(6764),(7142)) 
+)
+group by classes.classnumber
+order by title asc
+"2768"	"CIS 212 - 001"	"Wait List"	"24"	"-4"
+"2796"	"ITEC 250 - 002"	"Open"	"22"	"-2"
+"6571"	"ITEC 325 - 851"	"Open"	"19"	"11"
+"2781"	"ITEC 423 - 900"	"Wait List"	"30"	"-13"
+"7154"	"ITEC 423 - 901"	"Wait List"	"30"	"-8"
+"6572"	"ITEC 427 - 851"	"Open"	"10"	"20"
+"2809"	"ITEC 464 - 001"	"Closed"	"30"	"-14"
+"6764"	"ITEC 470 - 101"	"Open"	"16"	"4"
+"2816"	"ITEC 470 - 180"	"Open"	"7"	"13"
+"7142"	"ITEC 470 - 851"	"Open"	"4"	"21"
+
+
+select history.classnumber,title,meets,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+where history.classnumber = classes.classnumber
+group by classes.classnumber
+"2780"	"ITEC 397 - 101"	"TBA"	"4"	"16"
+"2787"	"ITEC 201 - 002"	"MoWeFr 2:00PM - 2:50PM"	"5"	"13"
+"2788"	"ITEC 201 - 400"	"MoWeFr 10:00AM - 10:50AM"	"6"	"12"
+
+# sql_ITEC
+# CREATE VIEW ITEC_fall2017 AS select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+where history.classnumber = classes.classnumber
+and title like 'ITEC%'
+group by classes.classnumber
+"2780"	"ITEC 397 - 101"		"TBA"		"Open"	"4"	"16"
+"2781"	"ITEC 423 - 900"	"ITEC 423 requires a grade of C (2.0) or higher in ITEC 231."	"TBA"	"Online"	"Wait List"	"30"	"-12"
+"2782"	"ITEC 201 - 001"		"Mo 11:00AM - 12:15PM"		"Open"	"20"	"-1"
+
+# structure
+select name,sql from sqlite_master
+where type in ('table','view')
+
+select timestamp,title,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+where history.classnumber = '2792'
+order by timestamp asc
+
+select timestamp,(SeatsOpen-waitlisttotal) from history
+where history.classnumber in (2768,2796,6571)
+order by timestamp asc
+
+
+# chart.line.js:
+# what we need is this :
+[{
+    "timestamp" : "date",
+    "ITEC-101" : "-1",
+    "ITEC-212" : "5",
+    "ITEC-464" : "-14"
+  },..
+
+select timestamp,waitlisttotal from history
+where history.classnumber = 2768
+order by timestamp asc
+"1510866999"	"3"
+"1510870572"	"3"
+"1510914679"	"3"
+"1510935594"	"3"
+"1510950682"	"3"
+"1510997853"	"3"
+"1511038200"	"4"
+"1511124168"	"4"
+"1511184506"	"4"
+"1511185524"	"4"
+"1511186116"	"4"
+"1511340077"	"2"
+
+select timestamp,waitlisttotal from history
+where history.classnumber = 2781
+order by timestamp asc
+"1510867025"	"12"
+"1510870576"	"12"
+"1510914682"	"12"
+"1510935596"	"12"
+"1510950684"	"12"
+"1510997856"	"12"
+"1511038202"	"13"
+"1511124170"	"12"
+"1511184506"	"11"
+"1511185525"	"11"
+"1511186118"	"11"
+"1511340080"	"11"
+
+
+# LEFT join multiple columns:
+SELECT a.timestamp,a.SeatsOpen as 'CIS212-001',
+       b.SeatsOpen as 'ITEC250-002'
+  FROM history a 
+    LEFT JOIN history b
+     ON a.timestamp=b.timestamp
+where a.classnumber = 2768 or b.classnumber = 2796
+# ==> only one timestamp match!
+# using (timestamp) == ON a.timestamp=b.timestamp
+
+# ==> one must join 2 tables where the rows do not match so we must create a pseudo column with the rowcount of the output
+# https://stackoverflow.com/questions/16847574/how-to-use-row-number-in-sqlite
+# unfortunately wht's returned is the original row ids...
+
+# https://stackoverflow.com/questions/28608031/sqlite-limit-and-row-number
+# SOLUTION:
+SELECT timestamp,SeatsOpen,
+(
+    SELECT COUNT(*) 
+    FROM history b  
+    WHERE a.timestamp >= b.timestamp
+	and b.classnumber = 2768
+) AS rnum
+FROM history a 
+where a.classnumber = 2768
+LIMIT 20;
+# timestamp SeatsOpen rnum
+"1510866999"	"0"	"1"
+"1510870572"	"0"	"2"
+"1510914679"	"0"	"3"
+
+# option to explore:
+SELECT timestamp,waitlisttotal,
+(
+    SELECT COUNT(*) 
+    FROM history b  
+    WHERE a.timestamp >= b.timestamp
+	and b.classnumber = 2768
+) AS rnum
+FROM history a 
+where a.classnumber = 2768 or a.classnumber = 2781
+"1510866999"	"3"	"1"
+"1510870572"	"3"	"2"
+"1510914679"	"3"	"3"
+"1510935594"	"3"	"4"
+"1510950682"	"3"	"5"
+"1510997853"	"3"	"6"
+"1511038200"	"4"	"7"
+"1511124168"	"4"	"8"
+"1511184506"	"4"	"9"
+"1511185524"	"4"	"10"
+"1511186116"	"4"	"11"
+"1511340077"	"2"	"12"
+"1510867025"	"12"	"1"
+"1510870576"	"12"	"2"
+"1510914682"	"12"	"3"
+"1510935596"	"12"	"4"
+"1510950684"	"12"	"5"
+"1510997856"	"12"	"6"
+"1511038202"	"13"	"7"
+"1511124170"	"12"	"8"
+"1511184506"	"11"	"9"
+"1511185525"	"11"	"10"
+"1511186118"	"11"	"11"
+"1511340080"	"11"	"12"
+
+# ET VOILAAAAAAAAAAAAA
+SELECT x.timestamp as timestamp,x.waitlisttotal as 'CIS212-001',
+       y.waitlisttotal as 'ITEC250-002'
+  FROM (SELECT timestamp,waitlisttotal,
+(
+    SELECT COUNT(*) 
+    FROM history b  
+    WHERE a.timestamp >= b.timestamp
+	and b.classnumber = 2768
+) AS rnum
+FROM history a 
+where a.classnumber = 2768) x
+    LEFT JOIN (SELECT timestamp,waitlisttotal,
+(
+    SELECT COUNT(*) 
+    FROM history b  
+    WHERE a.timestamp >= b.timestamp
+	and b.classnumber = 2781
+) AS rnum
+FROM history a 
+where a.classnumber = 2781) y
+     ON x.rnum=y.rnum
+# timestamp 'CIS212-001' 'ITEC250-002'
+"1510866999"	"3"	"12"
+"1510870572"	"3"	"12"
+"1510914679"	"3"	"12"
+"1510935594"	"3"	"12"
+"1510950682"	"3"	"12"
+"1510997853"	"3"	"12"
+"1511038200"	"4"	"13"
+"1511124168"	"4"	"12"
+"1511184506"	"4"	"11"
+"1511185524"	"4"	"11"
+"1511186116"	"4"	"11"
+"1511340077"	"2"	"11"
+
+# chart.line.js:
+# what we need is this :
+[{
+    "timestamp" : "date",
+    "CIS212-001" : "-1",
+    "ITEC250-002" : "5",
+  },..
+
+SELECT x.timestamp as timestamp,x.openings as 'CIS212-001', 
+     y.openings as 'ITEC250-002' 
+FROM (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, 
+( 
+  SELECT COUNT(*) 
+  FROM history b 
+  WHERE a.timestamp >= b.timestamp 
+and b.classnumber = 2768 
+) AS rnum 
+FROM history a 
+where a.classnumber = 2768) x 
+  LEFT JOIN (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, 
+( 
+  SELECT COUNT(*) 
+  FROM history b 
+  WHERE a.timestamp >= b.timestamp 
+and b.classnumber = 2781 
+) AS rnum 
+FROM history a 
+where a.classnumber = 2781) y 
+   ON x.rnum=y.rnum;
+# timestamp 'CIS212-001' 'ITEC250-002'
+"1510866999"	"-3"	"-12"
+"1510870572"	"-3"	"-12"
+"1510914679"	"-3"	"-12"
+"1510935594"	"-3"	"-12"
+"1510950682"	"-3"	"-12"
+"1510997853"	"-3"	"-12"
+"1511038200"	"-4"	"-13"
+"1511124168"	"-4"	"-12"
+"1511184506"	"-4"	"-11"
+"1511185524"	"-4"	"-11"
+"1511186116"	"-2"	"-11"
+"1511340077"	"-2"	"-11"
+
+
+
+
+"sql_ITEC231": "select timestamp,title,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes \
+    where history.classnumber = '2792' \
+    and history.classnumber = classes.classnumber \
+    order by timestamp asc \
+    LIMIT 100;",
+"sql_classChart": "SELECT x.timestamp as timestamp,x.openings as 'CIS212-001', \
+     y.openings as 'ITEC250-002' \
+FROM (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \
+( \
+  SELECT COUNT(*) \
+  FROM history b \
+  WHERE a.timestamp >= b.timestamp \
+and b.classnumber = 2768 \
+) AS rnum \
+FROM history a \
+where a.classnumber = 2768) x \
+  LEFT JOIN (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \
+( \
+  SELECT COUNT(*) \
+  FROM history b \
+  WHERE a.timestamp >= b.timestamp \
+and b.classnumber = 2781 \
+) AS rnum \
+FROM history a \
+where a.classnumber = 2781) y \
+   ON x.rnum=y.rnum;"
+#
+
+# classes in ITEC:
+select title,status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes 
+where history.classnumber = classes.classnumber 
+and title like 'ITEC%'
+group by title
+order by timestamp,title asc 
+
+# low fill classes in ITEC:
+select title,status,SeatsTaken,SeatsOpen from history,classes 
+where history.classnumber = classes.classnumber 
+and title like 'ITEC%'
+and SeatsTaken < 5
+and SeatsOpen > 9
+and status = 'Open'
+group by title
+order by timestamp,title asc 
+# title	Status	SeatsTaken	SeatsOpen
+# ITEC 201 - 002	Open	4	14
+# ITEC 201 - 101	Open	3	17
+# ITEC 201 - 400	Open	4	14
+# ITEC 201 - 401	Open	3	15
+# ITEC 201 - 402	Open	3	15
+# ITEC 201 - 450	Open	4	14
+# ITEC 397 - 101	Open	4	16
+# ITEC 470 - 851	Open	4	21
+
+# empty classes in ITEC:
+select title,status,SeatsTaken,SeatsOpen from history,classes 
+where history.classnumber = classes.classnumber 
+and title like 'ITEC%'
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+group by title
+order by timestamp,title asc 
+# title	Status	SeatsTaken	SeatsOpen
+# ITEC 201 - 400	Open	0	18
+1
+
+# every really empty classes:
+select title,status,meets,SeatsTaken,SeatsOpen from history,classes 
+where history.classnumber = classes.classnumber 
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+group by title
+order by timestamp,title asc;
+590
+
+#------------------------------------------------------
+# goal: select classes with 0 SeatsTaken group by class
+http://www.peachpit.com/articles/article.aspx?p=30681&seqNum=8
+SELECT
+    au_id,
+    COUNT(*) AS "num_books"
+  FROM title_authors
+  GROUP BY au_id;
+#
+
+# distinct classes:
+select distinct substr(title, 1, 4), from classes
+115
+
+# number of distinct classes offered:
+select distinct substr(title, 1, 4), count (*) as num_classes from classes
+group by substr(title, 1, 4)
+# substr(title, 1, 4)	num_classes
+# MUSA	598
+# BIOL	268
+# PSYC	253
+# MATH	246
+# ENGL	187
+# ART 	181
+# NURS	177
+# PHYS	155
+# SPPA	124
+# COSC	117
+115
+
+# not good: i guess we count the number of timestamps for every classes:
+select distinct substr(title, 1, 4), count (*) as num_classes from history,classes 
+where history.classnumber = classes.classnumber 
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+group by substr(title, 1, 4)
+order by timestamp,substr(title, 1, 4) asc;
+# substr(title, 1, 4)	num_classes
+# MUSA	3399
+# NURS	336
+# BIOL	273
+# ILPD	273
+# MATH	185
+# TSEM	160
+# ACSD	156
+# IDHP	104
+# SPPA	104
+# ENGL	100
+# PSYC	96
+60
+
+# ==> MUSA should show 258 empty classes
+select title,status,SeatsTaken,SeatsOpen from history,classes 
+where history.classnumber = classes.classnumber 
+and substr(title, 1, 4) = 'MUSA'
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+group by history.classnumber
+order by timestamp,title asc 
+# title	Status	SeatsTaken	SeatsOpen
+# MUSA 100 - 001	Open	0	12
+# MUSA 100 - 101	Open	0	12
+# MUSA 101 - 001	Open	0	12
+# MUSA 101 - 002	Open	0	12
+258
+
+# let's make a list of timestamps to rely on:
+SELECT timestamp from history,classes where history.classnumber = classes.classnumber 
+and substr(title, 1, 4) = 'MUSA' 
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+group by history.classnumber
+258
+
+# let's group everything together: no good we have 297 instead of 258:
+select distinct substr(title, 1, 4) as class, count (*) as num_classes from history,classes 
+where history.classnumber = classes.classnumber 
+and substr(title, 1, 4) = 'MUSA'
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+and timestamp in (
+  SELECT timestamp from history,classes where history.classnumber = classes.classnumber 
+  and substr(title, 1, 4) = 'MUSA' 
+  and SeatsTaken = 0
+  and SeatsOpen > 9
+  and status = 'Open'
+  and meets != 'TBA'
+  GROUP BY history.ClassNumber)
+group by class
+# MUSA	297
+
+# finally: not perfect but well that's enough for tonight:
+select distinct substr(title, 1, 4) as class, count (*) as num_classes from history,classes 
+where history.classnumber = classes.classnumber 
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+and timestamp in (
+  SELECT timestamp from history,classes where history.classnumber = classes.classnumber 
+  and SeatsTaken = 0
+  and SeatsOpen > 9
+  and status = 'Open'
+  and meets != 'TBA'
+  GROUP BY history.ClassNumber)
+group by class
+# substr(title, 1, 4)	num_classes
+# MUSA	303
+# TSEM	33
+# MATH	28
+# NURS	27
+# BIOL	25
+# ILPD	21
+# ENGL	15
+# ACSD	12
+# ELED	11
+# EESE	10
+60
+
+# verif for ENGL:
+SELECT timestamp from history,classes where history.classnumber = classes.classnumber 
+and substr(title, 1, 4) = 'ENGL' 
+and SeatsTaken = 0
+and SeatsOpen > 9
+and status = 'Open'
+and meets != 'TBA'
+group by history.classnumber
+14
+# so why do we have 15 in the select above?
+
+
+#############################################
+# 1.6 - add more classes in the chart
+"2768"	"CIS 212 - 001"	"Wait List"	"24"	"-4"
+"2796"	"ITEC 250 - 002"	"Open"	"22"	"-2"
+"6571"	"ITEC 325 - 851"	"Open"	"19"	"11"
+"2781"	"ITEC 423 - 900"	"Wait List"	"30"	"-13"
+"7154"	"ITEC 423 - 901"	"Wait List"	"30"	"-8"
+"6572"	"ITEC 427 - 851"	"Open"	"10"	"20"
+"2809"	"ITEC 464 - 001"	"Closed"	"30"	"-14"
+"6764"	"ITEC 470 - 101"	"Open"	"16"	"4"
+"2816"	"ITEC 470 - 180"	"Open"	"7"	"13"
+"7142"	"ITEC 470 - 851"	"Open"	"4"	"21"
+
+SELECT a.timestamp as timestamp,a.openings as 'CIS212-001', b.openings as 'ITEC423-900' , c.openings as 'ITEC464-001' 
+FROM (
+  SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, 
+  (
+    SELECT COUNT(*) 
+    FROM history y 
+    WHERE x.timestamp >= y.timestamp 
+    and y.classnumber = 2768 
+  ) AS rnum 
+  FROM history x 
+  where x.classnumber = 2768
+) a 
+LEFT JOIN (
+  SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, 
+  ( 
+    SELECT COUNT(*) 
+    FROM history y 
+    WHERE x.timestamp >= y.timestamp 
+    and y.classnumber = 2781 
+  ) AS rnum 
+  FROM history x 
+  where x.classnumber = 2781
+) b 
+ON a.rnum=b.rnum 
+LEFT JOIN (
+  SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, 
+  ( 
+    SELECT COUNT(*) 
+    FROM history y 
+    WHERE x.timestamp >= y.timestamp 
+    and y.classnumber = 2809 
+  ) AS rnum 
+  FROM history x 
+  where x.classnumber = 2809
+) c 
+ON b.rnum=c.rnum;
+
+##############################################
+# number of distinct (under)gradutate classes:
+select distinct Career, count (*) as num_classes from classes
+group by Career
+# Career	num_classes
+# Graduate	1139
+# Undergraduate	4430
+
+# number of distinct on-off campus classes:
+select distinct Campus, count (*) as num_classes from classes
+group by Campus
+# Campus	num_classes
+# Extended Miles OffCampus 25+	85
+# Main Academic Campus	5122
+# Off Campus w/in 25	28
+# Online Campus	244
+# TU Non-Main Campus	90
+
+# number of honor classes
+select EnrollmentRequirements, count (*) as num_classes from classes
+where EnrollmentRequirements like '%Honors%'
+# EnrollmentRequirements	num_classes
+# Must be admitted to the Honors College.	34
+
+# honor classes
+select title,Description from classes
+where EnrollmentRequirements like '%Honors%'
+
