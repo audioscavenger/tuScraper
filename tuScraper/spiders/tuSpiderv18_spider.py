@@ -6,44 +6,57 @@
 # pushd S:\wintools\PortableApps\tuScraper
 # pushd %TEMP%\PortableApps\Python27\tuScraper
 
-# scrapy crawl tuSpiderv7 -o tuSpiderv7.json
-# python ..\Scripts\scrapy.exe crawl tuSpiderv7 -o tuSpiderv7.json
+# scrapy crawl tuSpiderv18 -o tuSpiderv18.json
+# python ..\Scripts\scrapy.exe crawl tuSpiderv18 -o tuSpiderv18.json
 
 # https://doc.scrapy.org/en/latest/intro/tutorial.html#crawling
 import os, scrapy, sqlite3, re, datetime, arrow, sys, logging
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.sgml import SgmlLinkExtractor
 
-## version 7.0    blank page detection based on title
-## version 7.0    had to quote title in the sql insert query, for some reason (moved to Win10)
-## version 7.0    renamed the spider tu1182 to tuSpider
-## version 7.0    version database to tuScraper.x-yyyy.sqlite3
-## version 7.0    renamed a bunch of variables: total, num, nums, processRange, etc
-## version 6.1    added comments and option to reparse classes given a range
+## version 1.8    finally I could parse parameters from the batch command line: created __init__
+## version 1.7    blank page detection based on title
+## version 1.7    had to quote title in the sql insert query, for some reason (moved to Win10)
+## version 1.7    renamed the spider tu1182 to tuSpider
+## version 1.7    version database to tuScraper.x-yyyy.sqlite3
+## version 1.7    renamed a bunch of variables: total, num, nums, processRange, etc
+## version 1.7    added comments and option to reparse classes given a range
+## version 1.6    added comments + formating + rewrite some checks + modulo logging
+## version 1.5    added multiple checks and formating + db class list retrieval
+## version 1.5    added dict_factory method: convert sqlite cursor output to dictionary
+## version 1.4    check len(keys) - len(values) becasue some items are missing
+## version 1.3    added sqlite3 db + arrow for timestamping
+## version 1.3    first round of scrape range 1000-9999 with history table
+## version 1.2    saving of html files fetched under parse
+## version 1.0    first try for 6764,6765 classe with example found at https://doc.scrapy.org/en/latest/intro/tutorial.html#crawling
 
 # ----------------------------------------------------------------------
 # define global variables
 # ----------------------------------------------------------------------
-version = 7.0
+version = 1.8
 
-initDb = True                      # Process a defined range for class table first initialization
-semester = 1183                     # semester to process, will be used in the db name; 1182=Spring 2018, 1183=Summer 2018, etc
+initDb = False                      # Process a defined range for class table first initialization
+# semester = 1183                     # semester to process, will be used in the db name; 1182=Spring 2018, 1183=Summer 2018, etc
+# semester is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
 dbVersion = 1                       # TODO: duplicate the blank db file to create the semester db automatically
-# dbVersion 1: tuSpiderv7->   new "ClassNotes" field discoverd for 1183, making a total of 18 fields
+# dbVersion 1: tuSpiderv18->   new "ClassNotes" field discoverd for 1183, making a total of 18 fields
 # dbVersion 0: tuSpiderv1->v6
 
+# database = ''
+# db = ''
+# cursor = ''
+
 # site base url, that the spider will modify for each loop:
-baseUrl = 'https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/%s/' % (semester)
+# baseUrl = 'https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/%s/' % (semester)
+baseUrl = 'https://mytumobile.towson.edu/app/catalog/classsection/TOWSN'
+
 blankPageTitle = 'Course Catalog'   # generic title when class page do not exist
 
 # Define numeric fields:
 numerics = ['ClassNumber', 'SeatsTaken', 'SeatsOpen', 'ClassCapacity', 'WaitListTotal', 'WaitListCapacity']
 
-# Define keys to remove: "Components" has no value
+# Define keys to remove: "Components" is undefined in the values returned because the text contains a table I don’t mind to extract
 keys2remove=['Components']
-
-# Define path to database (no path = local in \tuScrapper dir)
-database='tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
 
 # Define SQL statement to check if a class number exists.
 # The question mark will be replaced by a parameter:
@@ -60,6 +73,8 @@ totalHistoInserts=0                 # Define a global variable total that will b
 moduloHistoInserts=500              # Print status every 500 lines updates in history table
 classRange = range(1000,7187)       # Range of class numbers to scrap via URL; these number values come from a 0-9999 range test
 # ----------------------------------------------------------------------
+# start_urls is the reserved name list that the spider will parse:
+start_urls = []
 
 # PAUSE
 # os.system('pause')
@@ -72,42 +87,54 @@ def dict_factory(cursor, row):
     d[col[0]] = row[idx]
   return d
 
-# class name is actually arbitrary. TODO: check out why
-class TuPipelineSpider(CrawlSpider):
+# class name is actually arbitrary. TODO: check out why it works
+# class TuSpiderv7(CrawlSpider):
+class TuSpiderv18(scrapy.Spider):
   # this name is called as parameter in the command line:
-  name = 'tuSpiderv7'
+  name = 'tuSpiderv18'
   
-  # start_urls is the reserved name list that the spider will parse:
-  start_urls = []
-  
-  # Create db connection
-  db = sqlite3.connect(database)
-  
-  # Attach the dict factory method to the post-process of row fetching
-  db.row_factory = dict_factory
-  
-  # Create a cursor to communicate with the db
-  cursor = db.cursor()
-  
-  if initDb:
-    # This has to be done the very first time to fill the database.
-    for classNum in classRange: start_urls.append(baseUrl+str(classNum))
-  else:
-    # Execute the sqlClassFetch statement to get the list of class numbers from the database:
-    # Output: rows = [{'ClassNumber': 7179, ..}]
-    rows = cursor.execute(sqlClassFetch).fetchall()
+  # INIT --------------------------------------------
+  def __init__(self, semester=None, *args, **kwargs):
+    super(TuSpiderv18, self).__init__(*args, **kwargs)
+    # Define path to database (no path = local in \tuScrapper dir)
+    self.database='tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
     
-    # Set moduloHistoInserts to 1 to print every lines updated if there are less than 20 rows to process:
-    if len(rows)<20: moduloHistoInserts=1
-  
-    # for each row returned, create an url to parse for the spider:
-    for row in rows: start_urls.append(baseUrl+str(row["ClassNumber"]))
-  #endif
-  
+    self.semesterUrl = '%s/%s/' % (baseUrl, semester)
+
+    # Create db connection
+    self.db = sqlite3.connect(self.database)
+    
+    # Attach the dict factory method to the post-process of row fetching
+    self.db.row_factory = dict_factory
+    
+    # Create a cursor to communicate with the db
+    self.cursor = self.db.cursor()
+
+    if initDb:
+      # This has to be done the very first time to fill the database.
+      for classNum in classRange: self.start_urls.append(self.semesterUrl+str(classNum))
+    else:
+      # Execute the sqlClassFetch statement to get the list of class numbers from the database:
+      # Output: rows = [{'ClassNumber': 7179, ..}]
+      rows = self.cursor.execute(sqlClassFetch).fetchall()
+      
+      # Set moduloHistoInserts to 1 to print every lines updated if there are less than 20 rows to process:
+      if len(rows)<20: moduloHistoInserts=1
+      # print 'YYY len(rows) %s' % len(rows)
+      # self.log('YYY len(rows) %s' % len(rows))
+    
+      # for each row returned, create an url to parse for the spider:
+      for row in rows: self.start_urls.append(self.semesterUrl+str(row["ClassNumber"]))
+    #endif
+  # INIT --------------------------------------------
+
   # This is the spider parse method that will be run in parallel against what's in the start_urls list
   # This method is run for each page.
   # Cache and parallel options are defined in Python27\tuScraper\tuScraper\settings.py
   def parse(self, response):
+    # self.log('YYY %s' % self.database)
+    # os.system('pause')
+    
     if initDb:
       global totalPagesFetched
       totalPagesFetched+=1
@@ -124,7 +151,7 @@ class TuPipelineSpider(CrawlSpider):
     title = response.css('title::text').extract_first()
     
     # Skip blank pages: process the rest only if there are attributes in the page
-    # 7.0: check page title instead
+    # 1.7: check page title instead
     # if len(keys) > 0:
     if title != blankPageTitle:
       # Fetch the attributes list from the page:
@@ -134,7 +161,7 @@ class TuPipelineSpider(CrawlSpider):
       if len(keys) == 0:
         print 'ERROR: title = %s != %s but len(keys) == 0 for Current URL: %s' % (title, blankPageTitle, response.request.url)
         os.system('pause')
-        break
+        exit()
       #endif
       
       # Cleanup keys: keep only alpha-num + convert to ascii:
@@ -150,7 +177,7 @@ class TuPipelineSpider(CrawlSpider):
       values = response.css('div.section-content div.pull-right div::text').extract()
       ClassNumber = values[keys.index('ClassNumber')]
       
-      # If we have more value than keys:
+      # If we have more keys than values:
       if len(keys) > len(values):
         # Re-fetch values but one level above:
         prevalues = response.css('div.section-content div.pull-right div').extract()
@@ -161,8 +188,9 @@ class TuPipelineSpider(CrawlSpider):
         # For each empty value, insert a default value at the right indice:
         for i in indices: values.insert(i, "TBA")
       
-      # On the other hand if there are more values than keys:
+      # On the other hand, If we have more values than keys:
       elif len(keys) < len(values):
+        # the only reason why there would be more value is because some <br> are present
         # Remove every <br> from the body:
         response = response.replace( body=re.sub(r"<br\s*[\/]?>", "\n", response.body) )
         
@@ -170,27 +198,30 @@ class TuPipelineSpider(CrawlSpider):
         values = response.css('div.section-content div.pull-right div::text').extract()
       #endif
       
-      # After these checks, if there are still more values than keys:
+      # After these preliminary checks, if there are still more values than keys, error message:
       if len(keys) < len(values):
         # Print error message on screen and log it:
         print 'ERROR for CLASS %s: len(keys)=%d len(values)=%d' % (ClassNumber, len(keys), len(values))
         self.logger.error('ERROR for CLASS %s: len(keys)=%d len(values)=%d' % (ClassNumber, len(keys), len(values)))
-      self.logger.debug("ClassNumber %s: %d values + %d keys = %s" % (ClassNumber, len(keys), len(values), ','.join(keys)))
+      else:
+        self.logger.debug("ClassNumber %s: %d values + %d keys = %s" % (ClassNumber, len(keys), len(values), ','.join(keys)))
       
-      # Make a dictionary by zipping keys against values:
-      classDict = dict(zip(keys,values))
-      
-      # Create a secondary dictionary classDictValues with numeric values only:
-      classDictValues = { key: classDict[key] for key in numerics }
-      
-      # Check if current class number is already in database:
-      db = sqlite3.connect(database)
-      cursor = db.cursor()
-      cursor.execute(sqlClassCheck, (ClassNumber,))
+        # Make a dictionary by zipping keys against values:
+        classDict = dict(zip(keys,values))
+        
+        # Create a secondary dictionary classDictValues with numeric values only:
+        classDictValues = { key: classDict[key] for key in numerics }
+        
+        # Check if current class number is already in database:
+        db = sqlite3.connect(self.database)
+        cursor = db.cursor()
+        cursor.execute(sqlClassCheck, (ClassNumber,))
       
       # -------------------------------
       # INSERT NEW CLASS IN class table
+      # Only executed if len(keys) == len(values) because cursor wouldn't be initialized otherwise
       # If no row is returned, INSERT a new class definition in the main class table:
+      
       if not cursor.fetchone()[0]:
         # TODO: this print shoud be modulo as well:
         print 'INSERT CLASS: %s' % (ClassNumber)
@@ -233,7 +264,7 @@ class TuPipelineSpider(CrawlSpider):
           print 'INSERTED CLASS ROWS: %d - Current class: %s' % (totalClassInserts, ClassNumber)
         # we don't print everything but we log everything
         self.logger.info('INSERTED total CLASS: %d - Current class: %s' % (totalClassInserts, ClassNumber))
-      #endif
+      #endif not cursor.fetchone()[0]
       # -------------------------------
       
       # -------------------------------
@@ -262,5 +293,5 @@ class TuPipelineSpider(CrawlSpider):
         print "sqlite3.Error %s" % (e)
         self.logger.error("sqlite3.Error %s" % (e))
       
-      # Uncomment this to log into json format:
+      # Uncomment this to log classDict in json format, path defined in tuScraper\settings.py
       # yield classDict

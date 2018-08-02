@@ -220,7 +220,7 @@ for key in classDict:
 numerics = ['ClassNumber', 'SeatsTaken', 'SeatsOpen', 'ClassCapacity', 'WaitListTotal', 'WaitListCapacity']
 for field in classDict:
   if re.sub(r'\W+', '', field) in numerics:
-	cursor.execute("ALTER TABLE history ADD "+re.sub(r'\W+', '', field)+" INTEGER")
+  cursor.execute("ALTER TABLE history ADD "+re.sub(r'\W+', '', field)+" INTEGER")
     if re.sub(r'\W+', '', field) != 'ClassNumber':
       cursor.execute("ALTER TABLE classes ADD "+re.sub(r'\W+', '', field)+" INTEGER")
   else

@@ -10,7 +10,9 @@ set /P sleep=sleep computer after scraping? [y/N]
 rem calling the spider name in the TuPipelineSpider class
 touch tuScraper.log
 start tail -f tuScraper.log
-python %pythonPath%\Scripts\scrapy.exe crawl tuSpiderv7
+
+rem https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
+python %pythonPath%\Scripts\scrapy.exe crawl tuSpiderv18 -a semester=1183
 sync64
 
 if "%sleep%" EQU "n" goto :END

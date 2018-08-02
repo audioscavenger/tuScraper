@@ -1,3 +1,4 @@
+// common.js - set of functions developed by AudioScavengeR@Github
 var version = 3.1
 
 function log(e) { console.log(e); }

@@ -12,7 +12,7 @@ var execBtn = document.getElementById("execute");
 var outputElm = document.getElementById('output');
 var errorElm = document.getElementById('error');
 var commandsElm = document.getElementById('commands');
-var dbFileElm = document.getElementById('dbfile');
+var dbFileElm = document.getElementById('loadDbFile');
 var savedbElm = document.getElementById('savedb');
 var execBtnLoadDbXhr0 = document.getElementById('loadDbXhr0');
 var execBtnLoadDbXhrFull = document.getElementById('loadDbXhrFull');
@@ -45,8 +45,8 @@ function disableActions(id) {
   // console.log("actions disabled");
 }
 function enableActions(id) {
-  // $(id).removeClass("disabledbutton");
-  $(".disabledbutton").removeClass("disabledbutton");
+  $(id).removeClass("disabledbutton");
+  // $(".disabledbutton").removeClass("disabledbutton");
   // console.log("actions enabled");
 }
 
@@ -93,7 +93,7 @@ function execute(commands, chartType) {
       }
     }
     toc("Displaying results");
-    enableActions('#actions');
+    enableActions('#tabs');
   }
   // try {
     // worker.postMessage({action:'exec',sql:commands});
@@ -194,9 +194,11 @@ var editor = CodeMirror.fromTextArea(commandsElm, {
     }
 });
 
-// Load a db from a file
+// Load a db from a file; this prevents the onchange event from the input itself
+// therefore, the uploaded file name must be updated from here
 if (dbFileElm) {
 dbFileElm.onchange = function() {
+  $('#loadedDbFile').val($(this).val().replace(/\\/g, '/').replace(/.*\//, ''));
   var f = dbFileElm.files[0];
   var r = new FileReader();
   updateProgressBar('init',0);
@@ -222,7 +224,7 @@ dbFileElm.onchange = function() {
       worker.postMessage({action:'open',buffer:r.result});
     }
   }
-  disableActions('#actions');
+  disableActions('#tabs');
   r.readAsArrayBuffer(f);
 }
 }
@@ -299,16 +301,22 @@ function execBtnLoadXhr2LoadFile(url) {
     }
   }
   tic();
-  disableActions('#actions');
+  disableActions('#tabs');
   xhr.open('GET', url, true);
   xhr.responseType = 'arraybuffer';
   xhr.send();
 }
+
 // TODO: BUG: for some reason these addEventListener are executed on load of the page, why?
 // execBtnLoadDbXhr0.addEventListener("click", execBtnLoadXhr2LoadFile('tuScraper.0.sqlite3'));
 // execBtnLoadDbXhrFull.addEventListener("click", execBtnLoadXhr2LoadFile('tuScraper.sqlite3'));
-if (execBtnLoadDbXhr0) execBtnLoadDbXhr0.onclick = function(e) { execBtnLoadXhr2LoadFile('tuScraper.0.sqlite3'); }
-execBtnLoadDbXhrFull.onclick = function(e) { execBtnLoadXhr2LoadFile('tuScraper.sqlite3'); }
+// if (execBtnLoadDbXhr0) execBtnLoadDbXhr0.onclick = function(e) { execBtnLoadXhr2LoadFile('tuScraper.0.sqlite3'); }
+if (execBtnLoadDbXhr0) execBtnLoadDbXhr0.onclick = function(e) { 
+  execBtnLoadXhr2LoadFile($(this).attr("database")); 
+  }
+if (execBtnLoadDbXhrFull) execBtnLoadDbXhrFull.onclick = function(e) { 
+  execBtnLoadXhr2LoadFile($(this).attr("database")); 
+  }
 
 function jsonEscape(str)  {
   return str.replace(/\\/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
@@ -413,7 +421,7 @@ function updateProgressBar(state,percentComplete) {
  */
 // https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron
 function setVarAsync() {
-  getJsonAsync(dirname(window.location.href)+"/sql.dict.json", function(sqlDict) {
+  getJsonAsync(dirname(window.location.href)+"/www/js/sql.dict.json", function(sqlDict) {
     createHiddenTooltip(sqlDict);
     simple_tooltip(".tip","tooltip");
     updateSqlButtons(sqlDict);
