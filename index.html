@@ -1,5 +1,5 @@
 <!doctype  html>
-<html lang="en" version="2.1">
+<html lang="en" version="2.3">
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,7 +16,7 @@
 <a href="//github.com/kripken/sql.js"><img style="position: absolute; top: 0; left: 0; border: 0;" src="www/img/forkme.png" alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
 
 <div class="container-fluid">
-<h1>TU Online SQL interpreter</h1>
+<h1>Classotron 3000</h1>
 
 <main>
 <label for='commands'>Enter some SQL</label>
@@ -46,11 +46,16 @@
   
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade buttons show active tabContent" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
+    
     <div class="row mb-2"><div class="col-lg">
       <button id="savedb"        type="button" class="btn btn-outline-secondary"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
-      <button id="loadDbXhr0"    type="button" class="btn btn-outline-secondary" database="tuScraper.1.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0</button>
-      <button id="loadDbXhrFull" type="button" class="btn btn-outline-secondary" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span><span>Load TUdb 0-1182</span></button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1183</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1184</button>
     </div></div>
+    
+    <div class="row"><div class="col-lg">
       <!-- <label class="button ico_database_up_48"><input id="loadDbFile" type="file"></label> -->
       
       <!-- so, this one uploads, but do not show the selected file and is ugly -->
@@ -83,10 +88,34 @@
         </label>
         <input type="text" class="form-control" id="loadedDbFile" readonly>
       </div>
+    </div></div>
+    
+    <div class="row mb-2"><div class="col-lg">
+      <!-- injectSql buttons need an id that matches their JSON entry in sql.dict.json -->
+      <button id="structure"    type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="structure">   <span class="icon-inside-left glyphicon glyphicon-cog">   </span>DB Structure</button>
+      <button id="countClasses" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="countClasses"><span class="icon-inside-left glyphicon glyphicon-search"></span>Count(Classes)</button>
+      <button id="countHistory" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="countHistory"><span class="icon-inside-left glyphicon glyphicon-search"></span>Count(Histo)</button>
+    </div></div>
 
     </div>
     
     <div class="tab-pane fade buttons disabled tabContent" id="nav-slice" role="tabpanel" aria-labelledby="nav-slice-tab">
+    <!-- injectSql buttons need an id that matches their JSON entry in sql.dict.json -->
+    <div class="row mb-2"><div class="col-lg">
+      <button id="classes" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="classes">              <span class="icon-inside-left glyphicon glyphicon-book">    </span>Classes</button>
+      <button id="fields"  type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="fields">               <span class="icon-inside-left glyphicon glyphicon-list-alt"></span>Fields</button>
+      <button id="history" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="history">              <span class="icon-inside-left glyphicon glyphicon-list-alt">   </span>History</button>
+      <button id="historyBig" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBig">        <span class="icon-inside-left glyphicon glyphicon-tags"></span>HistoryBig classes</button>
+      <button id="historyByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-book"></span>History by title</button>
+      <button id="historyBigByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBigByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>HistorBig by title</button>
+    </div></div>
+    </div>
+    
+    <div class="tab-pane fade buttons disabled tabContent" id="nav-graph" role="tabpanel" aria-labelledby="nav-graph-tab">
+    <div class="row mb-2"><div class="col-lg">
+      <span><input id="checkChart" type="checkbox">do not chart</input></span>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
       <button id="sql_mySurvey" type="button" class="btn btn-primary injectSql tip" tooltip="sql_mySurvey">
         <span class="badge ico_favorite_add_24">&zwnj;</span> mySurvey 
       </button>
@@ -99,14 +128,11 @@
       <button id="sql_classChart" type="button" class="btn btn-primary injectSql tip" tooltip="sql_classChart">
         <span class="badge ico_favorite_add_24">&zwnj;</span> histo ITEC212+423 
       </button>
-    </div>
+    </div></div>
     
-    <div class="tab-pane fade buttons disabled tabContent" id="nav-graph" role="tabpanel" aria-labelledby="nav-graph-tab">
-      <span><button id="structure" class="button injectSql ico_database_process_32 tip" tooltip="structure"></button></span>
-      <span><button id="classes" class="button injectSql ico_books_32 tip" tooltip="classes"></button></span>
-      <span><button id="fields" class="button injectSql ico_application_edit_32 tip" tooltip="fields"></button></span>
-      <span><button id="history" class="button injectSql ico_chart_32 tip" tooltip="history"></button></span>
-      <span><input id="checkChart" type="checkbox">try to chart line</input></span>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
+    </div></div>
     </div>
   </div>
 </div>
@@ -162,9 +188,9 @@
 <script type="text/javascript" src="www/js/tooltip.js"></script>
 
 <link rel="stylesheet" href="www/css/chart.css">
-<script type="text/javascript" src="www/js/chart.line.js"></script>
+<script type="text/javascript" src="www/js/chart.line.1.4.js"></script>
 
-<script type="text/javascript" src="www/js/gui.2.1.js"></script>
+<script type="text/javascript" src="www/js/gui.2.3.js"></script>
 
   <!-- http://jsfiddle.net/fauzi/UvjnT/ -->
   <!-- <link rel="stylesheet" href="www/css/jquery.dataTables.1.9.4.css"> -->

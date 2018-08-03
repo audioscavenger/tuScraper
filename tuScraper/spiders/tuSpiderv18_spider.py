@@ -15,6 +15,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.sgml import SgmlLinkExtractor
 
 ## version 1.8    finally I could parse parameters from the batch command line: created __init__
+## version 1.8    initDb and semester are arguments
 ## version 1.7    blank page detection based on title
 ## version 1.7    had to quote title in the sql insert query, for some reason (moved to Win10)
 ## version 1.7    renamed the spider tu1182 to tuSpider
@@ -35,7 +36,8 @@ from scrapy.linkextractors.sgml import SgmlLinkExtractor
 # ----------------------------------------------------------------------
 version = 1.8
 
-initDb = False                      # Process a defined range for class table first initialization
+# initDb = False                      # Process a defined range for class table first initialization
+# initDb is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
 # semester = 1183                     # semester to process, will be used in the db name; 1182=Spring 2018, 1183=Summer 2018, etc
 # semester is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
 dbVersion = 1                       # TODO: duplicate the blank db file to create the semester db automatically
@@ -71,7 +73,7 @@ totalClassInserts=0                 # Define a global variable total that will b
 moduloClassInserts=50               # Print status every 50 lines inserts in class table
 totalHistoInserts=0                 # Define a global variable total that will be incremented by the threads
 moduloHistoInserts=500              # Print status every 500 lines updates in history table
-classRange = range(1000,7187)       # Range of class numbers to scrap via URL; these number values come from a 0-9999 range test
+classRange = range(1000,9999)       # Range of class numbers to scrap via URL; these number values come from a 0-9999 range test
 # ----------------------------------------------------------------------
 # start_urls is the reserved name list that the spider will parse:
 start_urls = []
@@ -94,12 +96,12 @@ class TuSpiderv18(scrapy.Spider):
   name = 'tuSpiderv18'
   
   # INIT --------------------------------------------
-  def __init__(self, semester=None, *args, **kwargs):
+  def __init__(self, semester=1183, initDb=False, *args, **kwargs):
     super(TuSpiderv18, self).__init__(*args, **kwargs)
-    # Define path to database (no path = local in \tuScrapper dir)
+    # Define path to database and export it (no path = local in \tuScrapper dir)
     self.database='tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
     
-    self.semesterUrl = '%s/%s/' % (baseUrl, semester)
+    semesterUrl = '%s/%s/' % (baseUrl, semester)
 
     # Create db connection
     self.db = sqlite3.connect(self.database)
@@ -110,9 +112,12 @@ class TuSpiderv18(scrapy.Spider):
     # Create a cursor to communicate with the db
     self.cursor = self.db.cursor()
 
+    # export initDb
+    self.initDb = initDb
+    
     if initDb:
       # This has to be done the very first time to fill the database.
-      for classNum in classRange: self.start_urls.append(self.semesterUrl+str(classNum))
+      for classNum in classRange: self.start_urls.append(semesterUrl+str(classNum))
     else:
       # Execute the sqlClassFetch statement to get the list of class numbers from the database:
       # Output: rows = [{'ClassNumber': 7179, ..}]
@@ -124,7 +129,7 @@ class TuSpiderv18(scrapy.Spider):
       # self.log('YYY len(rows) %s' % len(rows))
     
       # for each row returned, create an url to parse for the spider:
-      for row in rows: self.start_urls.append(self.semesterUrl+str(row["ClassNumber"]))
+      for row in rows: self.start_urls.append(semesterUrl+str(row["ClassNumber"]))
     #endif
   # INIT --------------------------------------------
 
@@ -132,7 +137,13 @@ class TuSpiderv18(scrapy.Spider):
   # This method is run for each page.
   # Cache and parallel options are defined in Python27\tuScraper\tuScraper\settings.py
   def parse(self, response):
-    # self.log('YYY %s' % self.database)
+    # import variables from __init__
+    initDb = self.initDb
+    database = self.database
+    
+    # debug
+    # print('YYY %s' % initDb)
+    # print('YYY %s' % database)
     # os.system('pause')
     
     if initDb:

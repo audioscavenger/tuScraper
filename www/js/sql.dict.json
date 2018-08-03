@@ -1,9 +1,15 @@
 {
 "structure": "select name,sql from sqlite_master where type in ('table','view');",
+"countClasses": "SELECT count(*) from classes;",
+"countHistory": "SELECT count(*) from history;",
 "classes": "SELECT * from classes LIMIT 100;",
-"fields": "SELECT * from fields LIMIT 100;",
-"history": "SELECT * from history LIMIT 1000;",
+"fields": "SELECT * from fields;",
+"history": "SELECT * from history LIMIT 100;",
+"historyBig": "SELECT * from history \n  where history.ClassCapacity > 1 \n  LIMIT 100;",
+"historyByClass": "SELECT id,timestamp,title,SeatsTaken,SeatsOpen,ClassCapacity,WaitlistTotal,WaitlistCapacity \n  from history,classes \n  where history.ClassNumber = classes.ClassNumber \n  LIMIT 100;",
+"historyBigByClass": "SELECT id,timestamp,title,SeatsTaken,SeatsOpen,ClassCapacity,WaitlistTotal,WaitlistCapacity \n  from history,classes \n  where history.ClassNumber = classes.ClassNumber \n  and history.ClassCapacity > 1 \n  LIMIT 100;",
+"statsClassBySize": "select ClassCapacity, count(*) as ynum \n from history \n group by ClassCapacity;",
 "sql_mySurvey": "SELECT * from perso_fall2017;",
 "sql_ITEC": "SELECT * from  ITEC_fall2017;",
-"sql_ITEC231": "select timestamp,title,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes \n    where history.classnumber = '2792' \n    and history.classnumber = classes.classnumber \n    order by timestamp asc \n    LIMIT 100;",
-"sql_classChart": "SELECT x.timestamp as timestamp,x.openings as 'CIS212-001', \n     y.openings as 'ITEC250-002' \nFROM (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \n( \n  SELECT COUNT(*) \n  FROM history b \n  WHERE a.timestamp >= b.timestamp \nand b.classnumber = 2768 \n) AS rnum \nFROM history a \nwhere a.classnumber = 2768) x \n  LEFT JOIN (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \n( \n  SELECT COUNT(*) \n  FROM history b \n  WHERE a.timestamp >= b.timestamp \nand b.classnumber = 2781 \n) AS rnum \nFROM history a \nwhere a.classnumber = 2781) y \n   ON x.rnum=y.rnum;"}
+"sql_ITEC231": "select timestamp,title,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes \n  where history.classnumber = '2792' \n  and history.classnumber = classes.classnumber \n  order by timestamp asc \n  LIMIT 100;",
+"sql_classChart": "SELECT x.timestamp as timestamp,x.openings as 'CIS212-001', \n   y.openings as 'ITEC250-002' \nFROM (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \n( \n  SELECT COUNT(*) \n  FROM history b \n  WHERE a.timestamp >= b.timestamp \nand b.classnumber = 2768 \n) AS rnum \nFROM history a \nwhere a.classnumber = 2768) x \n  LEFT JOIN (SELECT timestamp,(SeatsOpen-waitlisttotal) as openings, \n( \n  SELECT COUNT(*) \n  FROM history b \n  WHERE a.timestamp >= b.timestamp \nand b.classnumber = 2781 \n) AS rnum \nFROM history a \nwhere a.classnumber = 2781) y \n   ON x.rnum=y.rnum;"}
