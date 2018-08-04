@@ -1,6 +1,8 @@
 ## tuScraper
 /.scrapy
 /img
+*-journal
+*.pyc
 
 ## ---------------------------------------------------------------------
 ## Composer template
