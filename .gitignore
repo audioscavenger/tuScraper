@@ -2,9 +2,7 @@
 /.scrapy
 /img
 *-journal
-*.pyc
-tuScraper/*.pyc
-tuScraper/spiders/*.pyc
+**/*.pyc
 
 ## ---------------------------------------------------------------------
 ## Composer template
