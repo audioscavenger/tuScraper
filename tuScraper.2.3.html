@@ -1,5 +1,5 @@
 <!doctype  html>
-<html lang="en" version="2.4">
+<html lang="en" version="2.3">
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -46,7 +46,7 @@
     <a class="nav-item nav-link active" id="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="true">Admin</a>
     <a class="nav-item nav-link" id="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
     <a class="nav-item nav-link" id="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
-    <a class="chartButton btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
+    <a class="btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
   </nav>
   
   <div class="tab-content" id="nav-tabContent">
@@ -157,18 +157,11 @@
   </div>
 </div>
 
-<div class="container">
-  <div id="progressBar" class="progressBar"></div>
-  <div id="error" class="error"></div>
-  <div class="row-fluid">
-    <div class="col-xs-11"><div id="chart-container"></div></div>
-    <div class="col-xs-1"><div id="chart-commands">
-      <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning btn-block">Random Color</button>
-      <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning btn-block">Random ColorS</button>
-    </div></div>
-  </div>
-  <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
-</div>
+<div id="progressBar" class="progressBar"></div>
+<div id="error" class="error"></div>
+<div id="chart-container"></div>
+<pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
+<!-- <div id="chart-container" class="chart-container"></div> -->
 
 </main>
 </div>
@@ -208,6 +201,15 @@
   <!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
+  <script type="text/javascript" src="www/js/sql.demo.js"></script>
+
+<link rel="stylesheet" href="www/css/tooltip.1.2.css">
+<script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
+
+<link rel="stylesheet" href="www/css/chart.css">
+<script type="text/javascript" src="www/js/chart.line.1.4.js"></script>
+
+<script type="text/javascript" src="www/js/gui.2.3.js"></script>
 
   <!-- http://jsfiddle.net/fauzi/UvjnT/ -->
   <!-- <link rel="stylesheet" href="www/css/jquery.dataTables.1.9.4.css"> -->
@@ -223,17 +225,7 @@
 
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-
-  <script type="text/javascript" src="www/js/sql.demo.js"></script>
-
-  <link rel="stylesheet" href="www/css/tooltip.1.2.css">
-  <script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
-
-  <script type="text/javascript" src="www/js/gui.2.4.js?v=2.4"></script>
-
-  <link rel="stylesheet" href="www/css/chart.css">
-  <script type="text/javascript" src="www/js/chart.line.2.4.js?v=2.4"></script>
-
+  
   <!-- sql.js is called or embebed in worker.sql.js -->
   <!-- <script type="text/javascript" src="www/js/sql.min.js"></script> -->
   <!-- TODO: include cdnjs sql.js in worker.sql.js -->
