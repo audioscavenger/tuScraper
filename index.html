@@ -35,6 +35,10 @@
   group by classes.classnumber
   ;</textarea>
 </div>
+<div class="container"><div class="row">
+<div id="tocMsg1" class="col-sm-6 text-secondary"></div>
+<div id="tocMsg2" class="col-sm-6 text-secondary"></div>
+</div></div>
 </div>
 
 <div class="container">
@@ -42,6 +46,7 @@
     <a class="nav-item nav-link active" id="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="true">Admin</a>
     <a class="nav-item nav-link" id="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
     <a class="nav-item nav-link" id="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
+    <a class="btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
   </nav>
   
   <div class="tab-content" id="nav-tabContent">
@@ -105,9 +110,15 @@
       <button id="classes" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="classes">              <span class="icon-inside-left glyphicon glyphicon-book">    </span>Classes</button>
       <button id="fields"  type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="fields">               <span class="icon-inside-left glyphicon glyphicon-list-alt"></span>Fields</button>
       <button id="history" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="history">              <span class="icon-inside-left glyphicon glyphicon-list-alt">   </span>History</button>
-      <button id="historyBig" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBig">        <span class="icon-inside-left glyphicon glyphicon-tags"></span>HistoryBig classes</button>
       <button id="historyByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-book"></span>History by title</button>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="historyBig" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBig">        <span class="icon-inside-left glyphicon glyphicon-tags"></span>HistoryBig classes</button>
       <button id="historyBigByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBigByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>HistorBig by title</button>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="historyThatChanged" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChanged">        <span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes</button>
+      <button id="historyThatChangedByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChangedByClass">        <span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes by title</button>
     </div></div>
     </div>
     
@@ -132,6 +143,7 @@
     
     <div class="row mb-2"><div class="col-lg">
       <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
+      <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size desc</button>
     </div></div>
     </div>
   </div>
@@ -139,10 +151,9 @@
 
 <div id="progressBar" class="progressBar"></div>
 <div id="error" class="error"></div>
+<div id="chart-container"></div>
 <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
 <!-- <div id="chart-container" class="chart-container"></div> -->
-<div id="chart-container">
-</div>
 
 </main>
 </div>

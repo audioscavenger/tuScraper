@@ -1,4 +1,3 @@
-var version = 2.1;
 /*
 1.4:  add call to fillChartWithSql
       execEditorContents will carry on chartType
@@ -10,13 +9,19 @@ var version = 2.1;
 2.1:  add bootstrap4 + loadedDbFile label update
 2.2:  use loadDbXhr class to attach xhr load db events on buttons
 2.2:  loadedDbFile update by xhr buttons as well
-2.2:  chartType decided upon table headers
-2.2:  checkChart meaning inverted
+2.3:  chartType decided upon table headers
+2.3:  checkChart meaning inverted
 
 TODO LIST:
 - wherever title appears in a table, replace class title by an href to the mytumobile page; semester will need to be in the db somewhere
 - try to include the glyphicons in the dict.json somehow
+- maybe delete the graph when switching tabs
+- finda way to reset the worker that crashes sometimes
+
+bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
+var version = 2.1;
+var debug = false;
 
 var execBtn = document.getElementById("execute");
 var outputElm = document.getElementById('output');
@@ -24,6 +29,9 @@ var errorElm = document.getElementById('error');
 var commandsElm = document.getElementById('commands');
 var dbFileElm = document.getElementById('loadDbFile');
 var savedbElm = document.getElementById('savedb');
+var purgeGraphBtn = document.getElementById('nav-graph-purge');
+var tocMsg1 = document.getElementById('tocMsg1');
+var tocMsg2 = document.getElementById('tocMsg2');
 // var execBtnLoadDbXhr0 = document.getElementById('loadDbXhr0');
 // var execBtnLoadDbXhrFull = document.getElementById('loadDbXhrFull');
 
@@ -41,7 +49,7 @@ function print(text) {
   outputElm.innerHTML = text.replace(/\n/g, '<br>');
 }
 function error(e) {
-  console.log(e);
+  if (debug) console.log(e);
   errorElm.style.height = '2em';
   errorElm.textContent = e.message;
   outputElm.textContent = "See error for details.";
@@ -74,7 +82,7 @@ function execute(commands, chartType) {
     // console.log(event.data);  // Object { id: undefined, results: Array[1] }
     // console.log(event.data.results);  // [{columns: Array(2), values: Array(3)}]
     var results = event.data.results;
-    console.log(results);  // Array [ Object ]
+    if (debug) console.log(results);  // Array [ Object ]
     if (results.length == 0) {
       outputElm.textContent = "Request returned 0 rows.";
       outputElm.className = "alert alert-warning";
@@ -93,23 +101,22 @@ function execute(commands, chartType) {
         
         // chart for chartType = line,bar.. // http://www.chartjs.org/docs/latest/charts/
         if (!document.getElementById("checkChart").checked) {
-          console.log('results[i].columns[1]='+results[i].columns[1]);
+          if (debug) console.log('results[i].columns[1]='+results[i].columns[1]);
           if (results[i].columns[0] == 'timestamp') {
             chartType="line";
-            console.log('execute: chartType='+chartType);
-            $('#chart-container').addClass('chart-container')
-            fillLineChartWithSql(results[i].columns, results[i].values, chartType) 
+            if (debug) console.log('execute: chartType='+chartType);
+            $('#chart-container').addClass('chart-container');
+            fillLineChartWithSql(results[i].columns, results[i].values, chartType);
+            $('#nav-graph-purge').removeClass("invisible");
           }
           if (results[i].columns[1] == 'ynum') {
             chartType="bar";
-            console.log('execute: chartType='+chartType);
-            $('#chart-container').addClass('chart-container')
-            fillBarChartWithSql(results[i].columns, results[i].values, chartType) 
+            if (debug) console.log('execute: chartType='+chartType);
+            $('#chart-container').addClass('chart-container');
+            fillBarChartWithSql(results[i].columns, results[i].values, chartType);
+            $('#nav-graph-purge').removeClass("invisible");
           }
-        } else {
-          $('#chart-container').removeClass('chart-container')
-          purgeElement("chart-container");
-        };
+        } else purgeGraphelement();
         // dataTable.jq.js is a table filter and sort plugin:
         var table = $('table').dataTable( {
           "autoWidth": true
@@ -129,6 +136,13 @@ function execute(commands, chartType) {
   outputElm.textContent = "Fetching results...";
   outputElm.className = "alert alert-light";
 }
+
+function purgeGraphelement() {
+  $('#chart-container').removeClass('chart-container');
+  purgeElement("chart-container");
+  $('#nav-graph-purge').addClass("invisible");
+}
+if (purgeGraphBtn) purgeGraphBtn.addEventListener("click", purgeGraphelement);
 
 // Create an HTML table
 var tableCreate = function () {
@@ -208,29 +222,46 @@ function execEditorContents(chartType) {
 }
 execBtn.addEventListener("click", execEditorContents, true);
 
+
+
 // Performance measurement functions
 var tictime;
 if (!window.performance || !performance.now) {window.performance = {now:Date.now}}
 function tic () {tictime = performance.now()}
 function toc(msg) {
-  var dt = performance.now()-tictime;
-  console.log((msg||'toc') + ": " + dt + "ms");
+  var delta = performance.now()-tictime;
+  message = (msg||'toc') + ": " + delta + "ms";
+  console.log(message);
+  printTocToGui(message);
 }
 
-// TODO: implement codemirrot properly: https://github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview
-// Add syntax highlihjting to the textarea
+function printTocToGui(msg) {
+  tocMsg1.textContent = tocMsg2.textContent;
+  tocMsg2.textContent = msg;
+}
+
+// TODO: jQuery UI show / hide with a slide effect
+// https://stackoverflow.com/questions/17329533/jquery-ui-show-hide-with-a-slide-effect-how-to-change-the-slide-back-in-sp#17329624
+// http://jsfiddle.net/xu3ck/1137/
+// function printTocToGui(msg) {
+  // $('.website-info').hide('slide', {direction: 'left'}, 300);
+  // $(this).next('.website-info').stop().show('slide', {direction: 'right'}, 300);
+// }
+
+// TODO: implement codemirror properly: https://github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview
+// TODO: Add syntax highlihjting to the textarea... done?
 var editor = CodeMirror.fromTextArea(commandsElm, {
-    mode: 'text/x-mysql',
-    viewportMargin: Infinity,
-    indentWithTabs: true,
-    smartIndent: true,
-    lineNumbers: true,
-    matchBrackets : true,
-    autofocus: true,
-    extraKeys: {
-      "Ctrl-Enter": execEditorContents,
-      "Ctrl-S": savedb,
-    }
+  mode: 'text/x-mysql',
+  viewportMargin: Infinity,
+  indentWithTabs: true,
+  smartIndent: true,
+  lineNumbers: true,
+  matchBrackets : true,
+  autofocus: true,
+  extraKeys: {
+    "Ctrl-Enter": execEditorContents,
+    "Ctrl-S": savedb,
+  }
 });
 
 // Load a db from a file; this prevents the onchange event from the input itself
@@ -256,7 +287,7 @@ dbFileElm.onchange = function() {
     };
     tic();
     try {
-      console.log(r.result);
+      if (debug) console.log(r.result);
       worker.postMessage({action:'open',buffer:r.result}, [r.result]);
     }
     catch(exception) {
@@ -303,15 +334,15 @@ if (savedbElm) savedbElm.addEventListener("click", savedb, true);
 function updateProgressTweaked(evt) {
   total = (evt.lengthComputable) ? evt.total : 10485760;
   var percentComplete = evt.loaded / total;
-  console.log("updateProgress "+percentComplete);
+  if (debug) console.log("updateProgress "+percentComplete);
   updateProgressBar('update',percentComplete);
 }
-function transferComplete(evt) { console.log("The transfer is complete"); }
-function transferFailed(evt) { console.log("transferFailed"); }
-function transferCanceled(evt) { console.log("transferCanceled"); }
+function transferComplete(evt) { if (debug) console.log("The transfer is complete"); }
+function transferFailed(evt) { if (debug) console.log("transferFailed"); }
+function transferCanceled(evt) { if (debug) console.log("transferCanceled"); }
 function loadEnd(evt) { 
   updateProgressBar('update',1);
-  console.log("The transfer finished (abort, load, or error)"); 
+  if (debug) console.log("The transfer finished (abort, load, or error)"); 
   // console.log(evt['target']['responseURL']); 
 }
 
@@ -326,7 +357,7 @@ function execBtnLoadXhr2LoadFile(url) {
   xhr.addEventListener("loadend", loadEnd);
 
   xhr.onload = function() {
-    console.log(this.response); // THIS is the ArrayBuffer we want for the worker postMessage buffer !
+    if (debug) console.log(this.response); // THIS is the ArrayBuffer we want for the worker postMessage buffer !
     worker.onmessage = function () {
       toc("Loading database from url: "+url);
       // Show the schema of the loaded database
@@ -410,7 +441,7 @@ for (var i = 0; i < execBtnInjectSql.length; i += 1) {
 function updateSqlButtons(sqlDict) {
   $(".injectSql").each(function(){
     this.onclick = function(e) {
-      console.log(this.id);
+      if (debug) console.log(this.id);
       setEditorSql(this.id,sqlDict);
       // execute (editor.getValue() + ';', $(this).attr("chart"));  // 1.4
       execEditorContents($(this).attr("chart"));  // 1.4
