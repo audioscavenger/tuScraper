@@ -6,6 +6,7 @@ https://www.dyclassroom.com/chartjs/chartjs-how-to-draw-line-graph-using-data-fr
 
 TODO: actually use chart.data.json via XMLhr
 TODO: map columns or something like that within a dict, currently num of columns is fixed
+TODO: random colors for variable number of arrays
 */
 var version = 1.3;
 

@@ -1,8 +1,12 @@
 /*
-1.4:  add call to fillChartWithSql
-      execEditorContents will carry on chartType
-      xhr request + JSON.parse for sqlDict
-      call tooltip from here because hiddenTooltip are generated asynchronously
+1.0:  added some buttons for custom xhr loading
+1.2:  implemented dataTables.js + disableActions + more SQL buttons
+1.3:  implemented dateFormat.js + Chart.js.js + auto tooltip of SQL in buttons
+1.4:  add calls to fillChartWithSql
+      + execEditorContents will carry on chartType
+      + xhr request progres bar
+      + JSON.parse for sqlDict!
+      + call tooltip from here because hiddenTooltip are generated asynchronously
       TODO: progress bar do not fade after loadDb
 1.5:  add remove .chart-container
 2.0:  add checkbox chart
@@ -11,12 +15,15 @@
 2.2:  loadedDbFile update by xhr buttons as well
 2.3:  chartType decided upon table headers
 2.3:  checkChart meaning inverted
+      + update worker.sql.js to latest master 20180804
+      + move codemirror under vendor folder
 
 TODO LIST:
 - wherever title appears in a table, replace class title by an href to the mytumobile page; semester will need to be in the db somewhere
 - try to include the glyphicons in the dict.json somehow
 - maybe delete the graph when switching tabs
 - finda way to reset the worker that crashes sometimes
+- somehow swith to original sql.js as worker.js is said to be limited
 
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */

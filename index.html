@@ -117,8 +117,9 @@
       <button id="historyBigByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBigByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>HistorBig by title</button>
     </div></div>
     <div class="row mb-2"><div class="col-lg">
-      <button id="historyThatChanged" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChanged">        <span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes</button>
-      <button id="historyThatChangedByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChangedByClass">        <span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes by title</button>
+      <button id="historyThatChanged" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChanged"><span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes</button>
+      <button id="historyThatChangedByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChangedByClass"><span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes by title</button>
+      <button id="historyCapacityChanged" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyCapacityChanged"><span class="icon-inside-left glyphicon glyphicon-fire"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>History changes by title</button>
     </div></div>
     </div>
     
@@ -128,16 +129,16 @@
     </div></div>
     <div class="row mb-2"><div class="col-lg">
       <button id="sql_mySurvey" type="button" class="btn btn-primary injectSql tip" tooltip="sql_mySurvey">
-        <span class="badge ico_favorite_add_24">&zwnj;</span> mySurvey 
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>mySurvey 
       </button>
       <button id="sql_ITEC" type="button" class="btn btn-primary injectSql tip" tooltip="sql_ITEC">
-        <span class="badge ico_favorite_add_24">&zwnj;</span> ITEC Survey
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>ITEC Survey
       </button>
       <button id="sql_ITEC231" type="button" class="btn btn-primary injectSql tip" tooltip="sql_ITEC231">
-        <span class="badge ico_favorite_add_24">&zwnj;</span> histo ITEC231
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC231
       </button>
       <button id="sql_classChart" type="button" class="btn btn-primary injectSql tip" tooltip="sql_classChart">
-        <span class="badge ico_favorite_add_24">&zwnj;</span> histo ITEC212+423 
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC212+423 
       </button>
     </div></div>
     
@@ -188,15 +189,15 @@
 <script type="text/javascript" src="www/js/common.js"></script>
 
   <!-- codemirror is needed by sql.demo.js -->
-  <link rel="stylesheet" href="www/css/codemirror.css">
-  <script type="text/javascript" src="www/js/codemirror.js"></script>
+  <link rel="stylesheet" href="www/codemirror/codemirror.css">
+  <script type="text/javascript" src="www/codemirror/codemirror.js"></script>
   <!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
   <script type="text/javascript" src="www/js/sql.demo.js"></script>
 
-<link rel="stylesheet" href="www/css/tooltip.css">
-<script type="text/javascript" src="www/js/tooltip.js"></script>
+<link rel="stylesheet" href="www/css/tooltip.1.2.css">
+<script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
 
 <link rel="stylesheet" href="www/css/chart.css">
 <script type="text/javascript" src="www/js/chart.line.1.4.js"></script>
@@ -216,7 +217,6 @@
   <!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
 
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
   
   <!-- sql.js is called or embebed in worker.sql.js -->
@@ -225,6 +225,7 @@
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
 
   <link rel="stylesheet" href="www/css/tuScraper-bootstrap.css?v=cdcfs">
-  <link rel="stylesheet" href="img/img.css">
+  <!-- favorite icons abandonned in favor of glyphicons -->
+  <!-- <link rel="stylesheet" href="img/img.css"> -->
 </body>
 </html>
