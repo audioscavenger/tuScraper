@@ -3,6 +3,8 @@
 /img
 *-journal
 *.pyc
+tuScraper/*.pyc
+tuScraper/spiders/*.pyc
 
 ## ---------------------------------------------------------------------
 ## Composer template
