@@ -131,40 +131,42 @@
       <span><input id="checkChart" type="checkbox">do not chart</input></span>
     </div></div>
     <div class="row mb-2"><div class="col-lg">
-      <button id="sql_mySurvey" type="button" class="btn btn-primary injectSql tip" tooltip="sql_mySurvey">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>mySurvey 
+      <button id="sqlHistoCIS435" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoCIS435">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435
       </button>
-      <button id="sql_ITEC" type="button" class="btn btn-primary injectSql tip" tooltip="sql_ITEC">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>ITEC Survey
-      </button>
-      <button id="sql_ITEC231" type="button" class="btn btn-primary injectSql tip" tooltip="sql_ITEC231">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC231
-      </button>
-      <button id="sql_classChart" type="button" class="btn btn-primary injectSql tip" tooltip="sql_classChart">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC212+423 
+      <button id="sqlHistoMultiple2" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple2">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC435+440
       </button>
     </div></div>
     
     <div class="row mb-2"><div class="col-lg">
       <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
       <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size desc</button>
+      <button id="statsClassEmptyBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize"><span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>Classes Empty by size</button>
     </div></div>
     <div class="row mb-2"><div class="col-lg">
-      <button id="statsClassEmptyBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize"><span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-up"></span>Classes Empty by size</button>
-      <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats"></span>Classes by size desc</button>
+      <button id="statsClassEmptyBySize1" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize1"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">1</span></button>
+      <button id="statsClassEmptyBySize5" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize5"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">5</span></button>
+      <button id="statsClassEmptyBySize6" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize6"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">6</span></button>
+      <button id="statsClassEmptyBySize10" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize10"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">10</span></button>
+      <button id="statsClassEmptyBySize12" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize12"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">12</span></button>
     </div></div>
     </div>
   </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
   <div id="progressBar" class="progressBar"></div>
   <div id="error" class="error"></div>
-  <div class="row-fluid">
+  <div class="row">
     <div class="col-xs-11"><div id="chart-container"></div></div>
     <div class="col-xs-1"><div id="chart-commands">
-      <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning btn-block">Random Color</button>
-      <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning btn-block">Random ColorS</button>
+      <div class="row">
+      <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning">Random Color</button>
+      </div>
+      <div class="row">
+      <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning">Random ColorS</button>
+      </div>
     </div></div>
   </div>
   <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
@@ -222,6 +224,8 @@
   <!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
 
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+  <!-- You must include Moment.js before Chart.js to use the time scale. -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
   <script type="text/javascript" src="www/js/sql.demo.js"></script>

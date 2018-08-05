@@ -4,10 +4,12 @@ https://www.dyclassroom.com/chartjs/chartjs-how-to-draw-line-graph-using-data-fr
 1.3   moved chart.data.json under www/js/
 1.4:  introduced bar graph
 2.4:  introduced pie chart
+      + random colors for variable number of arrays
+      + random colors updated dynamically with button
 
 TODO: actually use chart.data.json via XMLhr
 TODO: map columns or something like that within a dict, currently num of columns is fixed
-TODO: random colors for variable number of arrays
+TODO: random colors button works only for pie, check why
 */
 var chartVersion = 2.4;
 var config;
@@ -57,12 +59,78 @@ var randRgbaColor = function() {
 
 // chartType = line,bar.. // http://www.chartjs.org/docs/latest/charts/
 // fillLineChartWithSql is called by the GUI gui.js
-function fillLineChartWithSql(columns,values,chartType) {
+// fillPieChartWithSql is called by the GUI gui.js
+// http://www.chartjs.org/samples/latest/charts/pie.html
+function fillLineChartWithSql(columns,values) {
+  resetCanvas();
+  var arrays = [];
+  var colors = [];
+  
+  // create arrays of arrays with the right number of columns passed as argument
+  for (var c in columns) {
+    arrays.push([]);
+  }
+
+  // fill data and label arrays with each biunary value from the values array passed as argument
+  // input:
+  console.log(columns);       //  dual datasets: Array(3) [ "timestamp", "CIS212-001", "ITEC250-002" ]
+  console.log(values);        //  dual datasets: Array(n) [ ["2018-08-02 18:44:25", 4, 0], ..] => point 1 [timestamp, value dataset 1, value dataset 2], point 2 [], ...
+  for (var i in values) {
+    for (var c in columns) {
+      arrays[c].push(values[i][c]);
+    };
+  };
+  // output:
+  console.log(arrays[0]);     //  x-axis timestamps: Array(n) [ "2018-08-02 18:44:25", ..]
+  console.log(arrays[1]);     //  y-axis dataset 1 : Array(n) [ 4, 4, ..]
+  console.log(arrays[2]);     //  y-axis dataset 2 : Array(n) [ 0, 0, ..]
+  
+  transparency = 0.75;
+  for (var i = 0; i < columns.length; ++i) {
+    colors.push(randRgbaColor());
+  };
+  console.log(colors);        //  Array(3) ["rgba(161, 97, 32, 0.75)", ..]
+
+  // build datasets starting from 1 since I don't mind having colors one more item than necessary:
+  var datasets = [];
+  for (var i = 1; i < colors.length; ++i) {
+    datasets.push({
+      label: columns[i],
+      data: arrays[i],
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: colors[i],
+      borderColor: colors[i],
+      pointHoverBackgroundColor: colors[i],
+      pointHoverBorderColor: colors[i]
+    });
+  };
+
+  config = {
+    type: 'line',
+    data: {
+      datasets: datasets,
+      labels: arrays[0]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        xAxes: [{
+          type: 'time',
+          distribution: 'linear'
+        }]
+      }
+    }
+  };
+
+  ctx = document.getElementById('chartcanvas').getContext('2d');
+  window.myChart = new Chart(ctx, config);
+
+}
+
+function fillLineChartWithSql_OFF(columns,values,chartType) {
   resetCanvas();
   var arrays = [[],[],[]];  // TODO: map columns or something like that within a dict
-  var timestamps = [];
-  var class1 = [];
-  var class2 = [];
   // console.log(columns); //  [ "timestamp", "CIS212-001", "ITEC250-002" ]
   // console.log(values);  //  [ Array[3], Array[3],..]
 
@@ -73,9 +141,6 @@ function fillLineChartWithSql(columns,values,chartType) {
       // class2.push(values[i][c]);
     };
   };
-  // console.log(timestamps);
-  // console.log(class1);
-  // console.log(class2);
   
   var chartdata = {
     labels: arrays[0],
@@ -131,12 +196,8 @@ function fillBarGraphWithSql(columns,values,chartType) {
   for(var i in values) {
     for(var c in columns) {
       arrays[c].push(values[i][c]);
-      // class1.push(values[i][c]);
-      // class2.push(values[i][c]);
     };
   };
-  // console.log(class1);
-  // console.log(class2);
   
   var chartdata = {
     labels: arrays[0],
@@ -286,6 +347,7 @@ $(document).ready(function(){
   // fillChartAjax("js/chart.data.json");
   var btnUpdateMyChartSingleColor = document.getElementById('btnUpdateMyChartSingleColor');
   var btnUpdateMyChartRandomColors = document.getElementById('btnUpdateMyChartRandomColors');
+  // TODO: both these addEventListener attachement work, have to chose one once and for all...
   btnUpdateMyChartSingleColor.addEventListener("click", updateMyChartSingleColor);
   if (btnUpdateMyChartRandomColors) btnUpdateMyChartRandomColors.addEventListener("click", updateMyChartRandomColors);
 

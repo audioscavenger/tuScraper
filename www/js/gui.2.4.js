@@ -125,23 +125,22 @@ function execute(commands, chartType) {
             chartType="line";
             if (debug) console.log('execute: chartType='+chartType);
             $('#chart-container').addClass('chart-container');
-            fillLineChartWithSql(results[i].columns, results[i].values, chartType);
+            fillLineChartWithSql(results[i].columns, results[i].values);
             showChartButtons();
           }
           if (results[i].columns[1] == 'ynum') {
-            if (results[i].columns[0] == 'timestamp') {
-              chartType="bar";
-              if (debug) console.log('execute: chartType='+chartType);
-              $('#chart-container').addClass('chart-container');
-              fillBarGraphWithSql(results[i].columns, results[i].values, chartType);
-              showChartButtons();
-            } else {
+            chartType="bar";
+            if (debug) console.log('execute: chartType='+chartType);
+            $('#chart-container').addClass('chart-container');
+            fillBarGraphWithSql(results[i].columns, results[i].values, chartType);
+            showChartButtons();
+          }
+          if (results[i].columns[1] == 'pienum') {
               chartType="pie";
               if (debug) console.log('execute: fillPieChartWithSql');
               $('#chart-container').addClass('chart-container');
               fillPieChartWithSql(results[i].columns, results[i].values);
               showChartButtons();
-            }
           }
         } else purgeGraphelement();
         // dataTable.jq.js is a table filter and sort plugin:
