@@ -96,7 +96,7 @@ class TuSpiderv18(scrapy.Spider):
   name = 'tuSpiderv18'
   
   # INIT --------------------------------------------
-  def __init__(self, semester=1183, initDb=False, *args, **kwargs):
+  def __init__(self, semester=1184, initDb=False, *args, **kwargs):
     super(TuSpiderv18, self).__init__(*args, **kwargs)
     # Define path to database and export it (no path = local in \tuScrapper dir)
     self.database='tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
