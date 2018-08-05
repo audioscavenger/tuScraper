@@ -145,17 +145,17 @@ function fillBarGraphWithSql(columns,values) {
 
   // fill data and label arrays with each biunary value from the values array passed as argument
   // input:
-  console.log(columns);       //  dual datasets: Array(3) [ "timestamp", "CIS212-001", "ITEC250-002" ]
-  console.log(values);        //  dual datasets: Array(n) [ ["2018-08-02 18:44:25", 4, 0], ..] => point 1 [timestamp, value dataset 1, value dataset 2], point 2 [], ...
+  // console.log(columns);       //  dual datasets: Array(3) [ "timestamp", "CIS212-001", "ITEC250-002" ]
+  // console.log(values);        //  dual datasets: Array(n) [ ["2018-08-02 18:44:25", 4, 0], ..] => point 1 [timestamp, value dataset 1, value dataset 2], point 2 [], ...
   for (var i in values) {
     for (var c in columns) {
       arrays[c].push(values[i][c]);
     };
   };
   // output:
-  console.log(arrays[0]);     //  x-axis timestamps: Array(n) [ "2018-08-02 18:44:25", ..]
-  console.log(arrays[1]);     //  y-axis dataset 1 : Array(n) [ 4, 4, ..]
-  console.log(arrays[2]);     //  y-axis dataset 2 : Array(n) [ 0, 0, ..]
+  // console.log(arrays[0]);     //  x-axis timestamps: Array(n) [ "2018-08-02 18:44:25", ..]
+  // console.log(arrays[1]);     //  y-axis dataset 1 : Array(n) [ 4, 4, ..]
+  // console.log(arrays[2]);     //  y-axis dataset 2 : Array(n) [ 0, 0, ..]
   
   transparency = 0.75;
   for (var i = 0; i < columns.length; ++i) {
