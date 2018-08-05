@@ -63,6 +63,12 @@ h1 {
 	box-shadow: 0 0 2px #222;
 }
 
+/* bootstrap makes it very hard to set the width of an dumb input */
+.form-control.width-40 {
+  flex: inherit;
+  width: 10%;
+}
+
 /* label.button { */
   /* background-repeat: no-repeat; */
   /* background-position: left; */

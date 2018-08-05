@@ -1,5 +1,5 @@
 <!doctype  html>
-<html lang="en" version="2.4">
+<html lang="en" version="2.5">
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -54,8 +54,8 @@
     
     <div class="row mb-2"><div class="col-lg">
       <button id="savedb"        type="button" class="btn btn-outline-secondary"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button>
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1</button> -->
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button> -->
       <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1183</button>
       <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1184</button>
     </div></div>
@@ -146,6 +146,15 @@
       <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
       <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size desc</button>
       <button id="statsClassEmptyBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize"><span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>Classes Empty by size</button>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button class="btn btn-primary injectSql tip" type="button" id="statsClassEmptyBySizeParam" getvaluefrom="statsClassEmptyBySizeParamValue">
+          <span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>
+          Empty w/ size >
+          </button>
+        </div>
+        <input id="statsClassEmptyBySizeParamValue" type="number" class="form-control width-40" placeholder="" aria-label="Classes Empty size > to.. enter digit" aria-describedby="statsClassEmptyBySizeParam" value="1">
+      </div>
     </div></div>
     <div class="row mb-2"><div class="col-lg">
       <button id="statsClassEmptyBySize1" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize1"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">1</span></button>
@@ -162,15 +171,11 @@
   <div id="progressBar" class="progressBar"></div>
   <div id="error" class="error"></div>
   <div class="row">
-    <div class="col-xs-11"><div id="chart-container"></div></div>
-    <div class="col-xs-1"><div id="chart-commands">
-      <div class="row">
-      <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning">Random Color</button>
-      </div>
-      <div class="row">
-      <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning">Random ColorS</button>
-      </div>
-    </div></div>
+    <div class="col-xl">
+    <div id="chart-container"></div>
+    <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning">Random Color</button>
+    <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning">Random ColorS</button>
+    </div>
   </div>
   <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
 </div>
@@ -236,7 +241,7 @@
   <link rel="stylesheet" href="www/css/tooltip.1.2.css">
   <script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
 
-  <script type="text/javascript" src="www/js/gui.2.4.js?v=2.4"></script>
+  <script type="text/javascript" src="www/js/gui.2.5.js?v"></script>
 
   <link rel="stylesheet" href="www/css/chart.css">
   <script type="text/javascript" src="www/js/chart.line.2.4.js?v=2.4"></script>
@@ -246,7 +251,7 @@
   <!-- TODO: include cdnjs sql.js in worker.sql.js -->
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
 
-  <link rel="stylesheet" href="www/css/tuScraper-bootstrap.css?v=cdcfs">
+  <link rel="stylesheet" href="www/css/tuScraper-bootstrap.css?v=12">
   <!-- favorite icons abandonned in favor of glyphicons -->
   <!-- <link rel="stylesheet" href="img/img.css"> -->
 </body>

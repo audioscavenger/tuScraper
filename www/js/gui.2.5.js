@@ -17,6 +17,7 @@
 2.4:  checkChart meaning inverted
       + update worker.sql.js to latest master 20180804
       + move codemirror under vendor folder
+2.5:  added sql inject modif upon button input param
 
 TODO LIST:
 - wherever title appears in a table, replace class title by an href to the mytumobile page; semester will need to be in the db somewhere
@@ -27,7 +28,7 @@ TODO LIST:
 
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
-var guiVersion = 2.4;
+var guiVersion = 2.5;
 var debug = false;
 
 var execBtn = document.getElementById("execute");
@@ -452,7 +453,12 @@ var sqlDict = $.ajax({
 // setEditorSql fills the sql textarea with JSON entry matching button id
 function setEditorSql(buttonId, sqlDict) {
   // console.log('setEditorSql: sqlDict['+buttonId+']='+sqlDict[buttonId]);
-  editor.setValue(sqlDict[buttonId]);
+  if ($('#'+buttonId).attr("getvaluefrom")) {
+    value = $('#'+$('#'+buttonId).attr("getvaluefrom")).val();
+    // TODO: validate it's a digit
+    // console.log(value);
+    editor.setValue(sqlDict[buttonId].replace("XYZ", value));
+  } else editor.setValue(sqlDict[buttonId]);
 }
 
 /* ************************************************************** 
