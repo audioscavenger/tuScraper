@@ -4,25 +4,26 @@ https://www.dyclassroom.com/chartjs/chartjs-how-to-draw-line-graph-using-data-fr
 1.3   moved chart.data.json under www/js/
 1.4:  introduced bar graph
 2.4:  introduced pie chart
-2.5:  myChart global for dynamic modif
+      + random colors for variable number of arrays
+      + random colors updated dynamically with button
+2.5:  all 3 graphs use variable array datasets
 
 TODO: actually use chart.data.json via XMLhr
 TODO: map columns or something like that within a dict, currently num of columns is fixed
-TODO: random colors for variable number of arrays
+TODO: random colors button works only for pie, check why
 */
-var chartVersion = 2.4;
+var chartVersion = 2.5;
 var config;
-var ctx;
 var myChart;
+var ctx;
 
-// why recreate the canvas every time??
 function createchartContainer() {
-  var chartParent  = document.createElement('div');
-  chartParent.className = "chart-container";
+  var div  = document.createElement('div');
+  div.className = "chart-container";
   var canvas  = document.createElement('canvas');
   canvas.id = "chartcanvas";
-  chartParent.appendChild(canvas);
-  document.getElementById("output").appendChild(chartParent);
+  div.appendChild(canvas);
+  document.getElementById("output").appendChild(div);
 }
 
 function resetCanvas() {
@@ -49,8 +50,8 @@ var randRgba = function() {
   return Math.round(Math.random() * 255);
 };
 
-var randRgbaColor = function(transparency) {
-  return "rgba("+randRgba()+", "+randRgba()+", "+randRgba()+", "+transparency+")";
+var randRgbaColor = function() {
+  return "rgba("+randRgba()+", "+randRgba()+", "+randRgba()+", 0.75)";
 };
 
 // gui.js execute returns this:
@@ -59,58 +60,61 @@ var randRgbaColor = function(transparency) {
 
 // chartType = line,bar.. // http://www.chartjs.org/docs/latest/charts/
 // fillLineChartWithSql is called by the GUI gui.js
-function fillLineChartWithSql(columns,values,chartType) {
+// fillPieChartWithSql is called by the GUI gui.js
+// http://www.chartjs.org/samples/latest/charts/pie.html
+function fillLineChartWithSql(columns,values) {
   resetCanvas();
-  var arrays = [[],[],[]];  // TODO: map columns or something like that within a dict
-  var timestamps = [];
-  var class1 = [];
-  var class2 = [];
-  // console.log(columns); //  [ "timestamp", "CIS212-001", "ITEC250-002" ]
-  // console.log(values);  //  [ Array[3], Array[3],..]
+  var arrays = [];
+  var colors = [];
+  
+  // create arrays of arrays with the right number of columns passed as argument
+  for (var c in columns) {
+    arrays.push([]);
+  }
 
-  for(var i in values) {
-    for(var c in columns) {
+  // fill data and label arrays with each biunary value from the values array passed as argument
+  // input:
+  // console.log(columns);       //  dual datasets: Array(3) [ "timestamp", "CIS212-001", "ITEC250-002" ]
+  // console.log(values);        //  dual datasets: Array(n) [ ["2018-08-02 18:44:25", 4, 0], ..] => point 1 [timestamp, value dataset 1, value dataset 2], point 2 [], ...
+  for (var i in values) {
+    for (var c in columns) {
       arrays[c].push(values[i][c]);
-      // class1.push(values[i][c]);
-      // class2.push(values[i][c]);
     };
   };
-  // console.log(timestamps);
-  // console.log(class1);
-  // console.log(class2);
+  // output:
+  // console.log(arrays[0]);     //  x-axis timestamps: Array(n) [ "2018-08-02 18:44:25", ..]
+  // console.log(arrays[1]);     //  y-axis dataset 1 : Array(n) [ 4, 4, ..]
+  // console.log(arrays[2]);     //  y-axis dataset 2 : Array(n) [ 0, 0, ..]
   
-  var chartdata = {
-    labels: arrays[0],
-    datasets: [
-      {
-        label: columns[1],
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: "rgba(59, 89, 152, 0.75)",
-        borderColor: "rgba(59, 89, 152, 1)",
-        pointHoverBackgroundColor: "rgba(59, 89, 152, 1)",
-        pointHoverBorderColor: "rgba(59, 89, 152, 1)",
-        data: arrays[1]
-      },
-      {
-        label: columns[2],
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: "rgba(29, 202, 255, 0.75)",
-        borderColor: "rgba(29, 202, 255, 1)",
-        pointHoverBackgroundColor: "rgba(29, 202, 255, 1)",
-        pointHoverBorderColor: "rgba(29, 202, 255, 1)",
-        data: arrays[2]
-      }
-    ]
+  transparency = 0.75;
+  for (var i = 0; i < columns.length; ++i) {
+    colors.push(randRgbaColor());
+  };
+  // console.log(colors);        //  Array(3) ["rgba(161, 97, 32, 0.75)", ..]
+
+  // build datasets starting from 1 since I don't mind having colors one more item than necessary:
+  var datasets = [];
+  for (var i = 1; i < colors.length; ++i) {
+    datasets.push({
+      label: columns[i],
+      data: arrays[i],
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: colors[i],
+      borderColor: colors[i],
+      pointHoverBackgroundColor: colors[i],
+      pointHoverBorderColor: colors[i]
+    });
   };
 
-  var ctx = $("#chartcanvas");
-
-  var LineGraph = new Chart(ctx, {
-    type: chartType,
-    data: chartdata,
+  config = {
+    type: 'line',
+    data: {
+      datasets: datasets,
+      labels: arrays[0]
+    },
     options: {
+      responsive: true,
       scales: {
         xAxes: [{
           type: 'time',
@@ -118,45 +122,65 @@ function fillLineChartWithSql(columns,values,chartType) {
         }]
       }
     }
-  });
+  };
+
+  ctx = document.getElementById('chartcanvas').getContext('2d');
+  window.myChart = new Chart(ctx, config);
+
 }
 
+/****************************************************************
 // fillBarGraphWithSql is called by the GUI gui.js
-function fillBarGraphWithSql(columns,values,chartType) {
+// http://www.chartjs.org/samples/latest/charts/bar/vertical.html
+*/
+function fillBarGraphWithSql(columns,values) {
   resetCanvas();
-  var arrays = [[],[],[]];  // TODO: map columns or something like that within a dict
-  var class1 = [];
-  var class2 = [];
-  // console.log(columns); //  [ "timestamp", "CIS212-001", "ITEC250-002" ]
-  // console.log(values);  //  [ Array[3], Array[3],..]
+  var arrays = [];
+  var colors = [];
+  
+  // create arrays of arrays with the right number of columns passed as argument
+  for (var c in columns) {
+    arrays.push([]);
+  }
 
-  for(var i in values) {
-    for(var c in columns) {
+  // fill data and label arrays with each biunary value from the values array passed as argument
+  // input:
+  console.log(columns);       //  dual datasets: Array(3) [ "timestamp", "CIS212-001", "ITEC250-002" ]
+  console.log(values);        //  dual datasets: Array(n) [ ["2018-08-02 18:44:25", 4, 0], ..] => point 1 [timestamp, value dataset 1, value dataset 2], point 2 [], ...
+  for (var i in values) {
+    for (var c in columns) {
       arrays[c].push(values[i][c]);
-      // class1.push(values[i][c]);
-      // class2.push(values[i][c]);
     };
   };
-  // console.log(class1);
-  // console.log(class2);
+  // output:
+  console.log(arrays[0]);     //  x-axis timestamps: Array(n) [ "2018-08-02 18:44:25", ..]
+  console.log(arrays[1]);     //  y-axis dataset 1 : Array(n) [ 4, 4, ..]
+  console.log(arrays[2]);     //  y-axis dataset 2 : Array(n) [ 0, 0, ..]
   
-  var chartdata = {
-    labels: arrays[0],
-    datasets: [
-      {
-        label: columns[1],
-        backgroundColor: "rgba(59, 89, 152, 0.75)",
-        data: arrays[1]
-      }
-    ]
+  transparency = 0.75;
+  for (var i = 0; i < columns.length; ++i) {
+    colors.push(randRgbaColor());
+  };
+  console.log(colors);        //  Array(3) ["rgba(161, 97, 32, 0.75)", ..]
+
+  // build datasets starting from 1 since I don't mind having colors one more item than necessary:
+  var datasets = [];
+  for (var i = 1; i < colors.length; ++i) {
+    datasets.push({
+      label: columns[i],
+      data: arrays[i],
+      backgroundColor: colors[i]
+    });
   };
 
-  var ctx = $("#chartcanvas");
-
-  var BarGraph = new Chart(ctx, {
-    type: chartType,
-    data: chartdata,
+  config = {
+    type: 'bar',
+    data: {
+      datasets: datasets,
+      labels: arrays[0]
+    },
     options: {
+      responsive: true,
       scales: {
         xAxes: [{
           gridLines: {
@@ -165,7 +189,10 @@ function fillBarGraphWithSql(columns,values,chartType) {
         }]
       }
     }
-  });
+  };
+
+  ctx = document.getElementById('chartcanvas').getContext('2d');
+  window.myChart = new Chart(ctx, config);
 }
 
 // fillPieChartWithSql is called by the GUI gui.js
@@ -193,7 +220,7 @@ function fillPieChartWithSql(columns,values) {
   
   transparency = 0.75;
   for (var item in arrays[1]) {
-    arrays[2].push(randRgbaColor(transparency));
+    arrays[2].push(randRgbaColor());
   };
   // console.log(arrays[2]);       //  Array(17) ["rgba(161, 97, 32, 0.75)", ..]
 
@@ -211,31 +238,38 @@ function fillPieChartWithSql(columns,values) {
       responsive: true
     }
   };
-  console.log(config);
-  console.log(ctx);
 
+  ctx = document.getElementById('chartcanvas').getContext('2d');
   window.myChart = new Chart(ctx, config);
 
 }
 
-function updateMyChartSingleColor(color=null,transparency=0.75) {
-  // default color as random:
-  if (!color) color=randRgbaColor(transparency);
-  config.data.datasets.backgroundColor = randRgbaColor(transparency);
-  window.myChart.update();
-}
-if (btnUpdateMyChartSingleColor) btnUpdateMyChartSingleColor.addEventListener("click", updateMyChartSingleColor);
-
-function updateMyChartRandomColors(transparency=0.75) {
-  // default color as random:
-  config.data.datasets.forEach(function(dataset) {
-    dataset.backgroundColor = dataset.backgroundColor.map(function() {
-      return randRgbaColor(transparency);
+// set single backgroundColor to each dataset
+function updateMyChartSingleColor() {
+  if (config) {
+    config.data.datasets.forEach(function(dataset) {
+      singleColor = randRgbaColor();
+      dataset.backgroundColor = singleColor;
     });
-  });
-  window.myChart.update();
+    window.myChart.update();
+  }
 }
-if (btnUpdateMyChartRandomColors) btnUpdateMyChartRandomColors.addEventListener("click", updateMyChartRandomColors);
+
+// set array(backgroundColor) to each dataset
+function updateMyChartRandomColors() {
+  if (config) {
+    // default color as random:
+    config.data.datasets.forEach(function(dataset) {
+      // we make backgroundColor = data because we want an array of same length
+      dataset.backgroundColor = dataset.data;
+      // then we map randRgbaColor for each item in backgroundColor array
+      dataset.backgroundColor = dataset.backgroundColor.map(function() {
+        return randRgbaColor();
+      });
+    });
+    window.myChart.update();
+  }
+}
 
   // window.onload = function() {
     // var ctx = document.getElementById('chart-area').getContext('2d');
@@ -276,13 +310,15 @@ if (btnUpdateMyChartRandomColors) btnUpdateMyChartRandomColors.addEventListener(
     // config.data.datasets.splice(0, 1);
     // window.myChart.update();
   // });
-// console.log(ctx);
+
 $(document).ready(function(){
   // createchartContainer();
-  resetCanvas();
   // fillChartAjax("js/chart.data.json");
-  ctx = document.getElementById('chartcanvas');
-  // ctx = $("#chartcanvas");
-  // var btnUpdateMyChartSingleColor = document.getElementById('btnUpdateMyChartSingleColor');
-  // var btnUpdateMyChartRandomColors = document.getElementById('btnUpdateMyChartRandomColors');
+  var btnUpdateMyChartSingleColor = document.getElementById('btnUpdateMyChartSingleColor');
+  var btnUpdateMyChartRandomColors = document.getElementById('btnUpdateMyChartRandomColors');
+  // TODO: both these addEventListener attachement work, have to chose one once and for all...
+  btnUpdateMyChartSingleColor.addEventListener("click", updateMyChartSingleColor);
+  if (btnUpdateMyChartRandomColors) btnUpdateMyChartRandomColors.addEventListener("click", updateMyChartRandomColors);
+
 });
+

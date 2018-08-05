@@ -47,8 +47,10 @@
     <a class="nav-item nav-link" id="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
     <a class="nav-item nav-link" id="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
     <a class="chartButton btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
+    <a class="chartButton btn btn-warning invisible" id="btnUpdateMyChartSingleColor" data-toggle="tab" href="#" role="tab" aria-controls="btnUpdateMyChartSingleColor" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random Color</a>
+    <a class="chartButton btn btn-warning invisible" id="btnUpdateMyChartRandomColors" data-toggle="tab" href="#" role="tab" aria-controls="btnUpdateMyChartRandomColors" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random ColorS</a>
   </nav>
-  
+
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade buttons show active tabContent" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
     
@@ -170,13 +172,7 @@
 <div class="container-fluid">
   <div id="progressBar" class="progressBar"></div>
   <div id="error" class="error"></div>
-  <div class="row">
-    <div class="col-xl">
-    <div id="chart-container"></div>
-    <button id="btnUpdateMyChartSingleColor"  type="button" class="chartButton invisible btn btn-warning">Random Color</button>
-    <button id="btnUpdateMyChartRandomColors" type="button" class="chartButton invisible btn btn-warning">Random ColorS</button>
-    </div>
-  </div>
+  <div id="chart-container"></div>
   <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
 </div>
 
@@ -241,10 +237,10 @@
   <link rel="stylesheet" href="www/css/tooltip.1.2.css">
   <script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
 
-  <script type="text/javascript" src="www/js/gui.2.5.js?v"></script>
+  <script type="text/javascript" src="www/js/gui.2.5.js?v=1"></script>
 
   <link rel="stylesheet" href="www/css/chart.css">
-  <script type="text/javascript" src="www/js/chart.line.2.4.js?v=2.4"></script>
+  <script type="text/javascript" src="www/js/chart.line.2.5.js?v=2.5"></script>
 
   <!-- sql.js is called or embebed in worker.sql.js -->
   <!-- <script type="text/javascript" src="www/js/sql.min.js"></script> -->

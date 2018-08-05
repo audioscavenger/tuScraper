@@ -133,7 +133,7 @@ function execute(commands, chartType) {
             chartType="bar";
             if (debug) console.log('execute: chartType='+chartType);
             $('#chart-container').addClass('chart-container');
-            fillBarGraphWithSql(results[i].columns, results[i].values, chartType);
+            fillBarGraphWithSql(results[i].columns, results[i].values);
             showChartButtons();
           }
           if (results[i].columns[1] == 'pienum') {
