@@ -1,5 +1,5 @@
 <!doctype  html>
-<html lang="en" version="2.6">
+<html lang="en" version="2.5">
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -42,25 +42,13 @@
 </div>
 
 <div class="container">
-  <nav class="nav nav-pills nav-fill" id="tabs" role="tablist">
+  <nav class="nav nav-tabs" id="tabs" role="tablist">
     <a class="nav-item nav-link active" id="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="true">Admin</a>
     <a class="nav-item nav-link" id="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
     <a class="nav-item nav-link" id="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
-    <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">History</a>
-    <!-- <a class="nav-item nav-link" id="nav-chartMenu" data-toggle="tab" href="#" role="tab" aria-controls="nav-chartMenu" aria-selected="false"> -->
-    <div class="dropdown">
-      <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        ChartAdmin
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        <button class="dropdown-item warning" type="button"><input id="checkChart" type="checkbox"> don't chart</input></button>
-        <div class="dropdown-divider"></div>
-        <button class="chartButton dropdown-item invisible" type="button" id="btnUpdateMyChartSingleColor"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random Color</button>
-        <button class="chartButton dropdown-item invisible" type="button" id="btnUpdateMyChartRandomColors"><span class="icon-inside-left glyphicon glyphicon-random"></span><span class="icon-inside-left glyphicon glyphicon-random"></span>Random ColorS</button>
-      </div>
-    </div>
-    <!-- </a> -->
     <a class="chartButton btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
+    <a class="chartButton btn btn-warning invisible" id="btnUpdateMyChartSingleColor" data-toggle="tab" href="#" role="tab" aria-controls="btnUpdateMyChartSingleColor" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random Color</a>
+    <a class="chartButton btn btn-warning invisible" id="btnUpdateMyChartRandomColors" data-toggle="tab" href="#" role="tab" aria-controls="btnUpdateMyChartRandomColors" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random ColorS</a>
   </nav>
 
   <div class="tab-content" id="nav-tabContent">
@@ -142,6 +130,21 @@
     
     <div class="tab-pane fade buttons disabled tabContent" id="nav-graph" role="tabpanel" aria-labelledby="nav-graph-tab">
     <div class="row mb-2"><div class="col-lg">
+      <span><input id="checkChart" type="checkbox">do not chart</input></span>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="sqlHistoSingle" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoSingle">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435
+      </button>
+      <button id="sqlHistoMultiple2" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple2">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435+440
+      </button>
+      <button id="sqlHistoMultiple3" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple3">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC435+440+345
+      </button>
+    </div></div>
+    
+    <div class="row mb-2"><div class="col-lg">
       <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
       <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size desc</button>
       <button id="statsClassEmptyBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize"><span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>Classes Empty by size</button>
@@ -163,21 +166,6 @@
       <button id="statsClassEmptyBySize12" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize12"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">12</span></button>
     </div></div>
     </div>
-    
-    <div class="tab-pane fade buttons disabled tabContent" id="nav-history" role="tabpanel" aria-labelledby="nav-history">
-    <div class="row mb-2"><div class="col-lg">
-      <button id="sqlHistoSingle" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoSingle">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435
-      </button>
-      <button id="sqlHistoMultiple2" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple2">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435+440
-      </button>
-      <button id="sqlHistoMultiple3" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple3">
-        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC435+440+345
-      </button>
-    </div></div>
-    </div>
-
   </div>
 </div>
 
