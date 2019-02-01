@@ -2,13 +2,13 @@
 
 # Define your item pipelines here
 #
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# Don't forget to add your pipeline to the ITEM_PIPELINES settings.py
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 # http://www.pythoncentral.io/introduction-to-sqlite-in-python/
 # https://stackoverflow.com/questions/13952731/inserting-data-with-mysql-in-scrapy
 import sys
-# from scrapy.exceptions import DropItem
+from scrapy.exceptions import DropItem
 # from scrapy.http import Request
 
 sqlClassCheck = "SELECT COUNT(1) FROM classes WHERE ClassNumber = (?)"
@@ -49,14 +49,14 @@ class SQLiteStorePipeline(object):
       db.commit()
     #
 
-def process_item(self, classDict, spider):
-  try:
-    keys2insert = ','.join(classDictValues.keys())
-    query_string = "INSERT INTO history(timestamp,{}) VALUES ("+str(arrow.get(datetime.datetime.now()).timestamp)+",%s)"
-    query_string = query_string.format(keys2insert) % ','.join('?' * len(classDictValues.keys()))
-    self.cursor.execute(query_string, classDictValues.values())
-    self.db.commit()
-  except sqlite3.Error, e:
-    print "Error %d: %s" % (e.args[0], e.args[1])
+  def process_item(self, classDict, spider):
+    try:
+      keys2insert = ','.join(classDictValues.keys())
+      query_string = "INSERT INTO history(timestamp,{}) VALUES ("+str(arrow.get(datetime.datetime.now()).timestamp)+",%s)"
+      query_string = query_string.format(keys2insert) % ','.join('?' * len(classDictValues.keys()))
+      self.cursor.execute(query_string, classDictValues.values())
+      self.db.commit()
+    except sqlite3.Error, e:
+      print "Error %d: %s" % (e.args[0], e.args[1])
 
-  return classDict
+    return classDict

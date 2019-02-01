@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html version="1.3"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf8">
+  <title>tuScraper: Online Towson Class Database Fork</title>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  
+  <!-- http://jsfiddle.net/fauzi/UvjnT/ -->
+  <!-- <link rel="stylesheet" href="www/css/jquery.dataTables.1.9.4.css"> -->
+  <!-- <script type="text/javascript" src="www/js/jquery.dataTables.1.9.4.js"></script> -->
+  <!-- for some reason, the new version of jquery.dataTables do not color even rows -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
+  <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.css"> -->
+  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.js"></script> -->
+  <!-- not sure why i keep this reference to colVis here: -->
+  <!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
+
+  <link rel="stylesheet" href="www/css/codemirror.css">
+  <script type="text/javascript" src="www/js/codemirror.js"></script>
+  <!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  
+  <!-- sql.js is called or embebed in worker.sql.js -->
+  <!-- <script type="text/javascript" src="www/js/sql.min.js"></script> -->
+  <!-- TODO: include cdnjs sql.js in worker.sql.js -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
+
+  <link rel="stylesheet" href="www/css/tuScraper.css">
+  <link rel="stylesheet" href="img/img.css">
+
+</head>
+<body>
+<!-- Github ribbon -->
+<a href="//github.com/kripken/sql.js"><img style="position: absolute; top: 0; left: 0; border: 0;" src="www/img/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875.png" alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+
+	<h1>TU Online SQL interpreter</h1>
+
+<main>
+<label for='commands'>Enter some SQL</label>
+<br>
+
+<textarea id="commands" style="display: none;">select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+where history.classnumber = classes.classnumber
+and title like 'ITEC%'
+group by classes.classnumber
+;</textarea>
+
+<div id="actions">
+<div class="buttons">
+<span><button id="execute" class="button ico_play_48"></button></span>
+<span><button id="sql_mySurvey" class="button injectSql tip" tooltip="sql_mySurvey"><span class="inside ico_favorite_add_24"></span><span>mySurvey</span></button></span>
+<span><button id="sql_ITEC" class="button injectSql tip" tooltip="sql_ITEC"><span class="inside ico_favorite_add_24"></span><span>ITEC</span></button></span>
+<span><button id="sql_timestamp" class="button injectSql tip" tooltip="sql_timestamp"><span class="inside ico_favorite_add_24"></span><span>ITEC231 histo</span></button></span>
+<span><button id="sql_classChart" class="button injectSql tip" tooltip="sql_classChart"><span class="inside ico_chart_24"></span><span>ITEC212+423</span></button></span>
+<div class="clear"></div>
+</div>
+
+<div class="buttons">
+<span><button id="savedb" class="button ico_database_down_48"></button></span>
+<span><label class="button ico_database_up_48"><input id="dbfile" type="file"></label></span>
+<span><button id="loadDbXhr0" class="button"><span class="inside ico_database_next_24"></span><span>Load TUdb0</span></button></span>
+<span><button id="loadDbXhrFull" class="button"><span class="inside ico_database_next_24"></span><span>Load TUdb</span></button></span>
+<div class="clear"></div>
+</div>
+
+<div class="buttons">
+<span><button id="structure" class="button injectSql ico_database_process_32 tip" tooltip="structure"></button></span>
+<span><button id="classes" class="button injectSql ico_books_32 tip" tooltip="classes"></button></span>
+<span><button id="fields" class="button injectSql ico_application_edit_32 tip" tooltip="fields"></button></span>
+<span><button id="history" class="button injectSql ico_chart_32 tip" tooltip="history"></button></span>
+<div class="clear"></div>
+</div>
+</div>
+
+<div class="progressBar"></div>
+<div id="error" class="error"></div>
+<pre id="output">Results will be displayed here</pre>
+<!-- <div id="chart-container" class="chart-container"></div> -->
+<div class="chart-container">
+  <canvas id="line-chartcanvas"></canvas>
+</div>
+
+</main>
+
+<footer>
+sql.js: Original work by kripken (<a href='//github.com/kripken/sql.js'>sql.js</a>).
+</footer>
+
+<script type="text/javascript" src="www/js/common.js"></script>
+<script type="text/javascript" src="www/js/sql.demo.js"></script>
+
+<link rel="stylesheet" href="www/css/tooltip.css">
+<script type="text/javascript" src="www/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="www/css/chart.css">
+<script type="text/javascript" src="www/js/chart.line.js"></script>
+
+<script type="text/javascript" src="www/js/gui.js"></script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+
+<!doctype  html>
+<html lang="en" version="2.6">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- boostrap 3 -->
+  <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+  <!-- boostrap 4 -->
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+  <title>Classotron 3000</title>
+  <script>
+    (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-11283030-11', 'auto'); ga('set', 'anonymizeIp', true); ga('send', 'pageview');
+  </script>
+</head>
+
+<body>
+<!-- Github ribbon -->
+<a href="//github.com/kripken/sql.js"><img style="position: absolute; top: 0; left: 0; border: 0;" src="www/img/forkme.png" alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+
+<div class="container-fluid">
+<h1>Classotron 3000</h1>
+
+<main>
+<label for='commands'>Enter some SQL</label>
+<br>
+
+<div class="bd">
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">
+    <button id="execute" type="button" class="btn btn-primary">
+    <span class="icon-inside-left glyphicon glyphicon-play"></span>
+    </button>
+  </span>
+  <textarea id="commands" style="display: none;">select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+  where history.classnumber = classes.classnumber
+  and title like 'ITEC%'
+  group by classes.classnumber
+  ;</textarea>
+</div>
+<div class="container"><div class="row">
+<div id="tocMsg1" class="col-sm-6 text-secondary"></div>
+<div id="tocMsg2" class="col-sm-6 text-secondary"></div>
+</div></div>
+</div>
+
+<div class="container">
+  <nav class="nav nav-pills nav-fill" id="tabs" role="tablist">
+    <a class="nav-item nav-link btn-info active" id="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="true">Admin</a>
+    <a class="nav-item nav-link btn-info" id="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
+    <a class="nav-item nav-link btn-info" id="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
+    <a class="nav-item nav-link btn-info" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">History</a>
+    <!-- <a class="nav-item nav-link" id="nav-chartMenu" data-toggle="tab" href="#" role="tab" aria-controls="nav-chartMenu" aria-selected="false"> -->
+    <div class="dropdown">
+      <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        ChartAdmin
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <button class="dropdown-item" type="button"><input id="checkChart" type="checkbox"> don't chart</input></button>
+        <div class="dropdown-divider"></div>
+        <button class="chartButton dropdown-item invisible btn-warning" type="button" id="btnUpdateMyChartSingleColor"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random Color</button>
+        <button class="chartButton dropdown-item invisible btn-warning" type="button" id="btnUpdateMyChartRandomColors"><span class="icon-inside-left glyphicon glyphicon-random"></span><span class="icon-inside-left glyphicon glyphicon-random"></span>Random ColorS</button>
+      </div>
+    </div>
+    <!-- </a> -->
+    <a class="chartButton btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade buttons show active tabContent" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
+    
+    <div class="row mb-2"><div class="col-lg">
+      <button id="savedb"        type="button" class="btn btn-outline-secondary"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1</button> -->
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button> -->
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1183</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1184</button>
+    </div></div>
+    
+    <div class="row"><div class="col-lg">
+      <!-- <label class="button ico_database_up_48"><input id="loadDbFile" type="file"></label> -->
+      
+      <!-- so, this one uploads, but do not show the selected file and is ugly -->
+      <!-- <div class="custom-file-container"><div class="custom-file"> -->
+        <!-- <label class="custom-file-label" for="customFile">Select sqlite3...</label> -->
+        <!-- <input id="loadDbFile" type="file" class="custom-file-input" id="customFile"> -->
+      <!-- </div></div> -->
+      
+      <!-- so, this one uploads, but do not show the selected file -->
+      <!-- <div class="input-group"> -->
+        <!-- <div class="custom-file"> -->
+          <!-- <input type="file" class="custom-file-input" id="loadDbFile" aria-describedby="loadDbFile"> -->
+          <!-- <label class="custom-file-label" for="loadDbFile">Choose file</label> -->
+        <!-- </div> -->
+        <!-- <div class="input-group-append"> -->
+          <!-- <button class="btn btn-outline-secondary" type="button"><span class="icon-inside-left glyphicon glyphicon-floppy-open"></span>Button</button> -->
+        <!-- </div> -->
+      <!-- </div> -->
+      
+      <!-- https://codepen.io/anon/pen/ejeVLr -->
+      <!-- so, this one is btn prepend AND uploads BUT doesnt show the selected file -->
+      <div class="input-group">
+        <label class="input-group-prepend">
+          <span class="btn btn-outline-secondary">
+            <!-- dbFileElm listener in gui.js prevents the onchange event from the input itself -->
+            <!-- therefore, the uploaded file name must be updated from the gui.js -->
+            <!-- Upload&hellip; <input id="loadDbFile" type="file" style="display:none;" onchange="$('#loadedDbFile').val($(this).val().replace(/\\/g, '/').replace(/.*\//, ''));"> -->
+            Upload&hellip; <input id="loadDbFile" type="file" style="display:none;">
+          </span>
+        </label>
+        <input type="text" class="form-control" id="loadedDbFile" readonly>
+      </div>
+    </div></div>
+    
+    <div class="row mb-2"><div class="col-lg">
+      <!-- injectSql buttons need an id that matches their JSON entry in sql.dict.json -->
+      <button id="structure"    type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="structure">   <span class="icon-inside-left glyphicon glyphicon-cog">   </span>DB Structure</button>
+      <button id="countClasses" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="countClasses"><span class="icon-inside-left glyphicon glyphicon-search"></span>Count(Classes)</button>
+      <button id="countHistory" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="countHistory"><span class="icon-inside-left glyphicon glyphicon-search"></span>Count(Histo)</button>
+    </div></div>
+
+    </div>
+    
+    <div class="tab-pane fade buttons disabled tabContent" id="nav-slice" role="tabpanel" aria-labelledby="nav-slice-tab">
+    <!-- injectSql buttons need an id that matches their JSON entry in sql.dict.json -->
+    <div class="row mb-2"><div class="col-lg">
+      <button id="classes" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="classes">              <span class="icon-inside-left glyphicon glyphicon-book">    </span>Classes</button>
+      <button id="fields"  type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="fields">               <span class="icon-inside-left glyphicon glyphicon-list-alt"></span>Fields</button>
+      <button id="history" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="history">              <span class="icon-inside-left glyphicon glyphicon-list-alt">   </span>History</button>
+      <button id="historyByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-book"></span>History by title</button>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="historyBig" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBig">        <span class="icon-inside-left glyphicon glyphicon-tags"></span>HistoryBig classes</button>
+      <button id="historyBigByClass" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyBigByClass"><span class="icon-inside-left glyphicon glyphicon-list-alt"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>HistorBig by title</button>
+      <button id="historyClassFull" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyClassFull"><span class="icon-inside-left glyphicon glyphicon-thumbs-up"></span>Classes Full</button>
+      <button id="historyClassFullBAE" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyClassFullBAE"><span class="icon-inside-left glyphicon glyphicon-thumbs-up"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-up"></span>Classes BAE</button>
+      <button id="historyClassStillEmpty" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyClassStillEmpty"><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>Class Empty</button>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="historyThatChanged" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChanged"><span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes</button>
+      <button id="historyThatChangedByTitle" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyThatChangedByTitle"><span class="icon-inside-left glyphicon glyphicon-fire"></span>History changes by title</button>
+      <button id="historyCapacityChangedByTitle" type="button" class="disabled btn btn-outline-secondary injectSql tip" tooltip="historyCapacityChangedByTitle"><span class="icon-inside-left glyphicon glyphicon-fire"></span><span class="icon-inside-left glyphicon glyphicon-tags"></span>Capacity Changes by title</button>
+    </div></div>
+    </div>
+    
+    <div class="tab-pane fade buttons disabled tabContent" id="nav-graph" role="tabpanel" aria-labelledby="nav-graph-tab">
+    <div class="row mb-2"><div class="col-lg">
+      <button id="statsClassBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySize"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size</button>
+      <button id="statsClassBySizeByNum" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassBySizeByNum"><span class="icon-inside-left glyphicon glyphicon-stats">   </span>Classes by size desc</button>
+      <button id="statsClassEmptyBySize" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize"><span class="icon-inside-left glyphicon glyphicon-stats"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>Classes Empty by size</button>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button class="btn btn-primary injectSql tip" type="button" id="statsClassEmptyBySizeParam" getvaluefrom="statsClassEmptyBySizeParamValue">
+          <span class="icon-inside-left glyphicon glyphicon-adjust"></span><span class="icon-inside-left glyphicon glyphicon-thumbs-down"></span>
+          Empty w/ size >
+          </button>
+        </div>
+        <input id="statsClassEmptyBySizeParamValue" type="number" class="form-control width-40" placeholder="" aria-label="Classes Empty size > to.. enter digit" aria-describedby="statsClassEmptyBySizeParam" value="1">
+      </div>
+    </div></div>
+    <div class="row mb-2"><div class="col-lg">
+      <button id="statsClassEmptyBySize1" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize1"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">1</span></button>
+      <button id="statsClassEmptyBySize5" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize5"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">5</span></button>
+      <button id="statsClassEmptyBySize6" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize6"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">6</span></button>
+      <button id="statsClassEmptyBySize10" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize10"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">10</span></button>
+      <button id="statsClassEmptyBySize12" type="button" class="disabled btn btn-primary injectSql tip" tooltip="statsClassEmptyBySize12"><span class="icon-inside-left glyphicon glyphicon-adjust"></span>Empty classes <span class="badge badge-light">12</span></button>
+    </div></div>
+    </div>
+    
+    <div class="tab-pane fade buttons disabled tabContent" id="nav-history" role="tabpanel" aria-labelledby="nav-history">
+    <div class="row mb-2"><div class="col-lg">
+      <button id="sqlHistoSingle" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoSingle">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435
+      </button>
+      <button id="sqlHistoMultiple2" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple2">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo CIS435+440
+      </button>
+      <button id="sqlHistoMultiple3" type="button" class="btn btn-primary injectSql tip" tooltip="sqlHistoMultiple3">
+        <span class="icon-inside-left glyphicon glyphicon-star"></span>histo ITEC435+440+345
+      </button>
+    </div></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div id="progressBar" class="progressBar"></div>
+  <div id="error" class="error"></div>
+  <div id="chart-container"></div>
+  <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
+</div>
+
+</main>
+</div>
+
+<footer>
+</footer>
+
+
+<!-- bootstrap 3 -->
+<!-- <script src="//code.jquery.com/jquery-2.2.4.min.js"></script> -->
+<!-- <script src="//code.jquery.com/jquery-1.12.4.min.js"></script> -->
+<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+
+<!-- bootstrap 4 - transition is VERY painful: -->
+<!-- 1) slim jquery incompatible with XHR loading -->
+<!-- 2) they droped glyphicons -->
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<!-- Bootstrap 4 abandonned glyphicons. Internet is such a mess -->
+<!-- cannot even use font awesome because not matter what they say at stackoverflow, styles get messed up -->
+<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+<!-- this doesn't work: -->
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
+<!-- this seems to work: -->
+<link href="www/css/bootstrap-glyphicons-3.0.css?v=x" rel="stylesheet">
+
+
+<script type="text/javascript" src="www/js/common.js"></script>
+
+  <!-- codemirror is needed by sql.demo.js -->
+  <link rel="stylesheet" href="www/codemirror/codemirror.css">
+  <script type="text/javascript" src="www/codemirror/codemirror.js"></script>
+  <!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
+
+  <!-- http://jsfiddle.net/fauzi/UvjnT/ -->
+  <!-- <link rel="stylesheet" href="www/css/jquery.dataTables.1.9.4.css"> -->
+  <!-- <script type="text/javascript" src="www/js/jquery.dataTables.1.9.4.js"></script> -->
+  <!-- for some reason, the new version of jquery.dataTables do not color even rows -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
+  <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.css"> -->
+  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.js"></script> -->
+  <!-- not sure why i keep this reference to colVis here: -->
+  <!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
+
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+  <!-- You must include Moment.js before Chart.js to use the time scale. -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
+  <script type="text/javascript" src="www/js/sql.demo.js"></script>
+
+  <link rel="stylesheet" href="www/css/tooltip.1.2.css">
+  <script type="text/javascript" src="www/js/tooltip.1.2.js"></script>
+
+  <script type="text/javascript" src="www/js/gui.2.5.js?v=1"></script>
+
+  <link rel="stylesheet" href="www/css/chart.css">
+  <script type="text/javascript" src="www/js/chart.line.2.5.js?v=2.5"></script>
+
+  <!-- sql.js is called or embebed in worker.sql.js -->
+  <!-- <script type="text/javascript" src="www/js/sql.min.js"></script> -->
+  <!-- TODO: include cdnjs sql.js in worker.sql.js -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
+
+  <link rel="stylesheet" href="www/css/tuScraper-bootstrap.css?v=12">
+  <!-- favorite icons abandonned in favor of glyphicons -->
+  <!-- <link rel="stylesheet" href="img/img.css"> -->
+</body>
+</html>

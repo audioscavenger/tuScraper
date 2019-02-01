@@ -89,6 +89,11 @@ def dict_factory(cursor, row):
     d[col[0]] = row[idx]
   return d
 
+# i had to define a boolean convertor because one cannot pass booleans from command line
+def str2bool(v):
+  return v.lower() in ("yes", "true", "t", "1")
+#
+
 # class name is actually arbitrary. TODO: check out why it works
 # class TuSpiderv7(CrawlSpider):
 class TuSpiderv18(scrapy.Spider):
@@ -99,7 +104,7 @@ class TuSpiderv18(scrapy.Spider):
   def __init__(self, semester=1184, initDb=False, *args, **kwargs):
     super(TuSpiderv18, self).__init__(*args, **kwargs)
     # Define path to database and export it (no path = local in \tuScrapper dir)
-    self.database='tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
+    self.database='htdocs/tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
     
     semesterUrl = '%s/%s/' % (baseUrl, semester)
 
@@ -113,9 +118,9 @@ class TuSpiderv18(scrapy.Spider):
     self.cursor = self.db.cursor()
 
     # export initDb
-    self.initDb = initDb
+    self.initDb = str2bool(initDb)
     
-    if initDb:
+    if str2bool(initDb):
       # This has to be done the very first time to fill the database.
       for classNum in classRange: self.start_urls.append(semesterUrl+str(classNum))
     else:
@@ -304,5 +309,6 @@ class TuSpiderv18(scrapy.Spider):
         print "sqlite3.Error %s" % (e)
         self.logger.error("sqlite3.Error %s" % (e))
       
-      # Uncomment this to log classDict in json format, path defined in tuScraper\settings.py
-      # yield classDict
+  # Uncomment this to log classDict in json format, path defined in tuScraper\settings.py
+  # yield {'initDb':initDb, 'database':database, 'classDict':classDict}
+  

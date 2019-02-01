@@ -14,7 +14,7 @@ BOT_NAME = 'tuScraper'
 SPIDER_MODULES = ['tuScraper.spiders']
 NEWSPIDER_MODULE = 'tuScraper.spiders'
 LOG_LEVEL = 'INFO'
-LOG_FILE = 'tuScraper.log'
+LOG_FILE = 'tuScraper.log.json'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'tuScraper (http://www.it-cooking.com)'
@@ -68,7 +68,8 @@ COOKIES_ENABLED = False
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'tuScraper.pipelines.TuscraperPipeline': 300,
+#    'tuScraper.pipelines.ValidateDataPipeline': 300,
+#    'tuScraper.pipelines.SQLiteStorePipeline': 800,
 #}
 # ITEM_PIPELINES = ['tuScraper.pipelines.SQLiteStorePipeline']
 

@@ -1,0 +1,39 @@
+/* version = 1.1 */
+.tip {
+	cursor: help; /* On change le curseur par défaut par un curseur d'aide. */
+	border-bottom: 1px dotted #ba0000;
+}
+
+.hiddenTooltip {
+	display: none;
+}
+
+.tooltip {
+	position:absolute;
+	z-index:999;
+	left:-9999px;
+	background-color:#dedede;
+	padding:5px;
+	border:1px solid #fff;
+	width:auto;
+	/* https://developer.mozilla.org/fr/docs/CSS/border-radius */
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px 2px;
+	border-radius: 2px/2px;
+}
+
+.tooltip p {
+	margin:0px;
+	padding:0px;
+	color:#fff;
+	background-color:#222;
+	padding:2px 7px;
+	/* https://developer.mozilla.org/fr/docs/CSS/border-radius */
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px 2px;
+	border-radius: 2px/2px;
+}
+
+.tooltip img {
+	padding-top: 4px;
+}
