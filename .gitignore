@@ -88,6 +88,7 @@ dwsync.xml
 # Logs
 logs
 *.log
+*.log.json
 
 # Runtime data
 pids

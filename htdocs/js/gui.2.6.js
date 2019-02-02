@@ -34,8 +34,8 @@ TODO LIST:
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
 var guiVersion = 2.5;
-// var debug = false;
-var debug = true;
+var debug = false;
+// var debug = true;
 
 var execBtn = document.getElementById("execute");
 var outputElm = document.getElementById('alert-output');

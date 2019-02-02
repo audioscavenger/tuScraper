@@ -11,6 +11,7 @@
 
 # https://doc.scrapy.org/en/latest/intro/tutorial.html#crawling
 import os, scrapy, sqlite3, re, datetime, arrow, sys, logging
+from shutil import copyfile
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.sgml import SgmlLinkExtractor
 
@@ -35,12 +36,14 @@ from scrapy.linkextractors.sgml import SgmlLinkExtractor
 # define global variables
 # ----------------------------------------------------------------------
 version = 1.8
+Debug = False
+Verbose = True
 
 # initDb = False                      # Process a defined range for class table first initialization
 # initDb is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
 # semester = 1183                     # semester to process, will be used in the db name; 1182=Spring 2018, 1183=Summer 2018, etc
 # semester is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
-dbVersion = 1                       # TODO: duplicate the blank db file to create the semester db automatically
+dbVersion = 1                         # template db file = "tuScraper.1.sqlite3"
 # dbVersion 1: tuSpiderv18->   new "ClassNotes" field discoverd for 1183, making a total of 18 fields
 # dbVersion 0: tuSpiderv1->v6
 
@@ -70,6 +73,7 @@ sqlClassFetch = "SELECT ClassNumber FROM classes"
 totalPagesFetched=0                 # Define a global variable total that will be incremented by the threads
 moduloPagesFetched=50               # Define a global variable total that will be incremented by the threads
 totalClassInserts=0                 # Define a global variable total that will be incremented by the threads
+moduloClassInserts=50               # Print status every 50 lines inserts in class table
 moduloClassInserts=50               # Print status every 50 lines inserts in class table
 totalHistoInserts=0                 # Define a global variable total that will be incremented by the threads
 moduloHistoInserts=500              # Print status every 500 lines updates in history table
@@ -103,8 +107,10 @@ class TuSpiderv18(scrapy.Spider):
   # INIT --------------------------------------------
   def __init__(self, semester=1184, initDb=False, *args, **kwargs):
     super(TuSpiderv18, self).__init__(*args, **kwargs)
-    # Define path to database and export it (no path = local in \tuScrapper dir)
+    # Define path to database and export it (no path = local in tuScrapper/htdocs/)
+    # Define path to database and export it (no path = local in tuScrapper/htdocs/)
     self.database='htdocs/tuScraper.%s-%s.sqlite3' % (dbVersion, semester)
+    copyfile('htdocs/tuScraper.%s.sqlite3' % (dbVersion, semester), self.database)
     
     semesterUrl = '%s/%s/' % (baseUrl, semester)
 
@@ -146,10 +152,11 @@ class TuSpiderv18(scrapy.Spider):
     initDb = self.initDb
     database = self.database
     
-    # debug
-    # print('YYY %s' % initDb)
-    # print('YYY %s' % database)
-    # os.system('pause')
+    if Debug:
+      print('YYY %s' % initDb)
+      print('YYY %s' % database)
+      os.system('pause')
+    #
     
     if initDb:
       global totalPagesFetched
@@ -239,9 +246,9 @@ class TuSpiderv18(scrapy.Spider):
       # If no row is returned, INSERT a new class definition in the main class table:
       
       if not cursor.fetchone()[0]:
-        # TODO: this print shoud be modulo as well:
-        print 'INSERT CLASS: %s' % (ClassNumber)
-        self.logger.info('INSERT CLASS: %s' % (ClassNumber))
+        if Verbose:
+          print 'INSERT CLASS: %s' % (ClassNumber)
+          self.logger.info('INSERT CLASS: %s' % (ClassNumber))
         
         # Remove numerics from classDict:
         for unwanted_key in numerics: del classDict[unwanted_key]

@@ -1,4 +1,4 @@
-REM @echo OFF
+@echo OFF
 pushd %~dp0
 
 set pythonPath=S:\wintools\PortableApps\Python27
