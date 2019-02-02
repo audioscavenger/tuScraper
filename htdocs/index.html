@@ -81,10 +81,10 @@
       <button id="savedb"        type="button" class="btn btn-outline-secondary"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
       <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1</button> -->
       <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button> -->
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1183</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1184</button>
-      <!-- <button type="button" class="btn btn-outline-secondary testXhr" database="test.7z"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>test</button> -->
+      <button type="button" class="btn btn-outline-secondary unzipDbXhr" database="tuScraper.0-1182.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 0-1182</button>
+      <button type="button" class="btn btn-outline-secondary unzipDbXhr" database="tuScraper.1-1183.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1183</button>
+      <button type="button" class="btn btn-outline-secondary unzipDbXhr" database="tuScraper.1-1184.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>Load TUdb 1-1184</button>
+      <button type="button" class="btn btn-outline-secondary unzipDbXhr" database="test.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>test</button>
     </div></div>
     
     <div class="row"><div class="col-lg">
@@ -197,9 +197,11 @@
 
 <div class="container-fluid">
   <div id="progressBar" class="progressBar"></div>
-  <div id="error" class="error"></div>
   <div id="chart-container"></div>
-  <pre id="output" class="alert alert-light" role="alert">Results will be displayed here</pre>
+  <div id="alert-error" class="alert alert-danger hidden" role="alert alert-danger"></div>
+  <div id="alert-output" class="alert alert-info" role="alert alert-info">Results will be displayed here</div>
+  <pre id="output-table"><table></table></pre>
+  <!-- <div id="output-table"><table></table></div> -->
 </div>
 
 </main>
@@ -262,7 +264,11 @@
   <!-- <script type="text/javascript" src="//raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js"></script> -->
   <!-- Refused to execute script from 'https://raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled. -->
   <!-- <script type="text/javascript" src="js/lzma-min.js"></script> -->
-  <script type="text/javascript" src="js/lzma_worker-min.js"></script>
+  <!-- <script type="text/javascript" src="js/lzma_worker-min.js"></script> -->
+
+  <!-- https://stuk.github.io/jszip/ -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  <script type="text/javascript" src="js/jszip-utils.min.js"></script>
 
   <!-- sql.demo.js covers CodeMirror implementation -->
   <script type="text/javascript" src="js/sql.demo.js"></script>

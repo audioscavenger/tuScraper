@@ -19,9 +19,11 @@
       + move codemirror under vendor folder
 2.5:  added sql inject modif upon button input param
 2.6:  added modal transition slide for tab content
-      + added lzma.js for 7-zip LZMA decompress on the fly + asynchronous worker
+      + added lzma.js for 7-zip LZMA decompress on the fly + asynchronous worker / ABORTED it just doesn't work
+      + added JSZip and it works!
 
 TODO LIST:
+- handle progress bar with JSZip utils
 - handle 404 (Not Found) in execBtnLoadXhr2LoadFile
 - wherever title appears in a table, replace class title by an href to the mytumobile page; semester will need to be in the db somewhere
 - try to include the glyphicons in the dict.json somehow
@@ -36,8 +38,9 @@ var guiVersion = 2.5;
 var debug = true;
 
 var execBtn = document.getElementById("execute");
-var outputElm = document.getElementById('output');
-var errorElm = document.getElementById('error');
+var outputElm = document.getElementById('alert-output');
+var errorElm = document.getElementById('alert-error');
+var tableElm = document.getElementById('output-table');
 var commandsElm = document.getElementById('commands');
 var dbFileElm = document.getElementById('loadDbFile');
 var savedbElm = document.getElementById('savedb');
@@ -47,34 +50,67 @@ var tocMsg2 = document.getElementById('tocMsg2');
 // var execBtnLoadDbXhr0 = document.getElementById('loadDbXhr0');
 // var execBtnLoadDbXhrFull = document.getElementById('loadDbXhrFull');
 
-/// LZMA([optional path])
-/// If lzma_worker.js is in the same directory, you don't need to set the path.
-// var my_lzma = new LZMA("https://raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma_worker-min.js");
-// var my_lzma = new LZMA("js/lzma_worker-min.js");
 
-
-// Start the worker in which sql.js will run
-var worker = new Worker("js/worker.sql.js");
-// alert(worker);
-worker.onerror = error;
+// Start the sqlWorker in which sql.js will run
+var sqlWorker = new Worker("js/worker.sql.js");
+// alert(sqlWorker);
+sqlWorker.onerror = outputError;
 
 // Open a database
-worker.postMessage({action:'open'});
+sqlWorker.postMessage({action:'open'});
+
+// basename
+function basename(filename) {
+  return filename.replace(/\\/g, '/').replace(/.*\//, '');
+}
+
+// basenameNoExt
+function basenameNoExt(filename) {
+  return output = filename.substr(0, filename.lastIndexOf('.')) || filename;
+}
+
+// extension
+function extension(filename) {
+  return filename.split('.').pop();
+}
 
 // Connect to the HTML element we 'print' to
 function print(text) {
   outputElm.innerHTML = text.replace(/\n/g, '<br>');
 }
-function error(e) {
-  if (debug) console.log(e);
-  errorElm.style.height = '2em';
-  errorElm.textContent = e.message;
+
+function outputTable(content) {
+  tableElm.removeChild(tableElm.firstChild);
+  tableElm.appendChild(content);
+}
+
+function hideTable(content) {
+  tableElm.innerHTML = "";
+  errorElm.className = "hidden";
+}
+
+function outputMessage(message) {
+  if (debug) console.log('outputMessage: '+message);
+  outputElm.textContent = message;
+  outputElm.className = "alert alert-info";
+}
+
+function outputWarning(message) {
+  if (debug) console.log('outputWarning: '+message);
+  outputElm.textContent = message;
+  outputElm.className = "alert alert-warning";
+}
+
+function outputError(message) {
+  if (debug) console.log('outputError: '+message);
   outputElm.textContent = "See error for details.";
-  outputElm.className = "alert alert-danger";
+  outputElm.className = "alert alert-warning";
+  errorElm.className = "alert alert-danger";
+  errorElm.textContent = message;
 }
 
 function noerror() {
-  errorElm.style.height = '0';
+  errorElm.className = "hidden";
 }
 
 function disableActions() {
@@ -104,7 +140,7 @@ function showChartButtons() {
 // Run a command in the database
 function execute(commands, chartType) {
   tic();
-  worker.onmessage = function(event) {
+  sqlWorker.onmessage = function(event) {
     // console.log(event);  // MessageEvent {isTrusted: true, data: {…}, origin: "", lastEventId: "", source: null, …}
     // console.log(event.data);  // Object { id: undefined, results: Array[1] }
     // console.log(event.data.results);  // [{columns: Array(2), values: Array(3)}]
@@ -112,20 +148,21 @@ function execute(commands, chartType) {
     // this results.length sometimes returns uncaught TypeError??
     // console.log(results);  // Array [ Object ]
     if (!results || results.length == 0) {
-      outputElm.textContent = "Request returned 0 rows.";
-      outputElm.className = "alert alert-warning";
+      outputWarning("Request returned 0 rows.");
     } else {
       toc("Executing SQL");
 
       tic();
       disableActions();
       // outputElm.innerHTML = ''; // http://jsperf.com/innerhtml-vs-removechild
-      outputElm.removeChild(outputElm.firstChild);
+      // outputElm.removeChild(outputElm.firstChild);
       for (var i=0; i<results.length; i++) {
         // for event.data.results = Array [ Object ], results.length = 1
         // console.log('columns='+results[i].columns); // columns=[0:id,1:timestamp,2:ClassNumber,.. x8]
         // console.log('values='+results[i].values);   // values=[0:[1512,1510867045,2792,22,0,22,2,6,7228],.. xNbRows]
-        outputElm.appendChild(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
+        // outputElm.appendChild(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
+        outputTable(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
+        outputMessage("Request rsults:")
         
         // chart for chartType = line,bar.. // http://www.chartjs.org/docs/latest/charts/
         // TODO: add radio boxes for selecting chart type
@@ -163,15 +200,14 @@ function execute(commands, chartType) {
     enableActions();
   }
   // try {
-    // worker.postMessage({action:'exec',sql:commands});
+    // sqlWorker.postMessage({action:'exec',sql:commands});
   // }
   // catch(exception) {
-    // worker.postMessage({action:'exec',sql:commands});
+    // sqlWorker.postMessage({action:'exec',sql:commands});
   // }
-  worker.postMessage({action:'exec', sql:commands});
+  sqlWorker.postMessage({action:'exec', sql:commands});
   toc("Fetching results...");
-  outputElm.textContent = "Fetching results...";
-  outputElm.className = "alert alert-light";
+  outputMessage("Fetching results...")
 }
 
 function purgeGraphelement() {
@@ -352,7 +388,7 @@ var editor = CodeMirror.fromTextArea(commandsElm, {
 // therefore, the uploaded file name must be updated from here
 if (dbFileElm) {
 dbFileElm.onchange = function() {
-  $('#loadedDbFile').val($(this).val().replace(/\\/g, '/').replace(/.*\//, ''));
+  $('#loadedDbFile').val(basename($(this).val()));
   var f = dbFileElm.files[0];
   var r = new FileReader();
   updateProgressBar('init',0);
@@ -363,7 +399,7 @@ dbFileElm.onchange = function() {
   r.addEventListener("loadend", loadEnd);
   
   r.onload = function() {
-    worker.onmessage = function () {
+    sqlWorker.onmessage = function () {
       toc("Loading database from uploaded file");
       // Show the schema of the loaded database
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
@@ -372,10 +408,10 @@ dbFileElm.onchange = function() {
     tic();
     try {
       if (debug) console.log(r.result);
-      worker.postMessage({action:'open',buffer:r.result}, [r.result]);
+      sqlWorker.postMessage({action:'open',buffer:r.result}, [r.result]);
     }
     catch(exception) {
-      worker.postMessage({action:'open',buffer:r.result});
+      sqlWorker.postMessage({action:'open',buffer:r.result});
     }
   }
   disableActions();
@@ -385,7 +421,7 @@ dbFileElm.onchange = function() {
 
 // Save the db to a file
 function savedb () {
-  worker.onmessage = function(event) {
+  sqlWorker.onmessage = function(event) {
     toc("Exporting the database");
     var arraybuff = event.data.buffer;
     var blob = new Blob([arraybuff]);
@@ -400,7 +436,7 @@ function savedb () {
     a.click();
   };
   tic();
-  worker.postMessage({action:'export'});
+  sqlWorker.postMessage({action:'export'});
 }
 if (savedbElm) savedbElm.addEventListener("click", savedb, true);
 
@@ -430,19 +466,9 @@ function loadEnd(evt) {
   // console.log(evt['target']['responseURL']); 
 }
 
-// cannot (De)Compress stuff asynchronously inside an already asynchronous xhr request lol
-function on_finish(result, error) {
-  if (debug) console.log("my_lzma.decompress result = "+result);
-  if (debug) console.log("my_lzma.decompress error = "+error);
-}
-function on_progress(percent) {
-  updateProgressBar('update',percent);
-}
-
-// load db file from http
+// load db file from url.sqlite3
 function execBtnLoadXhr2LoadFile(url) {
   var xhr = new XMLHttpRequest();
-  // var decompressed;
 
   updateProgressBar('init',0);
   xhr.addEventListener("progress", updateProgressTweaked);
@@ -452,28 +478,22 @@ function execBtnLoadXhr2LoadFile(url) {
   xhr.addEventListener("loadend", loadEnd);
 
   xhr.onload = function() {
-    if (debug) console.log('xhr this.response:'); // THIS is the ArrayBuffer we want for the worker postMessage buffer !
+    if (debug) console.log('xhr this.response:'+this.response); // THIS is the [object ArrayBuffer] we want for the worker postMessage buffer !
     if (debug) console.log(this.response); // THIS is the ArrayBuffer we want for the worker postMessage buffer !
-      // toc("decompressing "+this.response);
-      // this.decompressed = LZMA.decompress(this.response); // FREEZE
-      // toc("decompressed: "+decompressed);
 
-    worker.onmessage = function () {
+    sqlWorker.onmessage = function () {
       toc("Loading database from url: "+url);
       // Show the schema of the loaded database
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
       execEditorContents();
       $("#initMessage").fadeOut(300, function() { $(this).remove(); });
-      $('#loadedDbFile').val(url.replace(/\\/g, '/').replace(/.*\//, ''));
+      $('#loadedDbFile').val(basename(url));
     };
     try {
-      worker.postMessage({action:'open',buffer:this.response}, [this.response]);
-      // worker.postMessage({action:'open',buffer:decompressed}, [decompressed]);
-      // worker.postMessage({action:'open',buffer:my_lzma.decompress(this.response)}, [my_lzma.decompress(this.response)]);
+      sqlWorker.postMessage({action:'open',buffer:this.response}, [this.response]);
     }
     catch(exception) {
-      worker.postMessage({action:'open',buffer:this.response});
-      // worker.postMessage({action:'open',buffer:decompressed});
+      sqlWorker.postMessage({action:'open',buffer:this.response});
     }
   }
   tic();
@@ -482,17 +502,8 @@ function execBtnLoadXhr2LoadFile(url) {
   xhr.responseType = 'arraybuffer';
   if (debug) console.log('-----------------------xhr------------------------:');
   if (debug) console.log(xhr);
-      // toc("decompressing "+xhr.response);
-      // decompressed = LZMA.decompress(xhr.response);
-      // if (debug) console.log('decompressed:');
-      // if (debug) console.log(decompressed);
-      // toc("decompressed: "+decompressed);
   xhr.send();
 }
-/// To decompress:
-///NOTE: By default, the result will be returned as a string if it decodes as valid UTF-8 text;
-///      otherwise, it will return a Uint8Array instance.
-// my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
 
 // TODO: BUG: for some reason these addEventListener are executed on load of the page, why?
 // execBtnLoadDbXhr0.addEventListener("click", execBtnLoadXhr2LoadFile('tuScraper.0.sqlite3'));
@@ -507,25 +518,60 @@ function execBtnLoadXhr2LoadFile(url) {
   // }
 
 
-// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Sending_and_Receiving_Binary_Data
-function xhrDecompressFile(url) {
-  var oReq = new XMLHttpRequest();
-  var result, error, percent;
-  oReq.open("GET", url, true);
-  oReq.responseType = "arraybuffer";
+// https://stuk.github.io/jszip/documentation/examples.html
+// https://stuk.github.io/jszip/documentation/examples/get-binary-files-ajax.html
+function xhrDecompressDbFile(url) {
+  // 1) get a promise of the content
+  var promise = new JSZip.external.Promise(function (resolve, reject) {
+    JSZipUtils.getBinaryContent(url, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
 
-  oReq.onload = function (oEvent) {
-    var arrayBuffer = oReq.response; // Note: not oReq.responseText
-    if (arrayBuffer) {
-      var byteArray = new Uint8Array(arrayBuffer);
-      // var byteArray = arrayBuffer;
-      if (debug) console.log('byteArray='+byteArray);
-      if (debug) console.log(byteArray);
-      // var decompressed = LZMA.decompress(byteArray);   // Uncaught Error: corrupted input
-      LZMA.decompress(byteArray, on_finish(result, error), on_progress(percent));
+  // 2) chain with the zip promise
+  promise.then(JSZip.loadAsync)
+  .then(function(zip) {
+    // zippedFile = basenameNoExt(url)+'txt';   // debug txt file
+    zippedFile = basenameNoExt(url);
+    if (debug) console.log('zippedFile: '+zippedFile);
+    
+    if (extension(zippedFile) != 'sqlite3') throw '"'+basename(url)+'" doesn\'t look like it contains an sqlite3 db!';
+    
+    // 3) chain with the response content promise
+    // return zip.file(zippedFile).async("string"); // debug txt file
+    return zip.file(zippedFile).async("ArrayBuffer");
+  })
+  // 4) display the result
+  .then(function success(response) {
+    if (debug) console.log('response: '+response);
+    outputMessage("loaded, content = " + response);  // debug txt file
+    
+    
+    
+    sqlWorker.onmessage = function () {
+      toc("Loading database from url: "+url);
+      editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
+      execEditorContents();
+      $("#initMessage").fadeOut(300, function() { $(this).remove(); });
+      $('#loadedDbFile').val(basenameNoExt(url));
+    };
+    try {
+      sqlWorker.postMessage({action:'open',buffer:response}, [response]);
     }
-  };
-  oReq.send(null);
+    catch(exception) {
+      sqlWorker.postMessage({action:'open',buffer:response});
+    }
+    
+    
+    
+    
+  }, function error(e) {
+    outputError(e + " for " + zippedFile);
+  });
 }
 
 function jsonEscape(str)  {
@@ -654,6 +700,6 @@ var sqlDict;
 
 $( document ).ready(function() {
   $(".loadDbXhr").click(function () {execBtnLoadXhr2LoadFile($(this).attr("database")); }).end();
-  // $(".testXhr").click(function () {xhrDecompressFile($(this).attr("database")); }).end();
+  $(".unzipDbXhr").click(function () {xhrDecompressDbFile($(this).attr("database")); }).end();
   setVarAsync();
 });
