@@ -1,5 +1,5 @@
 <!doctype  html>
-<html lang="en" version="2.7">
+<html lang="en" version="2.6">
 <head>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,24 +7,6 @@
   <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
   <!-- boostrap 4 -->
   <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  
-  <!-- Bootstrap 4 abandonned glyphicons. Internet is such a mess -->
-  <!-- cannot even use font awesome because not matter what they say at stackoverflow, styles get messed up -->
-  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
-  <!-- this doesn't work: -->
-  <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
-  <!-- this seems to work: -->
-  <link href="css/bootstrap-glyphicons-3.0.css?v=x" rel="stylesheet">
-
-  <link rel="stylesheet" href="codemirror/codemirror.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
-  <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.css"> -->
-  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
-  <link rel="stylesheet" href="css/tooltip.1.2.css">
-  <link rel="stylesheet" href="css/chart.css">
-  <link rel="stylesheet" href="css/tuScraper-bootstrap.css?v=1fd">
-  <!-- favorite icons abandonned in favor of glyphicons -->
-  <!-- <link rel="stylesheet" href="img/img.css"> -->
 
   <title>Classotron 3000</title>
 
@@ -244,50 +226,69 @@
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+<!-- Bootstrap 4 abandonned glyphicons. Internet is such a mess -->
+<!-- cannot even use font awesome because not matter what they say at stackoverflow, styles get messed up -->
+<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+<!-- this doesn't work: -->
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
+<!-- this seems to work: -->
+<link href="css/bootstrap-glyphicons-3.0.css?v=x" rel="stylesheet">
+
+
 <script type="text/javascript" src="js/common.js"></script>
 
-<!-- codemirror is needed by sql.demo.js -->
-<script type="text/javascript" src="codemirror/codemirror.js"></script>
-<!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
+  <!-- codemirror is needed by sql.demo.js -->
+  <link rel="stylesheet" href="codemirror/codemirror.css">
+  <script type="text/javascript" src="codemirror/codemirror.js"></script>
+  <!-- TODO: implement codemirrot properly: //github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script> -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-codemirror/0.3.0/ui-codemirror.min.js"></script> -->
 
-<!-- http://jsfiddle.net/fauzi/UvjnT/ -->
-<!-- for some reason, the new version of jquery.dataTables do not color even rows -->
+  <!-- http://jsfiddle.net/fauzi/UvjnT/ -->
+  <!-- <link rel="stylesheet" href="css/jquery.dataTables.1.9.4.css"> -->
+  <!-- <script type="text/javascript" src="js/jquery.dataTables.1.9.4.js"></script> -->
+  <!-- for some reason, the new version of jquery.dataTables do not color even rows -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
+  <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.css"> -->
+  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.js"></script> -->
+  <!-- not sure why i keep this reference to colVis here: -->
+  <!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.js"></script> -->
-<!-- not sure why i keep this reference to colVis here: -->
-<!-- <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/datatables-colvis/1.1.2/js/dataTables.colVis.min.js"></script> -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+  <!-- You must include Moment.js before Chart.js to use the time scale. -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
-<!-- You must include Moment.js before Chart.js to use the time scale. -->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.2/moment.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <!-- 7-zip lzma on the fly with worker -->
+  <!-- <script type="text/javascript" src="//raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js"></script> -->
+  <!-- Refused to execute script from 'https://raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled. -->
+  <!-- <script type="text/javascript" src="js/lzma-min.js"></script> -->
+  <!-- <script type="text/javascript" src="js/lzma_worker-min.js"></script> -->
 
-<!-- 7-zip lzma on the fly with worker -->
-<!-- <script type="text/javascript" src="//raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js"></script> -->
-<!-- Refused to execute script from 'https://raw.githubusercontent.com/LZMA-JS/LZMA-JS/master/src/lzma-min.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled. -->
-<!-- <script type="text/javascript" src="js/lzma-min.js"></script> -->
-<!-- <script type="text/javascript" src="js/lzma_worker-min.js"></script> -->
+  <!-- https://stuk.github.io/jszip/ -->
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  <script type="text/javascript" src="js/jszip-utils.min.js"></script>
 
-<!-- https://stuk.github.io/jszip/ -->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
-<script type="text/javascript" src="js/jszip-utils.min.js"></script>
+  <!-- sql.demo.js covers CodeMirror implementation -->
+  <script type="text/javascript" src="js/sql.demo.js"></script>
 
-<!-- sql.demo.js covers CodeMirror implementation -->
-<script type="text/javascript" src="js/sql.demo.js"></script>
+  <link rel="stylesheet" href="css/tooltip.1.2.css">
+  <script type="text/javascript" src="js/tooltip.1.2.js"></script>
 
-<script type="text/javascript" src="js/tooltip.1.2.js"></script>
+  <script type="text/javascript" src="js/gui.2.6.js?v=2"></script>
 
-<script type="text/javascript" src="js/gui.2.7.js?v=2"></script>
+  <link rel="stylesheet" href="css/chart.css">
+  <script type="text/javascript" src="js/chart.line.2.5.js?v=2.5"></script>
 
-<script type="text/javascript" src="js/chart.line.2.5.js?v=2.5"></script>
+  <!-- sql.js is called or embebed in worker.sql.js -->
+  <!-- <script type="text/javascript" src="js/sql.min.js"></script> -->
+  <!-- TODO: include cdnjs sql.js in worker.sql.js -->
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
 
-<!-- sql.js is called or embebed in worker.sql.js -->
-<!-- <script type="text/javascript" src="js/sql.min.js"></script> -->
-<!-- TODO: include cdnjs sql.js in worker.sql.js -->
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sql.js/0.4.0/js/sql.js"></script> -->
-
+  <link rel="stylesheet" href="css/tuScraper-bootstrap.css?v=1fd">
+  <!-- favorite icons abandonned in favor of glyphicons -->
+  <!-- <link rel="stylesheet" href="img/img.css"> -->
 </body>
 </html>
