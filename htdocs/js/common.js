@@ -25,22 +25,32 @@ function changeFavicon2Link(strLink) {
   document.getElementsByTagName('head')[0].appendChild(strLink);
 }
 
+// basenameNoExt
+function basenameNoExt(strPpath) {
+  return strPpath.substr(0, strPpath.lastIndexOf('.')) || strPpath;
+}
+
+// extension
 function extension(strPpath) {
-  var arrExt = /^.+\.([^.]+)$/.exec(strPpath);
-  return arrExt == null ? "" : arrExt[1];
+  // var arrExt = /^.+\.([^.]+)$/.exec(strPpath);
+  // return arrExt == null ? "" : arrExt[1];
+  return strPpath.split('.').pop();
+}
+
+// basename
+function basename(strPpath) {
+  // return strPpath.split('/').pop();
+  // this covers also Windows paths:
+  return strPpath.replace(/\\/g,'/').replace( /.*\//, '' );
+}
+
+// dirname
+function dirname(strPpath) {
+  return strPpath.replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
 }
 
 function filename(strPpath) {
   return strPpath.substring(strPpath.lastIndexOf("/") + 1, strPpath.lastIndexOf("."));
-}
-
-function basename(strPpath) {
-  // return strPpath.replace(/\\/g,'/').replace( /.*\//, '' );
-  return strPpath.split('/').pop();
-}
-
-function dirname(strPpath) {
-  return strPpath.replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
 }
 
 function is_inArray(value,array) {

@@ -13,6 +13,7 @@ function formatCrHtml(str) {
   return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ '<br />' +'$2');
 }
 
+// simple_tooltip(".tip","tooltip");
 function simple_tooltip(target_items, name){
   $(target_items).each(function(i){
     var tootipContent;

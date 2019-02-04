@@ -1,4 +1,9 @@
 {
+"nav-admin-tab": "Load, save databases, and display db structure",
+"nav-slice-tab": "Slice and dice classes history to show enrolment activity",
+"nav-graph-tab": "Graph enrolment activity",
+"nav-custom-tab": "Graph custom class sets",
+"savedb": "Download current database",
 "structure": "select name,sql from sqlite_master where type in ('table','view');",
 "countClasses": "SELECT count(*) from classes;",
 "countHistory": "SELECT count(*) from history;",

@@ -1,6 +1,10 @@
+# https://www.git-scm.com/docs/gitattributes
+
 .gitattributes export-ignore
 .gitignore export-ignore
 .svnignore export-ignore
 miniweb.exe export-ignore
 *.log export-ignore
 *.log.json export-ignore
+*.pyc export-ignore
+archive/ export-ignore
