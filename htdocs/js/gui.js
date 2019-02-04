@@ -328,7 +328,7 @@ function printTocToGui(msg) {
 // adaptation for bootstrap 4 tab navigation
 // https://stackoverflow.com/questions/17329533/jquery-ui-show-hide-with-a-slide-effect-how-to-change-the-slide-back-in-sp#17329624
 // http://jsfiddle.net/xu3ck/1137/
-$(document).ready(function(){
+function setNavLinkEvents() {
 /*   $('.nav a').on('show.bs.tab', function(event){
     event.stopPropagation();
     console.log($(event));
@@ -377,12 +377,12 @@ $(document).ready(function(){
     hideWay = (activeTabElmIndex < targetPaneElmIndex) ? "left" : "right";
     showWay = (activeTabElmIndex < targetPaneElmIndex) ? "right" : "left";
     // THIS WORKS without event.stopPropagation(); AND with .tab-pane {position: absolute;}
-    activeTab.hide('slide', {direction: hideWay}, 600);                             // OK div #nav-admin.tab-pane
-    $(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600);    // OK but slides under the previous
+    // TODO: handle bug where you click on another whil animation is not over
+    activeTab.hide('slide', {direction: hideWay}, 600).then($(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600));
   });
 
   $('.tab-pane.active').show('slide', {direction: 'up'}, 600);   // first time load
- });
+}
 
 
 // TODO: implement codemirror properly: https://github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview
@@ -686,18 +686,23 @@ function getJsonAsync(url, callback) {
 }
 
 // https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron
-var sqlDict = {};
-function createButtonTooltips(dictionary) {
+function createSqlTooltips(dictionary) {
   getJsonAsync(dirname(window.location.href)+'/'+dictionary, function(sqlDict) {
-    // createHiddenTooltip(sqlDict, ".injectSql");
-    // createHiddenTooltip(sqlDict, ".tip");
-    createHiddenTooltip(sqlDict);
     setSqlButtonEvents(sqlDict);
+    createHiddenTooltip(sqlDict, ".injectSql");
   });
 }
 
-$( document ).ready(function() {
-  createButtonTooltips("js/sql.dict.json");
+function createGeneralTooltips(dictionary) {
+  getJsonAsync(dirname(window.location.href)+'/'+dictionary, function(generalTooltipDict) {
+    createHiddenTooltip(generalTooltipDict);
+  });
+}
+
+$(document).ready(function() {
+  createSqlTooltips("js/sql.dict.json");
+  createGeneralTooltips("js/general.dict.json");
+  setNavLinkEvents();
   
   $(".loadDbXhr").click(function () {
     url = $(this).attr("database");

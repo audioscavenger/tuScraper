@@ -1,5 +1,7 @@
 // version = 2.0
 /*
+I think this originates from https://kriesi.at/archives/create-simple-tooltips-with-css-and-jquery-part-2-smart-tooltips
+
 1) this tooltip function works with any element with the class "tip" AND the attribute tooltip="img url"
 	it will show a tooltip with the content of the url, within a div with "tooltip" class and id="tooltipX"
 2) OR, defining anywhere else, some div with "hiddenTooltip" class and an "id" that you can call later in the "tooltip" attribute (tooltip="ID")
@@ -7,12 +9,15 @@
 http://coding.smashingmagazine.com/2007/06/12/tooltips-scripts-ajax-javascript-css-dhtml/
 1.2:  now we call hiddenTooltip divs with id="tooltip-id"
       formatCrHtml for html carriage returns
-      
+2.0:  simplified functions and tooltip id names
+2.1:  re-enabled isUrlValid(tooltipRef)
+
 TODO:
-- [ ] autovalidate isUrlValid(tooltipRef) url for either img, canvas, text, etc
+- [x] autovalidate isUrlValid(tooltipRef) url for either img, canvas, text, etc
 
 */
 
+// 2.0: function formatCrHtml doesn;t seem to be needed anymore
 function formatCrHtml(str) {
   return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ '<br />' +'$2');
 }
@@ -30,6 +35,7 @@ function createTag(tag, id="", className="tooltip hiddenTooltip", innerHTML="") 
 }
 
 
+// 2.0: function attachTooltip(elm, tooltipId, tootipContent=null) attaches tooltipId to elm if exist, creates them otherwise
 function attachTooltip(elm, tooltipId, tootipContent=null) {
   // console.log('attachTooltip: '+tooltipId+'='+tootipContent);
   if (tootipContent) createTag('div', tooltipId, "tooltip hiddenTooltip", '<p>'+tootipContent+'</p>');
@@ -39,13 +45,12 @@ function attachTooltip(elm, tooltipId, tootipContent=null) {
   //THEN give the tooltip div an id and a content; if given before it just doesn't work
   var my_tooltip = $("#"+tooltipId);
   $(elm).removeAttr("tooltip").mouseover(function() {
-    my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);
-    // console.log('tooltip: mouseover:fadeIn');
+    // my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);   // why display:"none" here?
+    my_tooltip.css({opacity:0.8}).fadeIn(400);
+    // my_tooltip.css({opacity:0.8}).fadeIn(400);
   }).mousemove(function(kmouse){
     var border_top = $(window).scrollTop;
-    // console.log('tooltip: border_top='+border_top);
     var border_right = $(window).width();
-    // console.log('tooltip: border_right='+border_right);
     var left_pos;
     var top_pos;
     var offset = 15;
@@ -62,8 +67,8 @@ function attachTooltip(elm, tooltipId, tootipContent=null) {
     }
     my_tooltip.css({left:left_pos, top:top_pos});
   }).mouseout(function(){
-    my_tooltip.css({left:"-9999px"});
-    // console.log('tooltip: mouseout:-9999px');
+    my_tooltip.css({left:"-9999px"});     // this looks like much faster than display:"none"
+    // my_tooltip.css({display:"none"});  // for some reason, hovering multiple elelemnts raises a bug: they dont't disappear
   });
 }
 
@@ -77,6 +82,7 @@ function attachTooltip(elm, tooltipId, tootipContent=null) {
 * tooltipId="tooltip-tooltipRef"
 => creates hidden tooltips only for elements identified with both jQueryString + dict[tooltipRef] exists
 => if tooltipId already exist, just attach it to identified element
+=> if isUrlValid(dict[tooltipRef]), tooltip content becomes an img
 */
 function createHiddenTooltip(dict, jQueryStringThatApply=['[tooltip]']) {
   jQueryStringArray = (Array.isArray(jQueryStringThatApply)) ? jQueryStringThatApply : Array.of(jQueryStringThatApply);
@@ -87,7 +93,8 @@ function createHiddenTooltip(dict, jQueryStringThatApply=['[tooltip]']) {
       var tooltipRef = ($(this).attr('tooltip') !== "" ) ? $(this).attr('tooltip') : $(this).id;
       if (dict.hasOwnProperty(tooltipRef)) {
         tooltipId = "tooltip-"+tooltipRef;
-        tooltip = (document.getElementById(tooltipId) !== null) ? document.getElementById(tooltipId) : createTag('div', tooltipId, "tooltip hiddenTooltip", '<p>'+dict[tooltipRef]+'</p>');
+        tootipContent = (isUrlValid(dict[tooltipRef]) ) ? '<img src="'+dict[tooltipRef]+'" /></img>' : '<p>'+dict[tooltipRef]+'</p>';
+        tooltip = (document.getElementById(tooltipId) !== null) ? document.getElementById(tooltipId) : createTag('div', tooltipId, "tooltip hiddenTooltip", tootipContent);
         attachTooltip($(this), tooltipId);
       }
     });
