@@ -24,6 +24,8 @@
 2.7:
 - [x]  modal left/right detection for nav-tabContent
 - [x]  auto detect db extension
+- [ ]  add more tooltips
+- [ ]  chartadmin dropdown buttion is transparent, why??
 
 TODO LIST:
 - handle progress bar with JSZip utils
