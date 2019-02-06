@@ -35,17 +35,11 @@ h1 {
   opacity: 0.4;
   /* transition: opacity 1.3s; */
 }
-
-.nav-link-dupe {
-  display: block;
-  padding: .5rem 1rem;
-}
-
 /* I can't believe I had to create a custom container for tabs. unbelievable. */
 .tabContent {
   padding: 10px;
-  height: 200px;
-  /* height: auto; */
+  /* height: 200px; */
+  height: auto;
   width: 100%;
 }
 
@@ -55,8 +49,14 @@ h1 {
 /* } */
 .tab-pane {
   display: none;
-  position: absolute; 
-  width: 900px;
+  /* background: #fff; */
+  /* border: 1px solid grey; */
+  /* position: absolute;  */
+  /* left: 150px;  */
+  /* top: 50px; */
+  /* z-index: 2000; */
+  /* width: 900px; */
+  width: 100%;
   overflow: hidden;
 }
 .clear {
@@ -66,26 +66,26 @@ h1 {
   /* vertical-align:middle; */
   /* display:inline-block; */
 }
-/* .button { */
-	/* color: #333; */
-	/* background: linear-gradient(#eee, #ddd); */
-	/* border: none; */
-	/* border-radius: 6px; */
-	/* padding: 7px; */
-	/* margin: 5px; */
-	/* transition: .3s; */
-	/* font-family: ubuntu, sans-serif; */
-	/* font-size: 1em; */
-  /* max-height: 50px; */
-/* } */
+.button {
+	color: #333;
+	background: linear-gradient(#eee, #ddd);
+	border: none;
+	border-radius: 6px;
+	padding: 7px;
+	margin: 5px;
+	transition: .3s;
+	font-family: ubuntu, sans-serif;
+	font-size: 1em;
+  max-height: 50px;
+}
 
-/* .button:active { */
-	/* background: linear-gradient(#ddd, #eee); */
-/* } */
+.button:active {
+	background: linear-gradient(#ddd, #eee);
+}
 
-/* .button:hover, button:focus { */
-	/* box-shadow: 0 0 2px #222; */
-/* } */
+.button:hover, button:focus {
+	box-shadow: 0 0 2px #222;
+}
 
 /* bootstrap makes it very hard to set the width of an dumb input */
 .form-control.width-40 {

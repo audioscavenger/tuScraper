@@ -135,12 +135,18 @@ function getParentChildOfClassName(className) {
 function Browser() {
 // blah, browser detect, but mouse-position stuff doesn't work any other way
   var ua, s, i;
+  ua = navigator.userAgent;
 
   this.isIE    = false;
   this.isNS    = false;
+  this.agent = ua;
   this.version = null;
-
-  ua = navigator.userAgent;
+  this.isMobile = false;
+  
+  // isMobile detection: https://stackoverflow.com/questions/3514784/what-is-the-best-way-to-detect-a-mobile-device-in-jquery
+  if (window.matchMedia("only screen and (max-width: 760px)").matches) {
+  this.isMobile = true;
+}
 
   s = "MSIE";
   if ((i = ua.indexOf(s)) >= 0) {
@@ -166,6 +172,10 @@ function Browser() {
   }
 }
 
+function isMobile() {
+  return window.matchMedia("only screen and (max-width: 760px)").matches;
+}
+
 function getMousePosition(event) {
   if (browser.isIE) {
     x = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
@@ -176,6 +186,104 @@ function getMousePosition(event) {
     y = event.clientY + window.scrollY;
   }
   return [x,y];
+}
+
+
+// https://api.jquery.com/jQuery.get/
+function ajaxGetFromUrl(url, callback, useProxy=false) {
+  // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
+  var proxy = 'https://cors-anywhere.herokuapp.com/';
+  url = (useProxy) ? proxy + url : url;
+  $.ajax({
+    url: url,
+    // data: { name: "John", location: "Boston" },
+    type: 'GET',
+    dataType: "html",
+    success: function (data, text) {
+      alert(data);                  // <html...
+      alert(text);                  // success
+      callback(whatever);
+    },
+    error: function (request, status, error) {
+      alert(request.status);        // 404
+      alert(request.responseText);  // <html><head><title>404 Not Found...
+      alert(error);                 // Not Found
+    }
+  });
+}
+
+// https://api.jquery.com/jQuery.get/
+function getJsonFromUrlAsync(url, callback, useProxy=false) {
+  // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
+  var proxy = 'https://cors-anywhere.herokuapp.com/';
+  url = (useProxy) ? proxy + url : url;
+  // arguments are those passed to 'this' function: ["url", ƒ, true, "tooltip-Towson_University"]
+  // var optArgs = arguments.slice(3, arguments.length);
+  var optArgs = Array.prototype.slice.call(arguments, 3, arguments.length);
+
+  // $.getJSON(url, callback);
+  $.getJSON(url, function( json ) { callback(json, optArgs); });
+}
+/*
+function tryMe (param1, param2) {
+  alert(param1 + " and " + param2);
+}
+function callbackTester (callback) {
+  callback (arguments[1], arguments[2]);
+}
+callbackTester (tryMe, "hello", "goodbye");
+*/
+
+
+// https://api.jquery.com/jQuery.get/
+function getJsonAsync(url, callback, useProxy=false) {
+  // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
+  var proxy = 'https://cors-anywhere.herokuapp.com/';
+  url = (useProxy) ? proxy + url : url;
+  
+  // https://www.w3schools.com/js/tryit.asp?filename=tryjson_http
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      // console.log(unescape(this.responseText));
+      // https://jsonlint.com/
+      // https://stackoverflow.com/questions/42068/how-do-i-handle-newlines-in-json
+      callback(JSON.parse(unescape(this.responseText)));
+    }
+  };
+  xhr.open("GET", url, true);
+  xhr.send();
+}
+
+// https://api.jquery.com/jQuery.get/
+function getFromUrl(url, callback, useProxy=false) {
+  // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
+  var proxy = 'https://cors-anywhere.herokuapp.com/';
+  url = (useProxy) ? proxy + url : url;
+  
+  $.get(url, function( data ) {
+    // console.log(data.responseText);
+    callback(data);
+  });
+}
+
+function createTag(tag, id="", className="", content="", Parent="") {
+  elm  = (id && document.getElementById(id)) ? document.getElementById(id) : document.createElement(tag);
+  // elm  = document.createDocumentFragment(tag);  // See the use of document fragments for performance
+  if (id) elm.id = id;
+  if (className) elm.className = className;
+  // content = document.createTextNode(content); 
+  // elm.appendChild(content);
+  // console.log(content);
+  if (content && typeof content === 'object') { elm.appendChild(content); } else { elm.textContent = content; }
+  if (Parent) {
+    if (typeof Parent === 'object') { Parent.appendChild(elm); } else { if (document.getElementById(Parent)) document.getElementById(Parent).appendChild(elm); }
+  } else {
+    document.body.appendChild(elm);
+  }
+  
+  // console.log('createTag: '+elm.id);
+  return elm;
 }
 
 var browser = new Browser();

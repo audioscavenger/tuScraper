@@ -380,7 +380,8 @@ function setNavLinkEvents() {
     showWay = (activeTabElmIndex < targetPaneElmIndex) ? "right" : "left";
     // THIS WORKS without event.stopPropagation(); AND with .tab-pane {position: absolute;}
     // TODO: handle bug where you click on another whil animation is not over
-    activeTab.hide('slide', {direction: hideWay}, 600).then($(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600));
+    activeTab.hide('slide', {direction: hideWay}, 600),
+    $(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600);
   });
 
   $('.tab-pane.active').show('slide', {direction: 'up'}, 600);   // first time load
@@ -672,32 +673,21 @@ function updateProgressBar(state,percentComplete) {
 }
 */
 
-function getJsonAsync(url, callback) {
-  // https://www.w3schools.com/js/tryit.asp?filename=tryjson_http
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      // console.log(unescape(this.responseText));
-      // https://jsonlint.com/
-      // https://stackoverflow.com/questions/42068/how-do-i-handle-newlines-in-json
-      callback(JSON.parse(unescape(this.responseText)));
-    }
-  };
-  xhr.open("GET", url, true);
-  xhr.send();
-}
 
 // https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron
 function createSqlTooltips(dictionary) {
   getJsonAsync(dirname(window.location.href)+'/'+dictionary, function(sqlDict) {
     setSqlButtonEvents(sqlDict);
-    createHiddenTooltip(sqlDict, ".injectSql");
+    createHiddenTooltips(sqlDict, ".injectSql");
   });
 }
 
 function createGeneralTooltips(dictionary) {
-  getJsonAsync(dirname(window.location.href)+'/'+dictionary, function(generalTooltipDict) {
-    createHiddenTooltip(generalTooltipDict);
+  url = dirname(window.location.href)+'/'+dictionary;
+  getJsonAsync(url, function(generalTooltipDict) {
+    // console.log(url);
+    // console.log(generalTooltipDict);
+    createHiddenTooltips(generalTooltipDict);
   });
 }
 

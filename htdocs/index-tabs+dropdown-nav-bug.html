@@ -49,7 +49,7 @@
 <div class="container">
 <h1>Classotron 3000</h1>
 <h2>What is Classotron 3000?</h2>
-<p>Classotron is an sqlite database providing class enrolment data scraped from <a href="https://www.towson.edu/"><abbr tooltip="Towson_University">Towson University</abbr></a></p>
+<p>Classotron is an sqlite database providing class enrolment data scraped from <a href="towson.edu"><abbr tooltip="Towson_University">Towson University</abbr></a></p>
 </div>
 
 <div class="bd">
@@ -79,9 +79,11 @@
     <a class="nav-item nav-link btn-info" id="nav-slice-tab" tooltip="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
     <a class="nav-item nav-link btn-info" id="nav-graph-tab" tooltip="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
     <a class="nav-item nav-link btn-info" id="nav-custom-tab" tooltip="nav-custom-tab" data-toggle="tab" href="#nav-custom" role="tab" aria-controls="nav-custom" aria-selected="false">Custom</a>
-    <!-- problem:  dropdown-toggle needs to the nav-link class to be same height but then it becomes activated -->
-    <!-- solution: dcreate a duplicate class nav-link-dupe! -->
-    <a class="nav-item nav-link-dupe btn-warning dropdown-toggle" id="nav-chartMenu" data-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <!-- problem: dropdown-toggle needs to the nav-link class to be same height but then it becomes activated -->
+    <!-- <a class="nav-item nav-link btn-warning dropdown-toggle" id="nav-chartMenu" data-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+    <a class="nav-item btn-warning dropdown-toggle" id="nav-chartMenu" data-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <!-- <div class="dropdown"> -->
+      <!-- <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
         ChartAdmin
       </a>
       <!-- </button> -->
@@ -91,7 +93,9 @@
         <button class="chartButton dropdown-item invisible btn-warning" type="button" id="btnUpdateMyChartSingleColor"><span class="icon-inside-left glyphicon glyphicon-random"></span>Random Color</button>
         <button class="chartButton dropdown-item invisible btn-warning" type="button" id="btnUpdateMyChartRandomColors"><span class="icon-inside-left glyphicon glyphicon-random"></span><span class="icon-inside-left glyphicon glyphicon-random"></span>Random ColorS</button>
       </div>
-    <a class="chartButton nav-item nav-link-dupe btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
+    <!-- </div> -->
+    <!-- </a> -->
+    <a class="chartButton btn btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
   </nav>
 
   <div id="nav-tabContent" class="tab-content">

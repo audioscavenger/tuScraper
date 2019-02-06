@@ -3,5 +3,6 @@
 "nav-slice-tab": "Slice and dice classes history to show enrolment activity",
 "nav-graph-tab": "Graph enrolment activity",
 "nav-custom-tab": "Graph custom class sets",
-"savedb": "Download current database"
+"savedb": "Download current database",
+"Towson_University": "https://api.duckduckgo.com/?q=Towson%20University&format=json&pretty=0&no_html=1&skip_disambig=1"
 }
