@@ -94,22 +94,20 @@ function hideTable(content) {
   errorElm.className = "hidden";
 }
 
-function outputMessage(message) {
-  if (debug) console.log('outputMessage: '+message);
-  outputElm.textContent = message;
-  outputElm.className = "alert alert-info";
-}
+function outputMessage(message, alert="info") {
+  if (debug) console.log('outputMessage-'+alert+': '+message);
+  // outputElm.textContent = message;
+  // outputElm.className = "alert alert-"+alert;
+  // $(outputElm).fadeOut(2000);
+  
+  $(outputElm).animate({'opacity': 1}, 1000, function () {
+    $(this).text(message).attr('class', "alert alert-"+alert);
+  }).animate({'opacity': 0}, 2000);
 
-function outputWarning(message) {
-  if (debug) console.log('outputWarning: '+message);
-  outputElm.textContent = message;
-  outputElm.className = "alert alert-warning";
 }
 
 function outputError(message) {
-  if (debug) console.log('outputError: '+message);
-  outputElm.textContent = "See error for details.";
-  outputElm.className = "alert alert-warning";
+  outputMessage("See error for details.", alert="warning");
   errorElm.className = "alert alert-danger";
   errorElm.textContent = message;
 }
@@ -153,7 +151,7 @@ function execute(commands, chartType) {
     // this results.length sometimes returns uncaught TypeError??
     // console.log(results);  // Array [ Object ]
     if (!results || results.length == 0) {
-      outputWarning("Request returned 0 rows.");
+      outputMessage("Request returned 0 rows.", "warning");
     } else {
       toc("Executing SQL");
 
@@ -506,7 +504,7 @@ function execBtnLoadXhr2LoadFile(url) {
       // Show the schema of the loaded database
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
       execEditorContents();
-      $("#initMessage").fadeOut(300, function() { $(this).remove(); });
+      // $("#initMessage").fadeOut(300, function() { $(this).remove(); });
       $('#loadedDbFile').val(basename(url));
     };
     try {
@@ -569,8 +567,6 @@ function xhrDecompressDbFile(url) {
   .then(function success(response) {
     if (debug) console.log('response: '+response);
     outputMessage("loaded, content = " + response);  // debug txt file
-    
-    
     
     sqlWorker.onmessage = function () {
       toc("Loading database from url: "+url);
@@ -695,6 +691,7 @@ $(document).ready(function() {
   createSqlTooltips("js/sql.dict.json");
   createGeneralTooltips("js/general.dict.json");
   setNavLinkEvents();
+  outputMessage("Results will be displayed here");
   
   $(".loadDbXhr").click(function () {
     url = $(this).attr("database");

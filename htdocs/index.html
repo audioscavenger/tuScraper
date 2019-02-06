@@ -76,12 +76,12 @@
   <nav class="nav nav-fill" id="tabs" role="tablist">
   <!-- <nav class="nav nav-fill flex-column" id="tabs" role="tablist"> -->
     <a class="nav-item nav-link btn-info active" id="nav-admin-tab" tooltip="nav-admin-tab" data-toggle="tab" href="#nav-admin" role="tab" aria-controls="nav-admin" aria-selected="true">Admin</a>
-    <a class="nav-item nav-link btn-info" id="nav-slice-tab" tooltip="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
-    <a class="nav-item nav-link btn-info" id="nav-graph-tab" tooltip="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
-    <a class="nav-item nav-link btn-info" id="nav-custom-tab" tooltip="nav-custom-tab" data-toggle="tab" href="#nav-custom" role="tab" aria-controls="nav-custom" aria-selected="false">Custom</a>
+    <a class="nav-item nav-link btn-info disabled" id="nav-slice-tab" tooltip="nav-slice-tab" data-toggle="tab" href="#nav-slice" role="tab" aria-controls="nav-slice" aria-selected="false">Slice & Dice</a>
+    <a class="nav-item nav-link btn-info disabled" id="nav-graph-tab" tooltip="nav-graph-tab" data-toggle="tab" href="#nav-graph" role="tab" aria-controls="nav-graph" aria-selected="false">Graph</a>
+    <a class="nav-item nav-link btn-info disabled" id="nav-custom-tab" tooltip="nav-custom-tab" data-toggle="tab" href="#nav-custom" role="tab" aria-controls="nav-custom" aria-selected="false">Custom</a>
     <!-- problem:  dropdown-toggle needs to the nav-link class to be same height but then it becomes activated -->
     <!-- solution: dcreate a duplicate class nav-link-dupe! -->
-    <a class="nav-item nav-link-dupe btn-warning dropdown-toggle" id="nav-chartMenu" data-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="nav-item nav-link-dupe btn-warning dropdown-toggle disabled" id="nav-chartMenu" data-toggle="dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         ChartAdmin
       </a>
       <!-- </button> -->
@@ -221,7 +221,7 @@
   <div id="progressBar" class="progressBar"></div>
   <div id="chart-container"></div>
   <div id="alert-error" class="alert alert-danger hidden" role="alert alert-danger"></div>
-  <div id="alert-output" class="alert alert-info" role="alert alert-info">Results will be displayed here</div>
+  <div id="alert-output" class="alert alert-info hidden" role="alert alert-info">Results will be displayed here</div>
   <pre id="output-table"><table></table></pre>
   <!-- <div id="output-table"><table></table></div> -->
 </div>
