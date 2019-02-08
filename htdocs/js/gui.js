@@ -24,8 +24,11 @@
 2.7:
 - [x]  modal left/right detection for nav-tabContent
 - [x]  auto detect db extension
+- [x]  chartadmin dropdown button is transparent, why?? - wrong z-index
+2.8:
+- [x]  stack messages at footer/bottom: new framework created: footerMessages
 - [ ]  add more tooltips
-- [ ]  chartadmin dropdown buttion is transparent, why??
+- [x]  rounded toc time
 
 TODO LIST:
 - handle progress bar with JSZip utils
@@ -38,13 +41,12 @@ TODO LIST:
 
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
-var guiVersion = 2.7;
+var guiVersion = 2.8;
 var debug = false;
 // var debug = true;
 
 var execBtn = document.getElementById("execute");
-var outputElm = document.getElementById('alert-output');
-var errorElm = document.getElementById('alert-error');
+var outputBar = document.getElementById('alert-output');
 var tableElm = document.getElementById('output-table');
 var commandsElm = document.getElementById('commands');
 var dbFileElm = document.getElementById('loadDbFile');
@@ -79,9 +81,8 @@ function extension(filename) {
   return filename.split('.').pop();
 }
 
-// Connect to the HTML element we 'print' to
-function print(text) {
-  outputElm.innerHTML = text.replace(/\n/g, '<br>');
+function println(text) {
+  return text.replace(/\n/g, '<br>');
 }
 
 function outputTable(content) {
@@ -91,30 +92,23 @@ function outputTable(content) {
 
 function hideTable(content) {
   tableElm.innerHTML = "";
-  errorElm.className = "hidden";
+  // errorElm.className = "hidden";  // since 2.8
 }
 
 function outputMessage(message, alert="info") {
   if (debug) console.log('outputMessage-'+alert+': '+message);
-  // outputElm.textContent = message;
-  // outputElm.className = "alert alert-"+alert;
-  // $(outputElm).fadeOut(2000);
-  
-  $(outputElm).animate({'opacity': 1}, 1000, function () {
-    $(this).text(message).attr('class', "alert alert-"+alert);
-  }).animate({'opacity': 0}, 2000);
-
+  $(createTag('span', null, "message active alert alert-"+alert, message, outputBar)).stop().animate({left: 0}, 600, "easeOutBounce");
 }
 
 function outputError(message) {
   outputMessage("See error for details.", alert="warning");
-  errorElm.className = "alert alert-danger";
-  errorElm.textContent = message;
+  outputMessage(message, alert="danger");
 }
 
-function noerror() {
-  errorElm.className = "hidden";
-}
+// since 2.8
+// function noerror() {
+  // errorElm.className = "hidden";
+// }
 
 function disableActions() {
   $(".buttons").addClass("disabled");
@@ -157,13 +151,13 @@ function execute(commands, chartType) {
 
       tic();
       disableActions();
-      // outputElm.innerHTML = ''; // http://jsperf.com/innerhtml-vs-removechild
-      // outputElm.removeChild(outputElm.firstChild);
+      // outputBar.innerHTML = ''; // http://jsperf.com/innerhtml-vs-removechild
+      // outputBar.removeChild(outputBar.firstChild);
       for (var i=0; i<results.length; i++) {
         // for event.data.results = Array [ Object ], results.length = 1
         // console.log('columns='+results[i].columns); // columns=[0:id,1:timestamp,2:ClassNumber,.. x8]
         // console.log('values='+results[i].values);   // values=[0:[1512,1510867045,2792,22,0,22,2,6,7228],.. xNbRows]
-        // outputElm.appendChild(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
+        // outputBar.appendChild(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
         outputTable(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
         outputMessage("Request rsults:")
         
@@ -216,6 +210,7 @@ function execute(commands, chartType) {
 function purgeGraphelement() {
   $('#chart-container').removeClass('chart-container');
   purgeElement("chart-container");
+  // $("#chart-container").fadeOut();
   hideChartButtons();
 }
 if (purgeGraphBtn) purgeGraphBtn.addEventListener("click", purgeGraphelement);
@@ -291,7 +286,7 @@ var tableCreate = function () {
 
 // Execute the commands when the button is clicked
 function execEditorContents(chartType) {
-  noerror();
+  // noerror();  // since 2.8
   // console.log('execEditorContent: chartType='+chartType);
   if (typeof chartType !== 'string') chartType=undefined;
   execute (editor.getValue() + ';', chartType);
@@ -306,7 +301,7 @@ if (!window.performance || !performance.now) {window.performance = {now:Date.now
 function tic () {tictime = performance.now()}
 function toc(msg) {
   var delta = performance.now()-tictime;
-  message = (msg||'toc') + ": " + delta + "ms";
+  message = (msg||'toc') + ": " + delta.toFixed(2) + "ms";
   console.log(message);
   printTocToGui(message);
 }
@@ -683,7 +678,7 @@ function createGeneralTooltips(dictionary) {
   getJsonAsync(url, function(generalTooltipDict) {
     // console.log(url);
     // console.log(generalTooltipDict);
-    createHiddenTooltips(generalTooltipDict);
+    // createHiddenTooltips(generalTooltipDict);
   });
 }
 

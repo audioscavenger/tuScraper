@@ -1,0 +1,9 @@
+
+footer >.container {
+  margin-left: 2rem;
+}
+
+.message {
+  left: 100%;
+  cursor: pointer;
+}

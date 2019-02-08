@@ -206,11 +206,5 @@ images available at https://cdn.datatables.net/1.10.2/ */
 .sorting_asc_disabled { background: url('../../img/core/16/sort_asc_disabled.png') no-repeat center right;padding-right: 20px !important; }
 .sorting_desc_disabled { background: url('../../img/core/16/sort_desc_disabled.png') no-repeat center right;padding-right: 20px !important; }
 
-table.dataTable, table.dataTable th, table.dataTable td {
-  /* nowrap: all on one line */
-  /* white-space: nowrap; */
-  /* normal: wrap to the smallest column width */
-  white-space: normal;
-}
 .dataTables_paginate { float: left !important; }
 

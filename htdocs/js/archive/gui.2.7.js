@@ -21,7 +21,11 @@
 2.6:  added modal transition slide for tab content
       + added lzma.js for 7-zip LZMA decompress on the fly + asynchronous worker / ABORTED it just doesn't work
       + added JSZip and it works!
-2.7:  modal left/right detection for nav-tabContent
+2.7:
+- [x]  modal left/right detection for nav-tabContent
+- [x]  auto detect db extension
+- [ ]  add more tooltips
+- [ ]  chartadmin dropdown buttion is transparent, why??
 
 TODO LIST:
 - handle progress bar with JSZip utils
@@ -34,7 +38,7 @@ TODO LIST:
 
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
-var guiVersion = 2.5;
+var guiVersion = 2.7;
 var debug = false;
 // var debug = true;
 
@@ -53,7 +57,7 @@ var tocMsg2 = document.getElementById('tocMsg2');
 
 
 // Start the sqlWorker in which sql.js will run
-var sqlWorker = new Worker("js/worker.sql.js");
+var sqlWorker = new Worker("dist/worker.sql.js");
 // alert(sqlWorker);
 sqlWorker.onerror = outputError;
 
@@ -67,7 +71,7 @@ function basename(filename) {
 
 // basenameNoExt
 function basenameNoExt(filename) {
-  return output = filename.substr(0, filename.lastIndexOf('.')) || filename;
+  return filename.substr(0, filename.lastIndexOf('.')) || filename;
 }
 
 // extension
@@ -90,22 +94,20 @@ function hideTable(content) {
   errorElm.className = "hidden";
 }
 
-function outputMessage(message) {
-  if (debug) console.log('outputMessage: '+message);
-  outputElm.textContent = message;
-  outputElm.className = "alert alert-info";
-}
+function outputMessage(message, alert="info") {
+  if (debug) console.log('outputMessage-'+alert+': '+message);
+  // outputElm.textContent = message;
+  // outputElm.className = "alert alert-"+alert;
+  // $(outputElm).fadeOut(2000);
+  
+  $(outputElm).animate({'opacity': 1}, 1000, function () {
+    $(this).text(message).attr('class', "alert alert-"+alert);
+  }).animate({'opacity': 0}, 2000);
 
-function outputWarning(message) {
-  if (debug) console.log('outputWarning: '+message);
-  outputElm.textContent = message;
-  outputElm.className = "alert alert-warning";
 }
 
 function outputError(message) {
-  if (debug) console.log('outputError: '+message);
-  outputElm.textContent = "See error for details.";
-  outputElm.className = "alert alert-warning";
+  outputMessage("See error for details.", alert="warning");
   errorElm.className = "alert alert-danger";
   errorElm.textContent = message;
 }
@@ -149,7 +151,7 @@ function execute(commands, chartType) {
     // this results.length sometimes returns uncaught TypeError??
     // console.log(results);  // Array [ Object ]
     if (!results || results.length == 0) {
-      outputWarning("Request returned 0 rows.");
+      outputMessage("Request returned 0 rows.", "warning");
     } else {
       toc("Executing SQL");
 
@@ -326,7 +328,7 @@ function printTocToGui(msg) {
 // adaptation for bootstrap 4 tab navigation
 // https://stackoverflow.com/questions/17329533/jquery-ui-show-hide-with-a-slide-effect-how-to-change-the-slide-back-in-sp#17329624
 // http://jsfiddle.net/xu3ck/1137/
-$(document).ready(function(){
+function setNavLinkEvents() {
 /*   $('.nav a').on('show.bs.tab', function(event){
     event.stopPropagation();
     console.log($(event));
@@ -375,12 +377,13 @@ $(document).ready(function(){
     hideWay = (activeTabElmIndex < targetPaneElmIndex) ? "left" : "right";
     showWay = (activeTabElmIndex < targetPaneElmIndex) ? "right" : "left";
     // THIS WORKS without event.stopPropagation(); AND with .tab-pane {position: absolute;}
-    activeTab.hide('slide', {direction: hideWay}, 600);                             // OK div #nav-admin.tab-pane
-    $(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600);    // OK but slides under the previous
+    // TODO: handle bug where you click on another whil animation is not over
+    activeTab.hide('slide', {direction: hideWay}, 600),
+    $(targetPaneId+'.tab-pane').stop().show('slide', {direction: showWay}, 600);
   });
 
   $('.tab-pane.active').show('slide', {direction: 'up'}, 600);   // first time load
- });
+}
 
 
 // TODO: implement codemirror properly: https://github.com/angular-ui/ui-codemirror http://plnkr.co/edit/?p=preview
@@ -501,7 +504,7 @@ function execBtnLoadXhr2LoadFile(url) {
       // Show the schema of the loaded database
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
       execEditorContents();
-      $("#initMessage").fadeOut(300, function() { $(this).remove(); });
+      // $("#initMessage").fadeOut(300, function() { $(this).remove(); });
       $('#loadedDbFile').val(basename(url));
     };
     try {
@@ -565,8 +568,6 @@ function xhrDecompressDbFile(url) {
     if (debug) console.log('response: '+response);
     outputMessage("loaded, content = " + response);  // debug txt file
     
-    
-    
     sqlWorker.onmessage = function () {
       toc("Loading database from url: "+url);
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
@@ -593,22 +594,6 @@ function jsonEscape(str)  {
   return str.replace(/\\/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
 }
 
-var sqlDict = '';
-function getJsonAsync(url, callback) {
-  // https://www.w3schools.com/js/tryit.asp?filename=tryjson_http
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      // console.log(unescape(this.responseText));
-      // https://jsonlint.com/
-      // https://stackoverflow.com/questions/42068/how-do-i-handle-newlines-in-json
-      callback(JSON.parse(unescape(this.responseText)));
-    }
-  };
-  xhr.open("GET", url, true);
-  xhr.send();
-}
-
 /* 
 // Firefox: Synchronous XMLHttpRequest on the main thread is deprecated 
 // async: false - xhr.open("GET", url, false);
@@ -620,9 +605,9 @@ var sqlDict = $.ajax({
   async: false
 }).responseText;
 */
-// setEditorSql fills the sql textarea with JSON entry matching button id
-function setEditorSql(buttonId, sqlDict) {
-  // console.log('setEditorSql: sqlDict['+buttonId+']='+sqlDict[buttonId]);
+// fillEditorSqlField fills the sql textarea with JSON entry matching button id
+function fillEditorSqlField(buttonId, sqlDict) {
+  // console.log('fillEditorSqlField: sqlDict['+buttonId+']='+sqlDict[buttonId]);
   if ($('#'+buttonId).attr("getvaluefrom")) {
     value = $('#'+$('#'+buttonId).attr("getvaluefrom")).val();
     // TODO: validate it's a digit
@@ -638,44 +623,26 @@ function setEditorSql(buttonId, sqlDict) {
 /* var execBtnInjectSql = document.getElementsByClassName('injectSql');
 for (var i = 0; i < execBtnInjectSql.length; i += 1) {
   execBtnInjectSql[i].onclick = function(e) {
-    setEditorSql(this.id);
+    fillEditorSqlField(this.id);
     execute (editor.getValue() + ';');
   };
 }*/
 // jquery school:
-function updateSqlButtons(sqlDict) {
-  $(".injectSql").each(function(){
-    this.onclick = function(e) {
-      if (debug) console.log(this.id);
-      setEditorSql(this.id,sqlDict);
-      // execute (editor.getValue() + ';', $(this).attr("chart"));  // 1.4
-      execEditorContents($(this).attr("chart"));  // 1.4
-    };
+function setSqlButtonEvents(sqlDict, className=".injectSql") {
+  $(className).each(function(){
+    // security, in case some buttons have className but no associated key in sqlDict:
+    if (sqlDict.hasOwnProperty(this.id)) {
+      this.onclick = function(e) {
+        if (debug) console.log(this.id);
+        fillEditorSqlField(this.id, sqlDict);
+        // execute (editor.getValue() + ';', $(this).attr("chart"));  // 1.4
+        execEditorContents($(this).attr("chart"));  // 1.4
+      };
+    }
   });
 }
 /* ************************************************************** 
  * **************************************************************/
-
-// generate the hiddenTooltip out from sqlDict
-function createHiddenTooltip(sqlDict) {
-    // console.log('createHiddenTooltip: sqlDict='+sqlDict);
-    // console.log(sqlDict);
-  $(".injectSql").each(function(){
-    if ($(this).attr("tooltip") !== "" ){
-      // console.log(sqlDict);
-      var tooltipRef = $(this).attr('tooltip');
-      // console.log('createHiddenTooltip: tooltipRef='+tooltipRef);
-      var div  = document.createElement('div');
-      // console.log(sqlDict[tooltipRef]);
-      var content = document.createTextNode(sqlDict[tooltipRef]); 
-      div.id = "tooltip-"+tooltipRef;
-      div.className = "hiddenTooltip";
-      div.appendChild(content);
-      document.body.appendChild(div);
-      // $("body").append('<div id="tooltip-'+tooltipRef+'" class="hiddenTooltip">'+sqlDict[tooltipRef]+'</div>');
-    }
-  });
-}
 
 // TODO: add my own class switcher here:
 // TODO: disable upload buttons for 4s after success
@@ -700,21 +667,44 @@ function updateProgressBar(state,percentComplete) {
     $('.progressBar').stop().css({transition:'0s',width:0,opacity:100});
   }
 }
- */
+*/
+
+
 // https://stackoverflow.com/questions/23667086/why-is-my-variable-unaltered-after-i-modify-it-inside-of-a-function-asynchron
-function setVarAsync() {
-  getJsonAsync(dirname(window.location.href)+"/js/sql.dict.json", function(sqlDict) {
-    createHiddenTooltip(sqlDict);
-    simple_tooltip(".tip","tooltip");
-    updateSqlButtons(sqlDict);
+function createSqlTooltips(dictionary) {
+  getJsonAsync(dirname(window.location.href)+'/'+dictionary, function(sqlDict) {
+    setSqlButtonEvents(sqlDict);
+    createHiddenTooltips(sqlDict, ".injectSql");
   });
 }
 
-var sqlDict;
+function createGeneralTooltips(dictionary) {
+  url = dirname(window.location.href)+'/'+dictionary;
+  getJsonAsync(url, function(generalTooltipDict) {
+    // console.log(url);
+    // console.log(generalTooltipDict);
+    createHiddenTooltips(generalTooltipDict);
+  });
+}
 
-
-$( document ).ready(function() {
-  $(".loadDbXhr").click(function () {execBtnLoadXhr2LoadFile($(this).attr("database")); }).end();
-  $(".unzipDbXhr").click(function () {xhrDecompressDbFile($(this).attr("database")); }).end();
-  setVarAsync();
+$(document).ready(function() {
+  createSqlTooltips("js/sql.dict.json");
+  createGeneralTooltips("js/general.dict.json");
+  setNavLinkEvents();
+  outputMessage("Results will be displayed here");
+  
+  $(".loadDbXhr").click(function () {
+    url = $(this).attr("database");
+    switch (extension(url)) {
+      case 'sqlite3':
+        execBtnLoadXhr2LoadFile(url);
+      break;
+      case 'zip':
+        xhrDecompressDbFile(url);
+      break;
+      default:
+        alert('url='+url+' doesn\'t like an sqlite3 database');
+      break;
+    }
+  }).end();
 });

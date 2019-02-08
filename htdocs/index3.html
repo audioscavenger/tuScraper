@@ -1,30 +1,13 @@
-<!doctype  html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
 <head>
-  <meta name="version" content="2.8">
-  <meta charset="utf8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  
-  <!-- Bootstrap 4 abandonned glyphicons. Internet is such a mess -->
-  <!-- cannot even use font awesome because not matter what they say at stackoverflow, styles get messed up -->
-  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
-  <!-- this doesn't work: -->
-  <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
-  <!-- this seems to work: -->
-  <link href="css/bootstrap-glyphicons-3.0.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="dist/codemirror/codemirror.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
-  <link rel="stylesheet" href="css/chart.css?v=1.1">
-  <link rel="stylesheet" href="css/tuScraper-bootstrap.css?v=2.7">
-  <link rel="stylesheet" href="css/tooltip.css?v=2.0">
-  <link rel="stylesheet" href="css/sticky-footer-navbar.css">
-  
-  <!-- favorite icons abandonned in favor of glyphicons -->
-  <!-- <link rel="stylesheet" href="img/img.css"> -->
-
+  <meta name="version" content="3.0">
+  <!-- how to REBASE the url root: -->
+  <!-- <base href="https://getbootstrap.com/docs/4.2/examples/sticky-footer-navbar/"> -->
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="author" content="https://github.com/audioscavenger/tuScraper/releases">
+  <meta name="generator" content="Jekyll v3.8.5">
   <title>Classotron 3000</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -36,11 +19,36 @@
   
   gtag('config', 'UA-35678256-4');
   </script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <!-- Bootstrap 4 abandonned glyphicons. Internet is such a mess -->
+  <!-- cannot even use font awesome because not matter what they say at stackoverflow, styles get messed up -->
+  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
+  <!-- this doesn't work: -->
+  <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
+  <!-- this seems to work: -->
+  <link href="css/bootstrap-glyphicons-3.0.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/sticky-footer-navbar.css">
+  <link rel="stylesheet" href="dist/codemirror/codemirror.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables_themeroller.css">
+  <link rel="stylesheet" href="css/chart.css?v=1.1">
+  <link rel="stylesheet" href="css/tooltip.css?v=2.0">
+  <link rel="stylesheet" href="css/footerMessages.css?v=1.0">
+  <link rel="stylesheet" href="css/tuScraper-bootstrap4.css?v=3.0">
+<style>
+.inactive {
+  /* absolute bug: no margin left and infinite margin right */
+  /* position:absolute; */
+}
+</style>
+
 </head>
 
-<body tcap-name="main">
-<!-- Github ribbon -->
-<a href="//github.com/audioscavenger/tuScraper"><img style="position: absolute; top: 0; left: 0; border: 0; z-index: 9999;" src="img/forkme.png" alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+
+<body class="d-flex flex-column h-100" tcap-name="main">
 
 <header>
   <!-- Fixed navbar -->
@@ -62,14 +70,15 @@
         </li>
       </ul>
       <form class="form-inline mt-2 mt-md-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <input value="" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </div>
   </nav>
 </header>
 
-<main role="main" class="container">
+<!-- Begin page content -->
+<main role="main" class="flex-shrink-0">
 
 <div class="container">
   <h1>Classotron 3000</h1>
@@ -93,8 +102,8 @@
 
   <div class="container">
     <div class="row">
-      <div id="tocMsg1" class="col-xs-6 text-secondary"></div>
-      <div id="tocMsg2" class="col-xs-6 text-secondary"></div>
+      <div id="tocMsg1" class="col-auto mr-auto text-secondary"></div>
+      <div id="tocMsg2" class="col-auto text-secondary"></div>
     </div>
   </div>
 </div>
@@ -232,25 +241,14 @@
   <!-- <div id="output-table"><table></table></div> -->
 </div>
 
+<button id="testMessageButton">new message</button>
 </main>
 
-<footer class="footer mt-auto py-3 fixed-bottom">
-  <div class="container">
-    <span id="alert-error" class="text-muted alert alert-danger hidden" role="alert alert-danger"></span>
-    <span id="alert-output" class="text-muted alert alert-info hidden" role="alert alert-info">Results will be displayed here</span>
-  </div>
+<footer class="footer mt-auto fixed-bottom">
+  <div class="container"><div id="alert-output" class="row">
+  </div></div>
 </footer>
 
-
-<!-- bootstrap 3 -->
-<!-- <script src="//code.jquery.com/jquery-2.2.4.min.js"></script> -->
-<!-- <script src="//code.jquery.com/jquery-1.12.4.min.js"></script> -->
-<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
-<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
-
-<!-- bootstrap 4 - transition is VERY painful: -->
-<!-- 1) slim jquery incompatible with XHR loading -->
-<!-- 2) they droped glyphicons -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
@@ -296,6 +294,8 @@
 <script type="text/javascript" src="js/gui.js?v=2.7"></script>
 
 <script type="text/javascript" src="js/chart.line.js?v=2.5"></script>
+
+<script type="text/javascript" src="js/footerMessages.js?v=1.0"></script>
 
 <!-- sql.js is called or embebed in worker.sql.js -->
 <!-- <script type="text/javascript" src="js/sql.min.js"></script> -->

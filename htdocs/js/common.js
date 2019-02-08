@@ -267,7 +267,7 @@ function getFromUrl(url, callback, useProxy=false) {
   });
 }
 
-function createTag(tag, id="", className="", content="", Parent="") {
+function createTag(tag, id=null, className=null, content=null, Parent=null) {
   elm  = (id && document.getElementById(id)) ? document.getElementById(id) : document.createElement(tag);
   // elm  = document.createDocumentFragment(tag);  // See the use of document fragments for performance
   if (id) elm.id = id;
@@ -285,5 +285,6 @@ function createTag(tag, id="", className="", content="", Parent="") {
   // console.log('createTag: '+elm.id);
   return elm;
 }
+
 
 var browser = new Browser();
