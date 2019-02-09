@@ -101,7 +101,6 @@ function outputMessage(message, alert="info") {
 }
 
 function outputError(message) {
-  outputMessage("See error for details.", alert="warning");
   outputMessage(message, alert="danger");
 }
 
@@ -159,7 +158,7 @@ function execute(commands, chartType) {
         // console.log('values='+results[i].values);   // values=[0:[1512,1510867045,2792,22,0,22,2,6,7228],.. xNbRows]
         // outputBar.appendChild(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
         outputTable(tableCreate(results[i].columns, results[i].values, 'timestamp', 'formatTimestamp'));
-        outputMessage("Request rsults:")
+        toc("Table generated")
         
         // chart for chartType = line,bar.. // http://www.chartjs.org/docs/latest/charts/
         // TODO: add radio boxes for selecting chart type
@@ -203,8 +202,7 @@ function execute(commands, chartType) {
     // sqlWorker.postMessage({action:'exec',sql:commands});
   // }
   sqlWorker.postMessage({action:'exec', sql:commands});
-  toc("Fetching results...");
-  outputMessage("Fetching results...")
+  toc("Fetching results");
 }
 
 function purgeGraphelement() {
@@ -302,13 +300,14 @@ function tic () {tictime = performance.now()}
 function toc(msg) {
   var delta = performance.now()-tictime;
   message = (msg||'toc') + ": " + delta.toFixed(2) + "ms";
-  console.log(message);
+  if (debug) console.log(message);
   printTocToGui(message);
 }
 
 function printTocToGui(msg) {
   tocMsg1.textContent = tocMsg2.textContent;
   tocMsg2.textContent = msg;
+  outputMessage(msg);
 }
 
 // TODO: jQuery UI show / hide with a slide effect
@@ -534,10 +533,12 @@ function execBtnLoadXhr2LoadFile(url) {
 // https://stuk.github.io/jszip/documentation/examples.html
 // https://stuk.github.io/jszip/documentation/examples/get-binary-files-ajax.html
 function xhrDecompressDbFile(url) {
+  tic();
   // 1) get a promise of the content
   var promise = new JSZip.external.Promise(function (resolve, reject) {
     JSZipUtils.getBinaryContent(url, function(err, data) {
       if (err) {
+        outputError(String(err));
         reject(err);
       } else {
         resolve(data);
@@ -550,7 +551,7 @@ function xhrDecompressDbFile(url) {
   .then(function(zip) {
     // zippedFile = basenameNoExt(url)+'txt';   // debug txt file
     zippedFile = basenameNoExt(url);
-    if (debug) console.log('zippedFile: '+zippedFile);
+    console.log('zippedFile: '+zippedFile);
     
     if (extension(zippedFile) != 'sqlite3') throw '"'+basename(url)+'" doesn\'t look like it contains an sqlite3 db!';
     
@@ -560,13 +561,14 @@ function xhrDecompressDbFile(url) {
   })
   // 4) display the result
   .then(function success(response) {
+    // toc("Database unziped");   // issue with messages piling up because of the bounce animation
     if (debug) console.log('response: '+response);
-    outputMessage("loaded, content = " + response);  // debug txt file
+    if (debug) outputMessage("loaded, content = " + response);  // debug for txt file
     
     sqlWorker.onmessage = function () {
-      toc("Loading database from url: "+url);
       editor.setValue("SELECT `name`, `sql`\n  FROM `sqlite_master`\n  WHERE type='table';");
       execEditorContents();
+      toc("Loaded database from url: "+url);
       $("#initMessage").fadeOut(300, function() { $(this).remove(); });
       $('#loadedDbFile').val(basenameNoExt(url));
     };
@@ -678,7 +680,7 @@ function createGeneralTooltips(dictionary) {
   getJsonAsync(url, function(generalTooltipDict) {
     // console.log(url);
     // console.log(generalTooltipDict);
-    // createHiddenTooltips(generalTooltipDict);
+    createHiddenTooltips(generalTooltipDict);
   });
 }
 

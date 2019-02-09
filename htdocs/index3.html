@@ -51,8 +51,10 @@
 <body class="d-flex flex-column h-100" tcap-name="main">
 
 <header>
+<!-- Github ribbon -->
+<a href="//github.com/audioscavenger/tuScraper"><img style="position: absolute; top: 0; left: 0; border: 0; z-index: 9999;" src="img/forkme.png" alt="Fork me on GitHub" data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
   <!-- Fixed navbar -->
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<!--   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="#">Fixed navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -75,7 +77,7 @@
       </form>
     </div>
   </nav>
-</header>
+ --></header>
 
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
@@ -102,8 +104,8 @@
 
   <div class="container">
     <div class="row">
-      <div id="tocMsg1" class="col-auto mr-auto text-secondary"></div>
-      <div id="tocMsg2" class="col-auto text-secondary"></div>
+      <div id="tocMsg1" class="col-auto mr-auto text-muted small"></div>
+      <div id="tocMsg2" class="col-auto text-muted small"></div>
     </div>
   </div>
 </div>
@@ -139,7 +141,7 @@
       <button id="savedb" type="button" class="btn btn-outline-secondary" tooltip="savedb"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
       <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 1</button> -->
       <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 0-1182</button> -->
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2018</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3f.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2018</button>
       <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Summer 2018</button>
       <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Fall 2018</button>
       <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1192.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2019</button>
@@ -241,7 +243,7 @@
   <!-- <div id="output-table"><table></table></div> -->
 </div>
 
-<button id="testMessageButton">new message</button>
+<!-- <button id="testMessageButton">new message</button> -->
 </main>
 
 <footer class="footer mt-auto fixed-bottom">
