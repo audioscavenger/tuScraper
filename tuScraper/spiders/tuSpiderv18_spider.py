@@ -15,6 +15,7 @@ from shutil import copyfile
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.sgml import SgmlLinkExtractor
 
+## version 1.8    just fix same scrap time for all records
 ## version 1.8    finally I could parse parameters from the batch command line: created __init__
 ## version 1.8    initDb and semester are arguments
 ## version 1.7    blank page detection based on title
@@ -38,6 +39,7 @@ from scrapy.linkextractors.sgml import SgmlLinkExtractor
 version = 1.8
 Debug = False
 Verbose = True
+scrapTime = str(arrow.get(datetime.datetime.now()).timestamp)
 
 # initDb = False                      # Process a defined range for class table first initialization
 # initDb is passed as argument from the batch https://doc.scrapy.org/en/latest/topics/spiders.html#spider-arguments
@@ -296,7 +298,8 @@ class TuSpiderv18(scrapy.Spider):
       keys2insert = ','.join(classDictValues.keys())
       
       # arrow will timestamp current datetime to a format that JavaScript can reconvert:
-      query_string = "INSERT INTO history(timestamp,{}) VALUES ("+str(arrow.get(datetime.datetime.now()).timestamp)+",%s)"
+      # query_string = "INSERT INTO history(timestamp,{}) VALUES ("+str(arrow.get(datetime.datetime.now()).timestamp)+",%s)"
+      query_string = "INSERT INTO history(timestamp,{}) VALUES ("+scrapTime+",%s)"
       query_string = query_string.format(keys2insert) % ','.join('?' * len(classDictValues.keys()))
       
       global totalHistoInserts  # set the variable totalHistoInserts global to increment it; will be accessed by many threads of this spider; looks like PHP a lot, eh?
