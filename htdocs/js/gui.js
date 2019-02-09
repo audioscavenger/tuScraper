@@ -25,23 +25,24 @@
 - [x]  modal left/right detection for nav-tabContent
 - [x]  auto detect db extension
 - [x]  chartadmin dropdown button is transparent, why?? - wrong z-index
-2.8:
+3.0:
 - [x]  stack messages at footer/bottom: new framework created: footerMessages
-- [ ]  add more tooltips
+- [x]  add more tooltips
 - [x]  rounded toc time
+- [x]  restarted index.html from scratch with bootstrap 4.2.1 + fixed navbar + fixed sticky footer
+- [x]  messages bouncing in the footer: created footerMessage.js
 
 TODO LIST:
-- handle progress bar with JSZip utils
-- handle 404 (Not Found) in execBtnLoadXhr2LoadFile
-- wherever title appears in a table, replace class title by an href to the mytumobile page; semester will need to be in the db somewhere
-- try to include the glyphicons in the dict.json somehow
-- maybe delete the graph when switching tabs
-- finda way to reset the worker that crashes sometimes
-- somehow swith to original sql.js as worker.js is said to be limited
+- [ ] better handle of 404 (Not Found) in execBtnLoadXhr2LoadFile
+- [ ] wherever title appears in a table, replace class title by an href to the mytumobile page; semester name will need to be in the db somewhere
+- [ ] try to include the glyphicons in the dict.json somehow
+- [ ] maybe delete the graph when switching tabs
+- [ ] find a way to reset the sql worker that crashes sometimes
+- [ ] somehow swith to original sql.js as worker.js is said to be "limited"?
 
 bootstrap class quick help: https://www.w3schools.com/Bootstrap/bootstrap_ref_css_helpers.asp
 */
-var guiVersion = 2.8;
+var guiVersion = 3.0;
 var debug = false;
 // var debug = true;
 
