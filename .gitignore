@@ -3,6 +3,7 @@
 /img
 *-journal
 miniweb.exe
+push.sh
 
 ## ---------------------------------------------------------------------
 ## Composer template
