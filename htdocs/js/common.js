@@ -117,6 +117,47 @@ function getParent(element, pTagName) {
   else return parentElement;
 }
 
+
+// https://stackoverflow.com/questions/15164655/generate-html-table-from-2d-javascript-array
+// example: createTable(values = [["tr 1, td 1", "tr 1, td 2"], ["tr 2, td 1", "tr 2, td 2"]]);
+// columns = array        = [0:id,   1:timestamp,2:ClassNumber,.. x nbColumns]
+// values  = array[array] = [0:[1512,1510867045, 2792,         .. x nbColumns],.. x nbRows]
+function createTableNode(values, columns=null) {
+  var table = document.createElement('table');
+  var tbody = document.createElement('tbody');
+
+  // table head
+  if (columns) {
+    var thead = document.createElement('thead');
+    var tr = document.createElement('tr');
+    
+    columns.forEach(function(cellTitle) {
+      var th = document.createElement('th');
+      th.appendChild(document.createTextNode(cellTitle));
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+  }
+
+  // table body
+  values.forEach(function(rowData) {
+    var tr = document.createElement('tr');
+    var colNum = 0;
+
+    rowData.forEach(function(cellData) {
+      var td = document.createElement('td');
+      td.appendChild(document.createTextNode(cellData));
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  return table;
+}
+
 // http://stackoverflow.com/questions/841553/jquery-this-child-selector
 function getNextOfClassName(className) {
   return this.next('.'+className);
@@ -213,6 +254,7 @@ function ajaxGetFromUrl(url, callback, useProxy=false) {
 }
 
 // https://api.jquery.com/jQuery.get/
+// getJsonFromUrlAsync callback a function with 1st arg=json and any subsequent arguments passed after useProxy
 function getJsonFromUrlAsync(url, callback, useProxy=false) {
   // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
   var proxy = 'https://cors-anywhere.herokuapp.com/';
@@ -222,7 +264,7 @@ function getJsonFromUrlAsync(url, callback, useProxy=false) {
   var optArgs = Array.prototype.slice.call(arguments, 3, arguments.length);
 
   // $.getJSON(url, callback);
-  $.getJSON(url, function( json ) { callback(json, optArgs); });
+  $.getJSON(url, function( json ) { callback(json, ...optArgs); });
 }
 /*
 function tryMe (param1, param2) {
@@ -236,6 +278,7 @@ callbackTester (tryMe, "hello", "goodbye");
 
 
 // https://api.jquery.com/jQuery.get/
+// https://stackoverflow.com/questions/24118961/how-to-store-the-output-of-an-xmlhttprequest-in-a-global-variable
 function getJsonAsync(url, callback, useProxy=false) {
   // https://ourcodeworld.com/articles/read/73/how-to-bypass-access-control-allow-origin-error-with-xmlhttprequest-jquery-ajax-
   var proxy = 'https://cors-anywhere.herokuapp.com/';
@@ -248,7 +291,13 @@ function getJsonAsync(url, callback, useProxy=false) {
       // console.log(unescape(this.responseText));
       // https://jsonlint.com/
       // https://stackoverflow.com/questions/42068/how-do-i-handle-newlines-in-json
-      callback(JSON.parse(unescape(this.responseText)));
+      if (typeof callback == 'function') {
+        callback(JSON.parse(unescape(this.responseText)));
+      } else if (typeof callback == 'string') {
+        window[callback] = JSON.parse(unescape(this.responseText));
+      } else {
+        throw new TypeError();
+      }
     }
   };
   xhr.open("GET", url, true);
@@ -267,6 +316,9 @@ function getFromUrl(url, callback, useProxy=false) {
   });
 }
 
+// without Parent, createTag does not attach the element to the document.body
+// todo: see if it's best practice to elm.appendChild(document.createTextNode(content)) instead of lm.textContent = content
+// todo: try to process optArgs such as: elm.title = "my title text";
 function createTag(tag, id=null, className=null, content=null, Parent=null) {
   elm  = (id && document.getElementById(id)) ? document.getElementById(id) : document.createElement(tag);
   // elm  = document.createDocumentFragment(tag);  // See the use of document fragments for performance
@@ -278,13 +330,31 @@ function createTag(tag, id=null, className=null, content=null, Parent=null) {
   if (content && typeof content === 'object') { elm.appendChild(content); } else { elm.textContent = content; }
   if (Parent) {
     if (typeof Parent === 'object') { Parent.appendChild(elm); } else { if (document.getElementById(Parent)) document.getElementById(Parent).appendChild(elm); }
-  } else {
-    document.body.appendChild(elm);
+  // } else {
+    // document.body.appendChild(elm);
+  }
+  
+  if (arguments.length > 5) {
+    var optArgs = Array.prototype.slice.call(arguments, 3, arguments.length);
+    console.log(optArgs);
   }
   
   // console.log('createTag: '+elm.id);
   return elm;
 }
 
+// https://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format
+// String.format usage: "{0} is dead, but {1} is alive! {0} {2}".format("ASP", "ASP.NET")
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
 
 var browser = new Browser();

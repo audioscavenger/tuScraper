@@ -156,7 +156,7 @@ function createAboutFromDuckduckgo(url, tooltipId) {
 }
 
 function convertDuckduckgoJsonToHtml(jsonDuckduckgo, tooltipId) {
-  // thanks to getJsonFromUrlAsync, the callback function gets all optional arguments passed in one array:
+  // thanks to getJsonFromUrlAsync, the callback function gets back any optional arguments passed after the first=json result:
   var tooltipBody = document.createElement('div');
   var img = createTag('img', '', '', '', tooltipBody);
     img.src = jsonDuckduckgo['Image'];
@@ -164,7 +164,7 @@ function convertDuckduckgoJsonToHtml(jsonDuckduckgo, tooltipId) {
   var h3 = createTag('h3', '', '', jsonDuckduckgo['Heading'], tooltipBody);
   var Abstract = createTag('div', '', '', '', tooltipBody);
     var AbstractText = createTag('span', '', '', jsonDuckduckgo['AbstractText'], Abstract);
-  var tooltip = createHiddenTooltip(tooltipId[0], tooltipBody);
+  var tooltip = createHiddenTooltip(tooltipId, tooltipBody);
   // console.log(tooltip);
   // console.log(document.body);
 }

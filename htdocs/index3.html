@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
-  <meta name="version" content="3.0">
+  <meta name="version" content="3.1">
   <!-- how to REBASE the url root: -->
   <!-- <base href="https://getbootstrap.com/docs/4.2/examples/sticky-footer-navbar/"> -->
   <meta charset="utf-8">
@@ -139,13 +139,13 @@
     
     <div class="row mb-2"><div class="col-lg">
       <button id="savedb" type="button" class="btn btn-outline-secondary" tooltip="savedb"><span class="icon-inside-left glyphicon glyphicon-floppy-save"></span>Save</button>
-      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 1</button> -->
-      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 0-1182</button> -->
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.0-1182.sqlite3f.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2018</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1183.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Summer 2018</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1184.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Fall 2018</button>
-      <button type="button" class="btn btn-outline-secondary loadDbXhr" database="tuScraper.1-1192.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2019</button>
-      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" database="test.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>test</button> -->
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" data-database="tuScraper.1.sqlite3">     <span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 1</button> -->
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" data-semester="1182" data-database="tuScraper.0-1182.sqlite3"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb 0-1182</button> -->
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" data-semester="1182" data-database="tuScraper.0-1182.sqlite3f.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2018</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" data-semester="1183" data-database="tuScraper.1-1183.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Summer 2018</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" data-semester="1184" data-database="tuScraper.1-1184.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Fall 2018</button>
+      <button type="button" class="btn btn-outline-secondary loadDbXhr" data-semester="1192" data-database="tuScraper.1-1192.sqlite3.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>TUdb Spring 2019</button>
+      <!-- <button type="button" class="btn btn-outline-secondary loadDbXhr" data-database="test.zip"><span class="icon-inside-left glyphicon glyphicon-cloud-upload"></span>test</button> -->
     </div></div>
     
     <div class="row"><div class="col-lg">
@@ -244,6 +244,7 @@
 </div>
 
 <!-- <button id="testMessageButton">new message</button> -->
+<!-- <button id="testShowTableFormatDict">ShowTableFormatDict</button> -->
 </main>
 
 <footer class="footer mt-auto fixed-bottom">
@@ -293,7 +294,7 @@
 
 <script type="text/javascript" src="js/tooltip.js?v=2.1"></script>
 
-<script type="text/javascript" src="js/gui.js?v=2.7"></script>
+<script type="text/javascript" src="js/gui.js?v=3.0"></script>
 
 <script type="text/javascript" src="js/chart.line.js?v=2.5"></script>
 

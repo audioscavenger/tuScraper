@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # pushd S:\wintools\PortableApps\Python27
 # python Scripts\pip.exe install pypiwin32 scrapy arrow
+## example with class ITEC 470 - 101:
 # scrapy shell https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/1182/6764
 # scrapy startproject tuScraper
 # pushd S:\wintools\PortableApps\tuScraper

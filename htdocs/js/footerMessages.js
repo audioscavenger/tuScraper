@@ -23,8 +23,9 @@ footer >.container {
 
 
 // https://stackoverflow.com/questions/12888584/is-there-a-way-to-tell-chrome-web-debugger-to-show-the-current-mouse-position-in
+// debug: comment this
 var x, y; document.onmousemove=(e)=>{x=e.pageX;y=e.pageY;}
-// live expression:  "("+x+", "+y+")"
+// create chrome live expression to show window mouse position:  "("+x+", "+y+")"
 
 var inc = 0;
 function messageTest() {
@@ -32,6 +33,7 @@ function messageTest() {
   return "aaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbb"+inc;
 }
 
+// debug: comment this
 $('#testMessageButton').click(function() {
   outputMessage(messageTest(), "info");
 });

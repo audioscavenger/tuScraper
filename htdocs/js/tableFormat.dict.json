@@ -1,0 +1,4 @@
+{
+"timestamp":  { "function": "createTimestampNode", "args": [ "timestamp" ] },
+"title":      { "function": "createClassUrlNode",  "args": [ "https://mytumobile.towson.edu/app/catalog/classsection/TOWSN/{0}/{1}", "semester", "ClassNumber" ] }
+}
