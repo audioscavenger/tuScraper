@@ -45,9 +45,12 @@ The data scraped do not contain urls but they can be recreated with:
 - [x] modified formatTimestamp to createTimestampNode
 - [x] implemented tableFormat.dict.json with auto format of columns
 - [x] implemented String.prototype.format in common.js
+- [x] decide if createClassUrl should return a link element or if it's the createFormattedTableNode function that should handle it: createClassUrlNode should return a node
 
 TODO LIST:
-- [x] decide if createClassUrl should return a link element or if it's the createFormattedTableNode function that should handle it: createClassUrlNode should return a node
+- [ ] repeal and replace sql.demo.js by codemiror cdn js to make this project my own once and for all
+- [ ] check why Executing SQL takes 5 seconds on Chrome and 128ms on Firefox!!
+- [ ] CodeMirror: find a way to wrap lines
 - [ ] decide once and for all if all necessary functions should be here or separated into different framework.js
 - [ ] better handle of 404 (Not Found) in execBtnLoadXhr2LoadFile
 - [ ] wherever title appears in a table, replace class title by an href to the mytumobile page; semester name will need to be in the db somewhere
@@ -245,7 +248,7 @@ function execute(commands, chartType) {
         });
       }
     }
-    toc("Displaying results");
+    // toc("Displaying results");
     enableActions();
   }
   // try {

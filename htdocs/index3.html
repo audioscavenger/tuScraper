@@ -88,21 +88,22 @@
   <p>Classotron is an sqlite database providing class enrolment data scraped from <a href="https://www.towson.edu/"><abbr tooltip="Towson_University">Towson University</abbr></a></p>
 </div>
 
-<div class="sql-container">
+<div id="sql-container" class="container-fluid">
   <div class="input-group">
     <span class="input-group-addon" id="basic-addon1">
       <button id="execute" type="button" class="btn btn-primary">
       <span class="icon-inside-left glyphicon glyphicon-play"></span>
       </button>
     </span>
-    <textarea id="commands" style="display: none;">select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
-    where history.classnumber = classes.classnumber
-    and title like 'ITEC%'
-    group by classes.classnumber
-    ;</textarea>
+    <textarea id="commands" class="hidden">
+select history.classnumber,title,enrollmentrequirements,meets,InstructionMode,Status,SeatsTaken,(SeatsOpen-waitlisttotal) from history,classes
+where history.classnumber = classes.classnumber
+and title like 'ITEC%'
+group by classes.classnumber;
+    </textarea>
   </div>
 
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div id="tocMsg1" class="col-auto mr-auto text-muted small"></div>
       <div id="tocMsg2" class="col-auto text-muted small"></div>
@@ -110,7 +111,7 @@
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
   <!-- <nav class="nav nav-pills nav-fill" id="tabs" role="tablist"> -->
   <nav class="nav nav-fill" id="tabs" role="tablist">
   <!-- <nav class="nav nav-fill flex-column" id="tabs" role="tablist"> -->
@@ -133,8 +134,8 @@
     <a class="chartButton nav-item nav-link-dupe btn-danger invisible" id="nav-graph-purge" data-toggle="tab" href="#" role="tab" aria-controls="nav-graph-purge" aria-selected="false"><span class="icon-inside-left glyphicon glyphicon-remove-sign"></span>Delete Graph</a>
   </nav>
 
-  <div id="nav-tabContent" class="tab-content">
-    <div class="row tabContent">
+  <div id="nav-tabContent" class="tab-content py-3">
+    <!-- <div class="row py-3"> -->
     <div class="tab-pane buttons active show" id="nav-admin" role="tabpanel" aria-labelledby="nav-admin-tab">
     
     <div class="row mb-2"><div class="col-lg">
@@ -232,14 +233,14 @@
     </div></div>
     </div>
 
-  </div>
+  <!-- </div> -->
   </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
   <div id="progressBar" class="progressBar"></div>
   <div id="chart-container"></div>
-  <pre id="output-table"><table></table></pre>
+  <pre id="output-table" class="container-fluid py-3"><table></table></pre>
   <!-- <div id="output-table"><table></table></div> -->
 </div>
 
@@ -294,7 +295,7 @@
 
 <script type="text/javascript" src="js/tooltip.js?v=2.1"></script>
 
-<script type="text/javascript" src="js/gui.js?v=3.0"></script>
+<script type="text/javascript" src="js/gui.js?v=3.1"></script>
 
 <script type="text/javascript" src="js/chart.line.js?v=2.5"></script>
 

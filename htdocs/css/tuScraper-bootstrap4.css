@@ -9,27 +9,15 @@
 /* core */
 /********/
 
-.nav-link-dupe {
-  display: block;
-  padding: .5rem 1rem;
-}
-
-/* I can't believe I had to create a custom container for tabs. unbelievable. */
-.tabContent {
-  padding: 10px;
-  height: 200px;
-  /* height: auto; */
+.tab-content {
   width: 100%;
+  min-height: 200px;
 }
-
-/* .tab-content { */
-  /* width: 100%; */
-  /* height: 200px; */
-/* } */
-.tab-pane {
+.tab-pane{
   display: none;
   position: absolute; 
-  width: 900px;
+  /* width: 900px; */
+  /* height: 200px; */
   overflow: hidden;
 }
 
@@ -56,6 +44,11 @@
 /***********/
 /* buttons */
 /***********/
+.nav-link-dupe {
+  display: block;
+  padding: .5rem 1rem;
+}
+
 /* bootstrap makes it very hard to set the width of an dumb input */
 .disabled {
   pointer-events: none;
@@ -74,20 +67,17 @@
 /* UI */
 /******/
 
+/* TODO CodeMirror: find a way to wrap lines */
 .CodeMirror {
   border: 1px solid #222;
-  height: auto;
-  min-height: 5em;
+  /* height: auto; */
+  height: 10em;
   width: 100%;
 }
-.CodeMirror-scroll {
-  overflow-y: hidden;
-  overflow-x: auto;
-}
-
-.sql-container {
-  padding: 10px;
-}
+/* .CodeMirror-scroll { */
+  /* overflow-y: hidden; */
+  /* overflow-x: auto; */
+/* } */
 
 .footer {
   font-size:.8em;
